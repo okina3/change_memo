@@ -35,15 +35,26 @@ return [
     |
     */
 
+    // ガードの設定
     'guards' => [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
-    'admin' => [
-        'driver' => 'session',
-        'provider' => 'supervisors',
-    ],
+        // ユーザー用のガード
+        'users' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+        // 管理者用のガード
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admin',
+        ],
+        // 'admin' => [
+        //     'driver' => 'session',
+        //     'provider' => 'supervisors',
+        // ],
     ],
 
     /*
@@ -63,25 +74,32 @@ return [
     |
     */
 
+    // プロバイダの設定
     // 'providers' => [
     //     'users' => [
     //         'driver' => 'eloquent',
     //         'model' => env('AUTH_MODEL', App\Models\User::class),
     //     ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+    // 'users' => [
+    //     'driver' => 'database',
+    //     'table' => 'users',
+    // ],
     'providers' => [
-    'users' => [
-        'driver' => 'eloquent',
-        'model' => App\Models\User::class,
-    ],
-    'supervisors' => [
-        'driver' => 'eloquent',
-        'model' => App\Models\Admin::class,
-    ],
+        // ユーザー用のプロバイダ
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+        // 管理者用のプロバイダ
+        'admin' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ],
+        // 'supervisors' => [
+        //     'driver' => 'eloquent',
+        //     'model' => App\Models\Admin::class,
+        // ],
     ],
 
     /*
