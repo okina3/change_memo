@@ -16,7 +16,8 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('auth.login');
+        // フォルダ階層に合わせてビューのパスを修正
+        return view('user.auth.login');
     }
 
     /**
