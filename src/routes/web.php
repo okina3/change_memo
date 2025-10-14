@@ -17,7 +17,7 @@ Route::prefix('/')->as('user.')->group(function () {
     Route::middleware('auth:users')->group(function () {
         //メモ管理画面
         Route::controller(MemoController::class)->group(function () {
-            Route::get('/', 'index')->name('index');
+            Route::get('/index', 'index')->name('index');
         });
 
 
