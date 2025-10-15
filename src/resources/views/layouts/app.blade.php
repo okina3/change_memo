@@ -16,7 +16,12 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+            {{-- 管理者ログイン時は管理者用ナビゲーション、その他はユーザー用ナビゲーション --}}
+            @if(Auth::guard('admin')->check())
+                @include('layouts.admin-navigation')
+            @else
+                @include('layouts.navigation')
+            @endif
 
             <!-- Page Heading -->
             @isset($header)
