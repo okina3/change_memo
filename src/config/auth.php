@@ -51,10 +51,6 @@ return [
             'driver' => 'session',
             'provider' => 'admin',
         ],
-        // 'admin' => [
-        //     'driver' => 'session',
-        //     'provider' => 'supervisors',
-        // ],
     ],
 
     /*
@@ -80,11 +76,6 @@ return [
     //         'driver' => 'eloquent',
     //         'model' => env('AUTH_MODEL', App\Models\User::class),
     //     ],
-
-    // 'users' => [
-    //     'driver' => 'database',
-    //     'table' => 'users',
-    // ],
     'providers' => [
         // ユーザー用のプロバイダ
         'users' => [
@@ -96,10 +87,6 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
         ],
-        // 'supervisors' => [
-        //     'driver' => 'eloquent',
-        //     'model' => App\Models\Admin::class,
-        // ],
     ],
 
     /*
