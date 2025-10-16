@@ -29,7 +29,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-    return redirect()->intended(route('admin.dashboard', absolute: false));
+        // ユーザー側で保存された intended URL に引っ張られないよう、強制的に管理者ダッシュボードへ
+        return redirect()->route('admin.dashboard');
     }
 
     /**
@@ -43,6 +44,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-    return redirect()->route('admin.login');
+        return redirect()->route('admin.login');
     }
 }

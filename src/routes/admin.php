@@ -11,19 +11,16 @@ use App\Http\Controllers\Admin\Auth\RegisteredUserController;
 use App\Http\Controllers\Admin\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
-// 管理者用ルートはURL先頭にadminを付与
+// 管理者用ルーティング
 Route::prefix('admin')->as('admin.')->group(function () {
     Route::middleware('auth:admin')->group(function () {
+        // 管理者用ダッシュボード
         Route::get('/dashboard', function () {
             return view('admin.dashboard');
         })->name('dashboard');
-
-        // Route::get('/profile', [AdminController::class, 'edit'])->name('profile.edit');
-        // Route::patch('/profile', [AdminController::class, 'update'])->name('profile.update');
-        // Route::delete('/profile', [AdminController::class, 'destroy'])->name('profile.destroy');
     });
 
-    //auth.phpの認証関連のルーティング
+    //管理者用のauth.phpの認証関連のルーティング
     Route::middleware('guest:admin')->group(function () {
         Route::get('register', [RegisteredUserController::class, 'create'])
             ->name('register');

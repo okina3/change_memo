@@ -16,11 +16,11 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            {{-- 管理者ログイン時は管理者用ナビゲーション、その他はユーザー用ナビゲーション --}}
+            {{-- 管理者用とユーザー用でナビゲーションを分ける --}}
             @if(Auth::guard('admin')->check())
                 @include('layouts.admin-navigation')
             @else
-                @include('layouts.navigation')
+                @include('layouts.user-navigation')
             @endif
 
             <!-- Page Heading -->
