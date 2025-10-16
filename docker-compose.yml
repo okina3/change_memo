@@ -21,24 +21,33 @@ services:
     container_name: php_apache_change_memo
     build:
       context: ./php
+    restart: always
     ports:
-      - "8000:80" 
+      - "8000:80"
       - "5173:5173"
     volumes:
       - ./src:/var/www/change_memo
       - ./apache/default.conf:/etc/apache2/sites-enabled/000-default.conf
     depends_on:
-      - database 
+      - database
+
+  mail:
+    image: axllent/mailpit:v1.8
+    container_name: mailpit
+    restart: always
+    ports:
+      - 8025:8025
+      - 1025:1025
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     depends_on:
-      - database 
+      - database
     environment:
-      - PMA_HOSTS=database 
-      - PMA_USER=admin 
+      - PMA_HOSTS=database
+      - PMA_USER=admin
       - PMA_PASSWORD=password
     ports:
-      - "3000:80" 
+      - "3000:80"
     volumes:
       - ./volumes/docker/phpmyadmin/sessions:/sessions
