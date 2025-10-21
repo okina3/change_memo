@@ -1,8 +1,6 @@
+@import "./common.css";
+@import "./accordion.css";
+@import "./micromodal.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Tailwindの後にプロジェクトの上書きスタイルを読み込む */
-@import "./common.css";
-@import "./accordion.css";
-/* @import "./micromodal.css"; */
