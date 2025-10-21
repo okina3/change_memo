@@ -18,8 +18,6 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            //ソフトデリート
-            $table->softDeletes();
             $table->timestamps();
         });
     }

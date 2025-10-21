@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('share_settings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('sharing_user_id');
+            $table->foreignId('sharing_user_id')
+                ->constrained('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->foreignId('memo_id')
                 ->constrained()
                 ->onUpdate('cascade')

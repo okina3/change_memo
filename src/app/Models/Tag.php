@@ -44,7 +44,6 @@ class Tag extends Model
     public function scopeAvailableAllTags(Builder $query): void
     {
         $query->where('user_id', Auth::id())
-            ->whereNull('deleted_at')
             ->orderBy('created_at', 'desc');
     }
 
@@ -58,8 +57,7 @@ class Tag extends Model
     {
         $query->with('memos.shareSettings')
             ->where('id', $get_url_tag)
-            ->where('user_id', Auth::id())
-            ->whereNull('deleted_at');
+            ->where('user_id', Auth::id());
     }
 
     /**

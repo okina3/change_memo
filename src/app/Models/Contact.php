@@ -66,23 +66,27 @@ class Contact extends Model
 
     /**
      * 検索した件名、問い合わせを表示するの為のスコープ。
-     * @param $query
-     * @param $keyword
+     * @param Builder $query
+     * @param string|null $keyword
      * @return void
      */
-    public function scopeSearchKeyword($query, $keyword): void
+    public function scopeSearchKeyword(Builder $query, ?string $keyword): void
     {
-        // もし件名、問い合わせの検索があったら
-        if (!is_null($keyword)) {
-            // 全角スペースを半角に変換
-            $spaceConvert = mb_convert_kana($keyword, 's');
-            // 空白で区切る
-            $keywords = preg_split('/\s+/', $spaceConvert, -1, PREG_SPLIT_NO_EMPTY);
-            // 単語をループで回す
-            foreach ($keywords as $word) {
-                $query->where('contacts.subject', 'like', '%' . $word . '%')
-                    ->orWhere('contacts.message', 'like', '%' . $word . '%');
-            }
+        // もし件名、問い合わせの検索がなければ何もしない
+        if ($keyword === null || $keyword === '') {
+            return;
+        }
+
+        // 全角スペースを半角に変換
+        $spaceConvert = mb_convert_kana($keyword, 's');
+        // 空白で区切る
+        $keywords = preg_split('/\s+/', $spaceConvert, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        // 単語をループで回す（AND検索）
+        foreach ($keywords as $word) {
+            $query->where(function (Builder $q) use ($word) {
+                $q->where('contacts.subject', 'like', '%' . $word . '%')
+                  ->orWhere('contacts.message', 'like', '%' . $word . '%');
+            });
         }
     }
 }
