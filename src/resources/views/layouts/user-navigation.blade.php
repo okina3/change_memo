@@ -11,14 +11,34 @@
             </div>
 
             <!-- Navigation Links -->
-            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-               <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                  {{ __('Dashboard') }}
-               </x-nav-link>
-            </div>
             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.index')">
                   メモ管理画面
+               </x-nav-link>
+            </div>
+            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+               <x-nav-link :href="route('user.tag.index')" :active="request()->routeIs('user.tag.index')">
+                  タグ管理画面
+               </x-nav-link>
+            </div>
+            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+               <x-nav-link :href="route('user.image.index')" :active="request()->routeIs('user.image.index')">
+                  画像管理画面
+               </x-nav-link>
+            </div>
+            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+               <x-nav-link :href="route('user.share-setting.index')" :active="request()->routeIs('user.share-setting.index')">
+                  共有メモ画面
+               </x-nav-link>
+            </div>
+            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+               <x-nav-link :href="route('user.trashed-memo.index')" :active="request()->routeIs('user.trashed-memo.index')">
+                  ゴミ箱
+               </x-nav-link>
+            </div>
+            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+               <x-nav-link :href="route('user.contact.create')" :active="request()->routeIs('user.contact.create')">
+                  管理人に連絡
                </x-nav-link>
             </div>
          </div>
@@ -29,7 +49,7 @@
                <x-slot name="trigger">
                   <button
                      class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                     <div>{{ Auth::user()->name }}</div>
+                     <div>{{ Auth::user()->name }}さん</div>
 
                      <div class="ms-1">
                         <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -78,8 +98,23 @@
    <!-- Responsive Navigation Menu -->
    <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
       <div class="pt-2 pb-3 space-y-1">
-         <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-            {{ __('Dashboard') }}
+         <x-responsive-nav-link :href="route('user.index')" :active="request()->routeIs('user.index')">
+            メモ管理画面
+         </x-responsive-nav-link>
+         <x-responsive-nav-link :href="route('user.tag.index')" :active="request()->routeIs('user.tag.index')">
+            タグ管理画面
+         </x-responsive-nav-link>
+         <x-responsive-nav-link :href="route('user.image.index')" :active="request()->routeIs('user.image.index')">
+            画像管理画面
+         </x-responsive-nav-link>
+         <x-responsive-nav-link :href="route('user.share-setting.index')" :active="request()->routeIs('user.share-setting.index')">
+            共有メモ画面
+         </x-responsive-nav-link>
+         <x-responsive-nav-link :href="route('user.trashed-memo.index')" :active="request()->routeIs('user.trashed-memo.index')">
+            ゴミ箱
+         </x-responsive-nav-link>
+         <x-responsive-nav-link :href="route('user.contact.create')" :active="request()->routeIs('user.contact.create')">
+            管理人に連絡
          </x-responsive-nav-link>
       </div>
 

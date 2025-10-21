@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Exception;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class SessionService
 {
@@ -31,10 +32,22 @@ class SessionService
      */
     public static function clickBrowserBackSession(): void
     {
-        if (!session()->has('back_button_clicked') ||
-            decrypt(session('back_button_clicked')) !== config('common_browser_back.browser_back_key')) {
-            abort(to_route('user.index')
-                ->with(['message' => '予期せぬエラーが起きました。トップページに戻ります。', 'status' => 'alert']));
+        try {
+            $has = session()->has('back_button_clicked');
+            $value = $has ? decrypt(session('back_button_clicked')) : null;
+
+            if (!$has || $value !== config('common_browser_back.browser_back_key')) {
+                throw new HttpResponseException(
+                    redirect()->route('user.index')
+                        ->with(['message' => '予期せぬエラーが起きました。トップページに戻ります。', 'status' => 'alert'])
+                );
+            }
+        } catch (\Throwable $e) {
+            // 復号失敗など異常時も安全にトップへリダイレクト
+            throw new HttpResponseException(
+                redirect()->route('user.index')
+                    ->with(['message' => '予期せぬエラーが起きました。トップページに戻ります。', 'status' => 'alert'])
+            );
         }
     }
 
