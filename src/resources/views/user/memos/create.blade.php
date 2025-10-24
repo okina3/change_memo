@@ -50,25 +50,22 @@
                      <div class="flex flex-wrap items-center gap-4">
                         <label for="weather_sunny" class="inline-flex items-center">
                            <input id="weather_sunny" type="checkbox" name="weather[]" value="sunny"
-                              class="rounded mb-1"
-                              {{ (is_array(old('weather')) && in_array('sunny', old('weather'))) || old('weather') === 'sunny' ? 'checked' : '' }} />
+                              class="rounded mb-1" @checked(in_array('sunny', old('weather', []))) />
                            <span class="ml-1">晴れ</span>
                         </label>
                         <label for="weather_cloudy" class="inline-flex items-center">
                            <input id="weather_cloudy" type="checkbox" name="weather[]" value="cloudy"
-                              class="rounded mb-1"
-                              {{ (is_array(old('weather')) && in_array('cloudy', old('weather'))) || old('weather') === 'cloudy' ? 'checked' : '' }} />
+                              class="rounded mb-1" @checked(in_array('cloudy', old('weather', []))) />
                            <span class="ml-1">曇り</span>
                         </label>
                         <label for="weather_rain" class="inline-flex items-center">
                            <input id="weather_rain" type="checkbox" name="weather[]" value="rain" class="rounded mb-1"
-                              {{ (is_array(old('weather')) && in_array('rain', old('weather'))) || old('weather') === 'rain' ? 'checked' : '' }} />
+                              @checked(in_array('rain', old('weather', []))) />
                            <span class="ml-1">雨</span>
                         </label>
                         <label for="weather_other" class="inline-flex items-center">
                            <input id="weather_other" type="checkbox" name="weather[]" value="other"
-                              class="rounded mb-1"
-                              {{ (is_array(old('weather')) && in_array('other', old('weather'))) || old('weather') === 'other' ? 'checked' : '' }} />
+                              class="rounded mb-1" @checked(in_array('other', old('weather', []))) />
                            <span class="ml-1">その他</span>
                         </label>
                      </div>

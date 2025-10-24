@@ -28,6 +28,26 @@ class UploadMemoRequest extends FormRequest
     }
 
     /**
+     * バリデーション前に、weather を配列へ正規化する。
+     * 
+     */
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('weather')) {
+            $weather = $this->input('weather');
+            if (is_string($weather)) {
+                // 空文字は空配列へ、それ以外は単一要素配列へ
+                $weather = trim($weather) === '' ? [] : [$weather];
+            } elseif ($weather === null) {
+                $weather = [];
+            }
+            $this->merge([
+                'weather' => $weather,
+            ]);
+        }
+    }
+
+    /**
      * バリデーションエラーメッセージを定義するメソッド。
      * @return string[]
      */
