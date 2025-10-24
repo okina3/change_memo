@@ -7,7 +7,7 @@
          <div class="p-3">
             <form action="{{ route('user.store') }}" method="post">
                @csrf
-               {{-- 釣行日・釣行時間・釣り場 --}}
+               {{-- 釣行日・釣行時間・釣り場所 --}}
                <div class="mb-8">
                   <div class="flex flex-wrap items-start gap-20">
                      {{-- 釣行日 --}}
@@ -16,7 +16,7 @@
                         <input class="rounded" type="date" name="fishing_date" value="{{ old('fishing_date') }}"
                            max="{{ now()->toDateString() }}" />
                         {{-- エラーメッセージ（釣行日） --}}
-                        {{-- <x-input-error class="mt-2" :messages="$errors->get('fishing_date')" /> --}}
+                        <x-input-error class="mt-2" :messages="$errors->get('fishing_date')" />
                      </div>
                      {{-- 釣行時間 --}}
                      <div class="flex flex-col">
@@ -29,8 +29,8 @@
                               value="{{ old('fishing_time_end') }}" step="60" />
                         </div>
                         {{-- エラーメッセージ（釣行時間） --}}
-                        {{-- <x-input-error class="mt-2" :messages="$errors->get('fishing_time_start')" />
-                        <x-input-error class="mt-2" :messages="$errors->get('fishing_time_end')" /> --}}
+                        <x-input-error class="mt-2" :messages="$errors->get('fishing_time_start')" />
+                        <x-input-error class="mt-2" :messages="$errors->get('fishing_time_end')" />
                      </div>
                      {{-- 釣り場所 --}}
                      <div class="flex flex-col">
@@ -38,7 +38,7 @@
                         <input class="w-60 rounded" type="text" name="fishing_spot" value="{{ old('fishing_spot') }}"
                            placeholder="例: ○○港 防波堤" />
                         {{-- エラーメッセージ（釣り場所） --}}
-                        {{-- <x-input-error class="mt-2" :messages="$errors->get('fishing_spot')"/> --}}
+                        <x-input-error class="mt-2" :messages="$errors->get('fishing_spot')"/>
                      </div>
                   </div>
                </div>
@@ -74,7 +74,7 @@
                      </div>
                      <p class="text-sm text-gray-500 mt-1">（複数選択可）</p>
                      {{-- エラーメッセージ（天気） --}}
-                     {{-- <x-input-error class="mt-2" :messages="$errors->get('weather')" /> --}}
+                     <x-input-error class="mt-2" :messages="$errors->get('weather')" />
                   </div>
                   {{-- 風（風速・風向） --}}
                   <div class="mb-8">
@@ -93,8 +93,8 @@
                               <span class="text-gray-600">m/s</span>
                            </div>
                            {{-- エラーメッセージ（風速） --}}
-                           {{-- <x-input-error class="mt-2" :messages="$errors->get('wind_speed_min')" />
-                        <x-input-error class="mt-2" :messages="$errors->get('wind_speed_max')" /> --}}
+                           <x-input-error class="mt-2" :messages="$errors->get('wind_speed_min')" />
+                        <x-input-error class="mt-2" :messages="$errors->get('wind_speed_max')" />
                         </div>
                         {{-- 風向 --}}
                         <div class="flex flex-col">
@@ -118,7 +118,7 @@
                               </option>
                            </select>
                            {{-- エラーメッセージ（風向） --}}
-                           {{-- <x-input-error class="mt-2" :messages="$errors->get('wind_direction')" /> --}}
+                           <x-input-error class="mt-2" :messages="$errors->get('wind_direction')" />
                         </div>
                      </div>
                   </div>
@@ -137,7 +137,7 @@
                            <option value="0" {{ old('has_flow') === '0' ? 'selected' : '' }}>流れなし</option>
                         </select>
                         {{-- エラーメッセージ（川の流れ） --}}
-                        {{-- <x-input-error class="mt-2" :messages="$errors->get('has_flow')" /> --}}
+                        <x-input-error class="mt-2" :messages="$errors->get('has_flow')" />
                      </div>
                      <div>
                         <label class="block text-sm text-gray-700 mb-1">濁り</label>
@@ -169,7 +169,7 @@
                            </option>
                         </select>
                         {{-- エラーメッセージ（水中のゴミ） --}}
-                        {{-- <x-input-error class="mt-2" :messages="$errors->get('underwater_debris')" /> --}}
+                        <x-input-error class="mt-2" :messages="$errors->get('underwater_debris')" />
                      </div>
                      <div>
                         <label class="block text-sm text-gray-700 mb-1">水位</label>
@@ -266,9 +266,9 @@
                         </button>
                      </div>
                      {{-- エラーメッセージ（釣果の内訳） --}}
-                     {{-- <x-input-error class="mt-2" :messages="$errors->get('catches.*.name')" />
+                     <x-input-error class="mt-2" :messages="$errors->get('catches.*.name')" />
                      <x-input-error class="mt-2" :messages="$errors->get('catches.*.count')" />
-                     <x-input-error class="mt-2" :messages="$errors->get('catches.*.length_cm')" /> --}}
+                     <x-input-error class="mt-2" :messages="$errors->get('catches.*.length_cm')" />
                   </div>
                </div>
 
