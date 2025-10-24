@@ -4,11 +4,10 @@
 
 ```mermaid
 erDiagram
-  MEMOS ||--|| CONDITIONS : "1:1"
+  MEMOS ||--|| WEATHER_CONDITIONS : "1:1"
+  MEMOS ||--|| RIVER_CONDITIONS : "1:1"
   MEMOS ||--o{ BAITS : "1:N"
   MEMOS ||--o{ CATCHES : "1:N"
-  MEMOS ||--o{ WEATHER_TYPE_MEMO : "1:N"
-  WEATHER_TYPES ||--o{ WEATHER_TYPE_MEMO : "1:N"
 
   MEMOS {
     bigint id PK
@@ -20,12 +19,19 @@ erDiagram
     timestamps timestamps
   }
 
-  CONDITIONS {
+  WEATHER_CONDITIONS {
     bigint id PK
     bigint memo_id FK "UNIQUE, -> memos.id"
+    enum weather_code "sunny,cloudy,rain,sunny_cloudy,sunny_rain,cloudy_sunny,cloudy_rain,rain_sunny,rain_cloudy,other (nullable)"
     tinyint wind_speed_min "unsigned, nullable"
     tinyint wind_speed_max "unsigned, nullable"
     enum wind_direction "N,NE,E,SE,S,SW,W,NW (nullable)"
+    timestamps timestamps
+  }
+
+  RIVER_CONDITIONS {
+    bigint id PK
+    bigint memo_id FK "UNIQUE, -> memos.id"
     boolean has_flow "nullable"
     enum water_clarity "clear,slightly,turbid,very_turbid (nullable)"
     enum underwater_debris "none,slightly,present (nullable)"
@@ -54,22 +60,11 @@ erDiagram
     %% UNIQUE(memo_id, position)
   }
 
-  WEATHER_TYPES {
-    bigint id PK
-    varchar(20) code "UNIQUE (sunny, cloudy, rain, other)"
-    varchar(50) label "nullable"
-    timestamps timestamps
-  }
-
-  WEATHER_TYPE_MEMO {
-    bigint weather_type_id FK "-> weather_types.id"
-    bigint memo_id FK "-> memos.id"
-    %% PRIMARY(weather_type_id, memo_id)
-  }
+  %% 天気マスタ／ピボットは廃止し、天気は WEATHER_CONDITIONS.weather_code に保持します。
 ```
 
 補足
-- 条件（CONDITIONS）はメモ（MEMOS）と1:1です。
+- 天気＋風（WEATHER_CONDITIONS）と川の状態（RIVER_CONDITIONS）は、それぞれメモ（MEMOS）と1:1です。
 - エサ（BAITS）/ 釣果（CATCHES）は1:Nで position により表示順管理（UNIQUE(memo_id, position) 推奨）。
-- 天気（WEATHER_TYPES）はマスタ、weather_type_memo はピボットです。
+- 天気は weather_code として WEATHER_CONDITIONS に直接格納します（UIのセレクト値と一致）。
 - 画像・タグ系は既存のままなので本図には含めていません（必要であれば追記可能）。
