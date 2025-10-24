@@ -153,6 +153,8 @@
                               強い濁り
                            </option>
                         </select>
+                        {{-- エラーメッセージ（濁り） --}}
+                        <x-input-error class="mt-2" :messages="$errors->get('water_clarity')" />
                      </div>
                      <div>
                         <label class="block text-sm text-gray-700 mb-1">水中のゴミ</label>
@@ -181,6 +183,8 @@
                               pattern="^-?\d*(\.\d+)?$" />
                            <span class="text-gray-600">cm</span>
                         </div>
+                        {{-- エラーメッセージ（水位） --}}
+                        <x-input-error class="mt-2" :messages="$errors->get('water_level')" />
                      </div>
                      <div>
                         <label class="block text-sm text-gray-700 mb-1">水温</label>
@@ -190,6 +194,8 @@
                               min="0" max="35" />
                            <span class="text-gray-600">℃</span>
                         </div>
+                        {{-- エラーメッセージ（水温） --}}
+                        <x-input-error class="mt-2" :messages="$errors->get('water_temp')" />
                      </div>
                   </div>
                </div>
@@ -223,6 +229,8 @@
                            ＋ エサを追加（最大5件）
                         </button>
                      </div>
+                     {{-- エラーメッセージ（エサ配列） --}}
+                     <x-input-error class="mt-2" :messages="$errors->get('baits.*')" />
                   </div>
                   {{-- 釣果の入力 --}}
                   <div class="mb-8">
