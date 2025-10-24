@@ -47,29 +47,21 @@
                   {{-- 天気の入力 --}}
                   <div class="mb-8">
                      <h2 class="sub_heading mb-1">天気</h2>
-                     <div class="flex flex-wrap items-center gap-4">
-                        <label for="weather_sunny" class="inline-flex items-center">
-                           <input id="weather_sunny" type="checkbox" name="weather[]" value="sunny"
-                              class="rounded mb-1" @checked(in_array('sunny', old('weather', []))) />
-                           <span class="ml-1">晴れ</span>
-                        </label>
-                        <label for="weather_cloudy" class="inline-flex items-center">
-                           <input id="weather_cloudy" type="checkbox" name="weather[]" value="cloudy"
-                              class="rounded mb-1" @checked(in_array('cloudy', old('weather', []))) />
-                           <span class="ml-1">曇り</span>
-                        </label>
-                        <label for="weather_rain" class="inline-flex items-center">
-                           <input id="weather_rain" type="checkbox" name="weather[]" value="rain" class="rounded mb-1"
-                              @checked(in_array('rain', old('weather', []))) />
-                           <span class="ml-1">雨</span>
-                        </label>
-                        <label for="weather_other" class="inline-flex items-center">
-                           <input id="weather_other" type="checkbox" name="weather[]" value="other"
-                              class="rounded mb-1" @checked(in_array('other', old('weather', []))) />
-                           <span class="ml-1">その他</span>
-                        </label>
+                     <div>
+                        <select id="weather" name="weather" class="rounded w-56">
+                           <option value="" @selected(old('weather', '') === '')>未選択</option>
+                           <option value="sunny" @selected(old('weather') === 'sunny')>晴れ</option>
+                           <option value="cloudy" @selected(old('weather') === 'cloudy')>曇り</option>
+                           <option value="rain" @selected(old('weather') === 'rain')>雨</option>
+                           <option value="sunny_cloudy" @selected(old('weather') === 'sunny_cloudy')>晴れ → 曇り</option>
+                           <option value="sunny_rain" @selected(old('weather') === 'sunny_rain')>晴れ → 雨</option>
+                           <option value="cloudy_sunny" @selected(old('weather') === 'cloudy_sunny')>曇り → 晴れ</option>
+                           <option value="cloudy_rain" @selected(old('weather') === 'cloudy_rain')>曇り → 雨</option>
+                           <option value="rain_sunny" @selected(old('weather') === 'rain_sunny')>雨 → 晴れ</option>
+                           <option value="rain_cloudy" @selected(old('weather') === 'rain_cloudy')>雨 → 曇り</option>
+                           <option value="other" @selected(old('weather') === 'other')>その他</option>
+                        </select>
                      </div>
-                     <p class="text-sm text-gray-500 mt-1">（複数選択可）</p>
                      {{-- エラーメッセージ（天気） --}}
                      <x-input-error class="mt-2" :messages="$errors->get('weather')" />
                   </div>
