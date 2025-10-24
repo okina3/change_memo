@@ -38,7 +38,7 @@
                         <input class="w-60 rounded" type="text" name="fishing_spot" value="{{ old('fishing_spot') }}"
                            placeholder="例: ○○港 防波堤" />
                         {{-- エラーメッセージ（釣り場所） --}}
-                        <x-input-error class="mt-2" :messages="$errors->get('fishing_spot')"/>
+                        <x-input-error class="mt-2" :messages="$errors->get('fishing_spot')" />
                      </div>
                   </div>
                </div>
@@ -91,28 +91,21 @@
                            </div>
                            {{-- エラーメッセージ（風速） --}}
                            <x-input-error class="mt-2" :messages="$errors->get('wind_speed_min')" />
-                        <x-input-error class="mt-2" :messages="$errors->get('wind_speed_max')" />
+                           <x-input-error class="mt-2" :messages="$errors->get('wind_speed_max')" />
                         </div>
                         {{-- 風向 --}}
                         <div class="flex flex-col">
                            <h2 class="sub_heading mb-1">風向</h2>
                            <select name="wind_direction" class="rounded">
-                              <option value=""
-                                 {{ old('wind_direction') === null || old('wind_direction') === '' ? 'selected' : '' }}>
-                                 未選択
-                              </option>
-                              <option value="N" {{ old('wind_direction') === 'N' ? 'selected' : '' }}>北</option>
-                              <option value="NE" {{ old('wind_direction') === 'NE' ? 'selected' : '' }}>北東
-                              </option>
-                              <option value="E" {{ old('wind_direction') === 'E' ? 'selected' : '' }}>東</option>
-                              <option value="SE" {{ old('wind_direction') === 'SE' ? 'selected' : '' }}>南東
-                              </option>
-                              <option value="S" {{ old('wind_direction') === 'S' ? 'selected' : '' }}>南</option>
-                              <option value="SW" {{ old('wind_direction') === 'SW' ? 'selected' : '' }}>南西
-                              </option>
-                              <option value="W" {{ old('wind_direction') === 'W' ? 'selected' : '' }}>西</option>
-                              <option value="NW" {{ old('wind_direction') === 'NW' ? 'selected' : '' }}>北西
-                              </option>
+                              <option value="" @selected(old('wind_direction', '') === '')>未選択</option>
+                              <option value="N" @selected(old('wind_direction') === 'N')>北</option>
+                              <option value="NE" @selected(old('wind_direction') === 'NE')>北東</option>
+                              <option value="E" @selected(old('wind_direction') === 'E')>東</option>
+                              <option value="SE" @selected(old('wind_direction') === 'SE')>南東</option>
+                              <option value="S" @selected(old('wind_direction') === 'S')>南</option>
+                              <option value="SW" @selected(old('wind_direction') === 'SW')>南西</option>
+                              <option value="W" @selected(old('wind_direction') === 'W')>西</option>
+                              <option value="NW" @selected(old('wind_direction') === 'NW')>北西</option>
                            </select>
                            {{-- エラーメッセージ（風向） --}}
                            <x-input-error class="mt-2" :messages="$errors->get('wind_direction')" />
@@ -128,10 +121,15 @@
                      <div>
                         <label class="block text-sm text-gray-700 mb-1">川の流れ</label>
                         <select name="has_flow" class="rounded">
-                           <option value=""
-                              {{ old('has_flow') === null || old('has_flow') === '' ? 'selected' : '' }}>未選択</option>
-                           <option value="1" {{ old('has_flow') === '1' ? 'selected' : '' }}>流れあり</option>
-                           <option value="0" {{ old('has_flow') === '0' ? 'selected' : '' }}>流れなし</option>
+                           <option value="" @selected(old('has_flow', '') === '')>
+                              未選択
+                           </option>
+                           <option value="1" @selected(old('has_flow') === '1')>
+                              流れあり
+                           </option>
+                           <option value="0" @selected(old('has_flow') === '0')>
+                              流れなし
+                           </option>
                         </select>
                         {{-- エラーメッセージ（川の流れ） --}}
                         <x-input-error class="mt-2" :messages="$errors->get('has_flow')" />
@@ -139,30 +137,37 @@
                      <div>
                         <label class="block text-sm text-gray-700 mb-1">濁り</label>
                         <select name="water_clarity" class="rounded">
-                           <option value=""
-                              {{ old('water_clarity') === null || old('water_clarity') === '' ? 'selected' : '' }}>未選択
+                           <option value="" @selected(old('water_clarity', '') === '')>
+                              未選択
                            </option>
-                           <option value="clear" {{ old('water_clarity') === 'clear' ? 'selected' : '' }}>クリア
+                           <option value="clear" @selected(old('water_clarity') === 'clear')>
+                              クリア
                            </option>
-                           <option value="slightly" {{ old('water_clarity') === 'slightly' ? 'selected' : '' }}>やや濁り
+                           <option value="slightly" @selected(old('water_clarity') === 'slightly')>
+                              やや濁り
                            </option>
-                           <option value="turbid" {{ old('water_clarity') === 'turbid' ? 'selected' : '' }}>濁り
+                           <option value="turbid" @selected(old('water_clarity') === 'turbid')>
+                              濁り
                            </option>
-                           <option value="very_turbid" {{ old('water_clarity') === 'very_turbid' ? 'selected' : '' }}>
-                              強い濁り</option>
+                           <option value="very_turbid" @selected(old('water_clarity') === 'very_turbid')>
+                              強い濁り
+                           </option>
                         </select>
                      </div>
                      <div>
                         <label class="block text-sm text-gray-700 mb-1">水中のゴミ</label>
                         <select name="underwater_debris" class="rounded">
-                           <option value=""
-                              {{ old('underwater_debris') === null || old('underwater_debris') === '' ? 'selected' : '' }}>
-                              未選択</option>
-                           <option value="none" {{ old('underwater_debris') === 'none' ? 'selected' : '' }}>なし
+                           <option value="" @selected(old('underwater_debris', '') === '')>
+                              未選択
                            </option>
-                           <option value="slightly" {{ old('underwater_debris') === 'slightly' ? 'selected' : '' }}>
-                              ややあり</option>
-                           <option value="present" {{ old('underwater_debris') === 'present' ? 'selected' : '' }}>あり
+                           <option value="none" @selected(old('underwater_debris') === 'none')>
+                              なし
+                           </option>
+                           <option value="slightly" @selected(old('underwater_debris') === 'slightly')>
+                              ややあり
+                           </option>
+                           <option value="present" @selected(old('underwater_debris') === 'present')>
+                              あり
                            </option>
                         </select>
                         {{-- エラーメッセージ（水中のゴミ） --}}
@@ -282,7 +287,7 @@
                   @foreach ($all_tags as $tag)
                      <div class="inline mr-3 hover:font-semibold">
                         <input class="mb-1 rounded" type="checkbox" name="tags[]" id="{{ $tag->id }}"
-                           value="{{ $tag->id }}" {{ in_array($tag->id, old('tags', [])) ? 'checked' : '' }} />
+                           value="{{ $tag->id }}" @checked(in_array($tag->id, old('tags', []))) />
                         <label for="{{ $tag->id }}">{{ $tag->name }}</label>
                      </div>
                   @endforeach
