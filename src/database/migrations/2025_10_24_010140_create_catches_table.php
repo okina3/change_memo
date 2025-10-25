@@ -10,17 +10,13 @@ return new class extends Migration {
         Schema::create('catches', function (Blueprint $table) {
             $table->id();
             $table->foreignId('memo_id')
-            ->constrained('memos')
-            ->cascadeOnDelete();
-            $table->string('name');
-            $table->unsignedSmallInteger('count')
-            ->default(0);
-            $table->unsignedSmallInteger('length_cm')
-            ->nullable();
-            $table->unsignedTinyInteger('position')
-            ->default(0);
+                ->constrained('memos')
+                ->cascadeOnDelete();
+            $table->string('name')->nullable();
+            $table->unsignedSmallInteger('count')->default(0);
+            $table->unsignedSmallInteger('length_cm')->nullable();
+            $table->unsignedTinyInteger('position')->default(0);
             $table->timestamps();
-            
             $table->unique(['memo_id', 'position']);
         });
     }

@@ -30,7 +30,7 @@ class Memo extends Model
     ];
 
     /**
-     * WeatherCondition（気象）モデルとの一対一のリレーションを定義。
+     * WeatherCondition（気象状態）モデルとの一対一のリレーションを定義。
      * @return HasOne
      */
     public function weatherCondition(): HasOne
