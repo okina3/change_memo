@@ -20,7 +20,7 @@ return new class extends Migration {
                 'cloudy',
                 'rain',
                 'other',
-            ])->nullable();
+            ]);
             $table->unsignedTinyInteger('wind_speed_min')->nullable();
             $table->unsignedTinyInteger('wind_speed_max')->nullable();
             $table->enum('wind_direction', ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'])->nullable();
