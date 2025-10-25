@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,10 +17,35 @@ class Memo extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'title',
+        'fishing_date',
+        'fishing_time_start',
+        'fishing_time_end',
+        'fishing_spot',
         'content',
         'user_id',
     ];
+
+    protected $casts = [
+        'fishing_date' => 'date',
+    ];
+
+    /**
+     * WeatherConditionモデルとの一対一のリレーションを定義。
+     * @return HasOne
+     */
+    public function weatherCondition(): HasOne
+    {
+        return $this->hasOne(WeatherCondition::class);
+    }
+
+    /**
+     * RiverConditionモデルとの一対一のリレーションを定義。
+     * @return HasOne
+     */
+    public function riverCondition(): HasOne
+    {
+        return $this->hasOne(RiverCondition::class);
+    }
 
     /**
      * Tagモデルとの多対多のリレーションを定義。

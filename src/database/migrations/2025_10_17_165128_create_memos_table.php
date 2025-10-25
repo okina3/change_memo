@@ -13,8 +13,16 @@ return new class extends Migration
     {
         Schema::create('memos', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('content');
+            $table->date('fishing_date')
+            ->nullable();
+            $table->time('fishing_time_start')
+            ->nullable();
+            $table->time('fishing_time_end')
+            ->nullable();
+            $table->string('fishing_spot')
+            ->nullable();
+            $table->text('content')
+            ->nullable();
             $table->foreignId('user_id')
                 ->constrained()
                 ->onUpdate('cascade')
