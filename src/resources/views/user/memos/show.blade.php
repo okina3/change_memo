@@ -20,18 +20,18 @@
                      <div class="">
                         <h2 class="sub_heading mb-1">釣行日</h2>
                         <p class="p-2 border border-gray-500 rounded">
-                           {{ $select_memo->fishing_date }}
+                           {{ optional($select_memo->fishing_date)->format('Y-m-d') }}
                         </p>
                      </div>
                      <div class="">
                         <h2 class="sub_heading mb-1">釣行時間</h2>
                         <div class="flex items-center gap-2">
                            <p class="p-2 border border-gray-500 rounded">
-                              {{ $select_memo->fishing_time_start }}
+                              {{ $select_memo->fishing_time_start ? \Carbon\Carbon::parse($select_memo->fishing_time_start)->format('H:i') : '' }}
                            </p>
                            <span class="text-gray-600">〜</span>
                            <p class="p-2 border border-gray-500 rounded">
-                              {{ $select_memo->fishing_time_end }}
+                              {{ $select_memo->fishing_time_end ? \Carbon\Carbon::parse($select_memo->fishing_time_end)->format('H:i') : '' }}
                            </p>
                         </div>
                      </div>
