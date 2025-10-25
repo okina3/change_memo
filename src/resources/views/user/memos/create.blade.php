@@ -51,12 +51,6 @@
                            <option value="sunny" @selected(old('weather') === 'sunny')>晴れ</option>
                            <option value="cloudy" @selected(old('weather') === 'cloudy')>曇り</option>
                            <option value="rain" @selected(old('weather') === 'rain')>雨</option>
-                           <option value="sunny_cloudy" @selected(old('weather') === 'sunny_cloudy')>晴れ → 曇り</option>
-                           <option value="sunny_rain" @selected(old('weather') === 'sunny_rain')>晴れ → 雨</option>
-                           <option value="cloudy_sunny" @selected(old('weather') === 'cloudy_sunny')>曇り → 晴れ</option>
-                           <option value="cloudy_rain" @selected(old('weather') === 'cloudy_rain')>曇り → 雨</option>
-                           <option value="rain_sunny" @selected(old('weather') === 'rain_sunny')>雨 → 晴れ</option>
-                           <option value="rain_cloudy" @selected(old('weather') === 'rain_cloudy')>雨 → 曇り</option>
                            <option value="other" @selected(old('weather') === 'other')>その他</option>
                         </select>
                         {{-- エラーメッセージ（天気） --}}

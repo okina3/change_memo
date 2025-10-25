@@ -19,12 +19,6 @@ return new class extends Migration {
                 'sunny',
                 'cloudy',
                 'rain',
-                'sunny_cloudy',
-                'sunny_rain',
-                'cloudy_sunny',
-                'cloudy_rain',
-                'rain_sunny',
-                'rain_cloudy',
                 'other',
             ])->nullable();
             $table->unsignedTinyInteger('wind_speed_min')->nullable();

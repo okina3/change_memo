@@ -15,11 +15,9 @@ return new class extends Migration {
             $table->foreignId('memo_id')
                 ->constrained('memos')
                 ->cascadeOnDelete();
-            $table->boolean('has_flow')->nullable();
-            $table->enum('water_clarity', ['clear', 'slightly', 'turbid', 'very_turbid'])
-                ->nullable();
-            $table->enum('underwater_debris', ['none', 'slightly', 'present'])
-                ->nullable();
+            $table->boolean('has_flow');
+            $table->enum('water_clarity', ['clear', 'slightly', 'turbid', 'very_turbid']);
+            $table->enum('underwater_debris', ['none', 'slightly', 'present']);
             $table->decimal('water_level', 5, 1)->nullable();
             $table->unsignedTinyInteger('water_temp')->nullable();
             $table->timestamps();
