@@ -12,16 +12,17 @@ return new class extends Migration {
     {
         Schema::create('river_conditions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('memo_id')->constrained('memos')->cascadeOnDelete();
-
+            $table->foreignId('memo_id')
+                ->constrained('memos')
+                ->cascadeOnDelete();
             $table->boolean('has_flow')->nullable();
-            $table->enum('water_clarity', ['clear','slightly','turbid','very_turbid'])->nullable();
-            $table->enum('underwater_debris', ['none','slightly','present'])->nullable();
+            $table->enum('water_clarity', ['clear', 'slightly', 'turbid', 'very_turbid'])
+                ->nullable();
+            $table->enum('underwater_debris', ['none', 'slightly', 'present'])
+                ->nullable();
             $table->decimal('water_level', 5, 1)->nullable();
             $table->unsignedTinyInteger('water_temp')->nullable();
-
             $table->timestamps();
-
             $table->unique('memo_id');
         });
     }

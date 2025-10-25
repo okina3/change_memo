@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RiverCondition extends Model
 {
@@ -25,4 +26,13 @@ class RiverCondition extends Model
         'water_level' => 'decimal:1',
         'water_temp' => 'integer',
     ];
+
+    /**
+     * Memoモデルへのリレーションを返す（一対一）。
+     * @return BelongsTo
+     */
+    public function memo(): BelongsTo
+    {
+        return $this->belongsTo(Memo::class);
+    }
 }
