@@ -10,11 +10,11 @@ return new class extends Migration {
         Schema::create('baits', function (Blueprint $table) {
             $table->id();
             $table->foreignId('memo_id')
-            ->constrained('memos')
-            ->cascadeOnDelete();
+                ->constrained('memos')
+                ->cascadeOnDelete();
             $table->string('name');
             $table->unsignedTinyInteger('position')
-            ->default(0);
+                ->default(0);
             $table->timestamps();
 
             $table->unique(['memo_id', 'position']);

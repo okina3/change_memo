@@ -48,6 +48,15 @@ class Memo extends Model
     }
 
     /**
+     * Baitモデルとの一対多のリレーションを定義。
+     * @return HasMany
+     */
+    public function baits(): HasMany
+    {
+        return $this->hasMany(Bait::class)->orderBy('position');
+    }
+
+    /**
      * Tagモデルとの多対多のリレーションを定義。
      * @return BelongsToMany
      */
