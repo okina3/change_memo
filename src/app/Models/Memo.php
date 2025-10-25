@@ -30,7 +30,7 @@ class Memo extends Model
     ];
 
     /**
-     * WeatherConditionモデルとの一対一のリレーションを定義。
+     * WeatherCondition（気象）モデルとの一対一のリレーションを定義。
      * @return HasOne
      */
     public function weatherCondition(): HasOne
@@ -39,7 +39,7 @@ class Memo extends Model
     }
 
     /**
-     * RiverConditionモデルとの一対一のリレーションを定義。
+     * RiverCondition（川の状態）モデルとの一対一のリレーションを定義。
      * @return HasOne
      */
     public function riverCondition(): HasOne
@@ -48,12 +48,23 @@ class Memo extends Model
     }
 
     /**
-     * Baitモデルとの一対多のリレーションを定義。
+     * Baitモデル（エサ）との一対多のリレーションを定義。
      * @return HasMany
      */
     public function baits(): HasMany
     {
-        return $this->hasMany(Bait::class)->orderBy('position');
+        return $this->hasMany(Bait::class)
+            ->orderBy('position');
+    }
+
+    /**
+     * CatchRecord(釣果)との一対多のリレーションを定義。
+     * @return HasMany
+     */
+    public function catches(): HasMany
+    {
+        return $this->hasMany(CatchRecord::class)
+            ->orderBy('position');
     }
 
     /**
