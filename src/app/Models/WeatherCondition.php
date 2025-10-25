@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class WeatherCondition extends Model
 {
@@ -23,4 +24,13 @@ class WeatherCondition extends Model
         'wind_speed_min' => 'integer',
         'wind_speed_max' => 'integer',
     ];
+
+    /**
+     * Memoモデルへのリレーションを返す（一対一）。
+     * @return BelongsTo
+     */
+    public function memo(): BelongsTo
+    {
+        return $this->belongsTo(Memo::class);
+    }
 }
