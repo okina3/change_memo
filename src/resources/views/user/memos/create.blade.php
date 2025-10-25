@@ -10,16 +10,14 @@
                {{-- 釣行日・釣行時間・釣り場所 --}}
                <div class="mb-8">
                   <div class="flex flex-wrap items-start gap-20">
-                     {{-- 釣行日 --}}
-                     <div class="flex flex-col">
+                     <div class="">
                         <h2 class="sub_heading mb-1">釣行日</h2>
                         <input class="rounded" type="date" name="fishing_date" value="{{ old('fishing_date') }}"
                            max="{{ now()->toDateString() }}" />
                         {{-- エラーメッセージ（釣行日） --}}
                         <x-input-error class="mt-2" :messages="$errors->get('fishing_date')" />
                      </div>
-                     {{-- 釣行時間 --}}
-                     <div class="flex flex-col">
+                     <div class="">
                         <h2 class="sub_heading mb-1">釣行時間</h2>
                         <div class="flex items-center gap-2">
                            <input class="rounded text-center" type="time" name="fishing_time_start"
@@ -32,8 +30,7 @@
                         <x-input-error class="mt-2" :messages="$errors->get('fishing_time_start')" />
                         <x-input-error class="mt-2" :messages="$errors->get('fishing_time_end')" />
                      </div>
-                     {{-- 釣り場所 --}}
-                     <div class="flex flex-col">
+                     <div class="">
                         <h2 class="sub_heading mb-1">釣り場所</h2>
                         <input class="w-60 rounded" type="text" name="fishing_spot" value="{{ old('fishing_spot') }}"
                            placeholder="例: ○○港 防波堤" />
@@ -43,12 +40,13 @@
                   </div>
                </div>
 
-               <div class="flex flex-col md:flex-row md:items-start md:gap-20">
-                  {{-- 天気の入力 --}}
-                  <div class="mb-8">
-                     <h2 class="sub_heading mb-1">天気</h2>
-                     <div>
-                        <select id="weather" name="weather" class="rounded w-56">
+               {{-- 気象状態 --}}
+               <div class="mb-8">
+                  <h2 class="sub_heading mb-1">気象状態</h2>
+                  <div class="flex flex-col md:flex-row md:items-start md:gap-28">
+                     <div class="">
+                        <label class="block text-sm text-gray-700 mb-1">天気</label>
+                        <select name="weather" class="rounded w-56">
                            <option value="" @selected(old('weather', '') === '')>未選択</option>
                            <option value="sunny" @selected(old('weather') === 'sunny')>晴れ</option>
                            <option value="cloudy" @selected(old('weather') === 'cloudy')>曇り</option>
@@ -61,47 +59,40 @@
                            <option value="rain_cloudy" @selected(old('weather') === 'rain_cloudy')>雨 → 曇り</option>
                            <option value="other" @selected(old('weather') === 'other')>その他</option>
                         </select>
+                        {{-- エラーメッセージ（天気） --}}
+                        <x-input-error class="mt-2" :messages="$errors->get('weather')" />
                      </div>
-                     {{-- エラーメッセージ（天気） --}}
-                     <x-input-error class="mt-2" :messages="$errors->get('weather')" />
-                  </div>
-                  {{-- 風（風速・風向） --}}
-                  <div class="mb-8">
-                     <div class="flex flex-wrap items-start gap-6">
-                        {{-- 風速 --}}
-                        <div class="flex flex-col">
-                           <h2 class="sub_heading mb-1">風速</h2>
-                           <div class="flex items-center gap-2">
-                              <input class="rounded text-center" type="number" name="wind_speed_min"
-                                 value="{{ old('wind_speed_min') }}" placeholder="1" inputmode="numeric" step="1"
-                                 min="1" max="9" />
-                              <span class="text-gray-600">〜</span>
-                              <input class="rounded text-center" type="number" name="wind_speed_max"
-                                 value="{{ old('wind_speed_max') }}" placeholder="2" inputmode="numeric" step="1"
-                                 min="1" max="9" />
-                              <span class="text-gray-600">m/s</span>
-                           </div>
-                           {{-- エラーメッセージ（風速） --}}
-                           <x-input-error class="mt-2" :messages="$errors->get('wind_speed_min')" />
-                           <x-input-error class="mt-2" :messages="$errors->get('wind_speed_max')" />
+                     <div class="">
+                        <label class="block text-sm text-gray-700 mb-1">風速</label>
+                        <div class="flex items-center gap-2">
+                           <input class="rounded text-center" type="number" name="wind_speed_min"
+                              value="{{ old('wind_speed_min') }}" placeholder="1" inputmode="numeric" step="1"
+                              min="1" max="9" />
+                           <span class="text-gray-600">〜</span>
+                           <input class="rounded text-center" type="number" name="wind_speed_max"
+                              value="{{ old('wind_speed_max') }}" placeholder="2" inputmode="numeric" step="1"
+                              min="1" max="9" />
+                           <span class="text-gray-600">m/s</span>
                         </div>
-                        {{-- 風向 --}}
-                        <div class="flex flex-col">
-                           <h2 class="sub_heading mb-1">風向</h2>
-                           <select name="wind_direction" class="rounded">
-                              <option value="" @selected(old('wind_direction', '') === '')>未選択</option>
-                              <option value="N" @selected(old('wind_direction') === 'N')>北</option>
-                              <option value="NE" @selected(old('wind_direction') === 'NE')>北東</option>
-                              <option value="E" @selected(old('wind_direction') === 'E')>東</option>
-                              <option value="SE" @selected(old('wind_direction') === 'SE')>南東</option>
-                              <option value="S" @selected(old('wind_direction') === 'S')>南</option>
-                              <option value="SW" @selected(old('wind_direction') === 'SW')>南西</option>
-                              <option value="W" @selected(old('wind_direction') === 'W')>西</option>
-                              <option value="NW" @selected(old('wind_direction') === 'NW')>北西</option>
-                           </select>
-                           {{-- エラーメッセージ（風向） --}}
-                           <x-input-error class="mt-2" :messages="$errors->get('wind_direction')" />
-                        </div>
+                        {{-- エラーメッセージ（風速） --}}
+                        <x-input-error class="mt-2" :messages="$errors->get('wind_speed_min')" />
+                        <x-input-error class="mt-2" :messages="$errors->get('wind_speed_max')" />
+                     </div>
+                     <div class="">
+                        <label class="block text-sm text-gray-700 mb-1">風向</label>
+                        <select name="wind_direction" class="rounded">
+                           <option value="" @selected(old('wind_direction', '') === '')>未選択</option>
+                           <option value="N" @selected(old('wind_direction') === 'N')>北</option>
+                           <option value="NE" @selected(old('wind_direction') === 'NE')>北東</option>
+                           <option value="E" @selected(old('wind_direction') === 'E')>東</option>
+                           <option value="SE" @selected(old('wind_direction') === 'SE')>南東</option>
+                           <option value="S" @selected(old('wind_direction') === 'S')>南</option>
+                           <option value="SW" @selected(old('wind_direction') === 'SW')>南西</option>
+                           <option value="W" @selected(old('wind_direction') === 'W')>西</option>
+                           <option value="NW" @selected(old('wind_direction') === 'NW')>北西</option>
+                        </select>
+                        {{-- エラーメッセージ（風向） --}}
+                        <x-input-error class="mt-2" :messages="$errors->get('wind_direction')" />
                      </div>
                   </div>
                </div>
@@ -274,11 +265,11 @@
                   </div>
                </div>
 
-               {{-- メモの内容入力 --}}
+               {{-- メモの備考入力 --}}
                <div class="mb-5">
-                  <h2 class="sub_heading mb-1">内容</h2>
-                  <textarea class="w-full rounded" name="content" rows="7" placeholder="ここにメモを入力">{{ old('content') }}</textarea>
-                  {{-- エラーメッセージ（メモの内容） --}}
+                  <h2 class="sub_heading mb-1">備考</h2>
+                  <textarea class="w-full rounded" name="content" rows="7" placeholder="ここに入力">{{ old('content') }}</textarea>
+                  {{-- エラーメッセージ（メモの備考） --}}
                   <x-input-error class="mt-2" :messages="$errors->get('content')" />
                </div>
                {{-- 既存タグの選択 --}}
