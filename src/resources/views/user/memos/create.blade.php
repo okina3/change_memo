@@ -270,6 +270,18 @@
                   @php
                      $oldCatches = old('catches', []);
                      $initialCount = max(1, min(count($oldCatches), 5));
+                     // 魚種の選択肢（必要に応じてここで追加・編集してください）
+                     $fishOptions = [
+                         'ヤマメ',
+                         'アマゴ',
+                         'イワナ',
+                         'ニジマス',
+                         'ブラックバス',
+                         'メバル',
+                         'アジ',
+                         'サバ',
+                         'その他',
+                     ];
                   @endphp
                   <div id="catches-container" class="space-y-2">
                      @for ($i = 0; $i < $initialCount; $i++)
@@ -278,9 +290,17 @@
                         @endphp
                         <div class="flex flex-wrap items-center gap-3 catch-row">
                            <div class="w-full sm:w-auto">
-                              <input class="w-full sm:w-48 rounded" type="text"
-                                 name="catches[{{ $i }}][name]" value="{{ $catch['name'] ?? '' }}"
-                                 placeholder="魚種名（例: ヤマメ）" />
+                              <select class="w-full sm:w-48 rounded" name="catches[{{ $i }}][name]">
+                                 <option value="">魚種を選択</option>
+                                 @foreach ($fishOptions as $opt)
+                                    <option value="{{ $opt }}" @selected(($catch['name'] ?? '') === $opt)>
+                                       {{ $opt }}</option>
+                                 @endforeach
+                                 {{-- ユーザーが以前入力した値が選択肢にない場合はその値を追加して選択状態にする --}}
+                                 @if (!empty($catch['name']) && !in_array($catch['name'], $fishOptions))
+                                    <option value="{{ $catch['name'] }}" selected>{{ $catch['name'] }}</option>
+                                 @endif
+                              </select>
                            </div>
                            <div class="flex items-center gap-2">
                               <input class="w-20 sm:w-24 rounded text-right" type="number"
