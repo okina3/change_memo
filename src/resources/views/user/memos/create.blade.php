@@ -30,12 +30,36 @@
                         <x-input-error class="mt-2" :messages="$errors->get('fishing_time_start')" />
                         <x-input-error class="mt-2" :messages="$errors->get('fishing_time_end')" />
                      </div>
-                     <div class="">
-                        <h2 class="sub_heading mb-1">釣り場所</h2>
-                        <input class="w-60 rounded" type="text" name="fishing_spot" value="{{ old('fishing_spot') }}"
-                           placeholder="例: ○○港 防波堤" />
-                        {{-- エラーメッセージ（釣り場所） --}}
-                        <x-input-error class="mt-2" :messages="$errors->get('fishing_spot')" />
+                     <div class="flex items-center gap-2">
+                        <div class="">
+                           <h2 class="sub_heading mb-1">スポット</h2>
+                           <select name="fishing_spot" class="rounded">
+                              <option value="" @selected(old('fishing_spot', '') === '')>
+                                 スポットを選択
+                              </option>
+                              <option value="港" @selected(old('fishing_spot') === '港')>
+                                 港
+                              </option>
+                              <option value="河川" @selected(old('fishing_spot') === '河川')>
+                                 河川
+                              </option>
+                              <option value="湖" @selected(old('fishing_spot') === '湖')>
+                                 湖
+                              </option>
+                              <option value="防波堤" @selected(old('fishing_spot') === '防波堤')>
+                                 防波堤
+                              </option>
+                              <option value="その他" @selected(old('fishing_spot') === 'その他')>
+                                 その他
+                              </option>
+                           </select>
+                           {{-- エラーメッセージ（スポット） --}}
+                           <x-input-error class="mt-2" :messages="$errors->get('fishing_spot')" />
+                        </div>
+                        <div class="">
+                           <h2 class="text-sm text-gray-700 mb-1 mt-2">スポット（追加）</h2>
+                           <input class="rounded" type="text" name="location_name" placeholder="相模川上流">
+                        </div>
                      </div>
                   </div>
                </div>
