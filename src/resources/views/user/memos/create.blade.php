@@ -57,7 +57,7 @@
                            <x-input-error class="mt-2" :messages="$errors->get('fishing_spot')" />
                         </div>
                         <div class="">
-                           <h2 class="text-sm text-gray-700 mb-1 mt-2">スポット（追加）</h2>
+                           <h2 class="text-sm text-gray-700 mb-1 mt-2">（スポット名を追加）</h2>
                            <input class="rounded" type="text" name="location_name" value="{{ old('location_name') }}"
                               placeholder="相模川上流">
                            {{-- エラーメッセージ（スポット追加） --}}
@@ -248,7 +248,7 @@
                            </div>
                            <div class="mt-2">
                               <button type="button" id="add-bait-row" class="text-sm text-blue-700 hover:underline">
-                                 ＋ エサを追加（最大5件）
+                                 ＋ エサ入力エリアを追加（最大5件）
                               </button>
                            </div>
                            {{-- エラーメッセージ（エサ配列） --}}
@@ -256,7 +256,7 @@
                         </div>
                      </div>
                      <div class="">
-                        <h2 class="text-sm text-gray-700 mt-2 mb-1">エサ（追加）</h2>
+                        <h2 class="text-sm text-gray-700 mt-2 mb-1">（エサ名を追加）</h2>
                         <input class="rounded w-60" type="text" name="new_bait" value="{{ old('new_bait') }}"
                            placeholder="例: アオイソメ">
                         {{-- エラーメッセージ（エサ追加） --}}
@@ -264,76 +264,92 @@
                      </div>
                   </div>
                </div>
-               
+
                {{-- 釣果の入力 --}}
                <div class="mb-8">
-                  <h2 class="sub_heading mb-1">釣果</h2>
-                  @php
-                     $oldCatches = old('catches', []);
-                     $initialCount = max(1, min(count($oldCatches), 5));
-                     // 魚種の選択肢（必要に応じてここで追加・編集してください）
-                     $fishOptions = [
-                         'ヤマメ',
-                         'アマゴ',
-                         'イワナ',
-                         'ニジマス',
-                         'ブラックバス',
-                         'メバル',
-                         'アジ',
-                         'サバ',
-                         'その他',
-                     ];
-                  @endphp
-                  <div class="flex items-start gap-6">
-                     <div id="catches-container" class="space-y-2 flex-1">
-                     @for ($i = 0; $i < $initialCount; $i++)
+                  <div class="flex gap-6">
+                     <div class="">
+                        <h2 class="sub_heading mb-1">釣果</h2>
                         @php
-                           $catch = $oldCatches[$i] ?? ['name' => '', 'count' => '', 'length_cm' => ''];
+                           $oldCatches = old('catches', []);
+                           $initialCount = max(1, min(count($oldCatches), 5));
+                           // 魚種の選択肢（必要に応じてここで追加・編集してください）
+                           $fishOptions = [
+                               'ヤマメ',
+                               'アマゴ',
+                               'イワナ',
+                               'ニジマス',
+                               'ブラックバス',
+                               'メバル',
+                               'アジ',
+                               'サバ',
+                               'その他',
+                           ];
                         @endphp
-                        <div class="flex flex-wrap items-center gap-3 catch-row">
-                           <div class="w-full sm:w-auto">
-                              <select class="w-full sm:w-48 rounded" name="catches[{{ $i }}][name]">
-                                 <option value="">魚種を選択</option>
-                                 @foreach ($fishOptions as $opt)
-                                    <option value="{{ $opt }}" @selected(($catch['name'] ?? '') === $opt)>
-                                       {{ $opt }}</option>
-                                 @endforeach
-                                 {{-- ユーザーが以前入力した値が選択肢にない場合はその値を追加して選択状態にする --}}
-                                 @if (!empty($catch['name']) && !in_array($catch['name'], $fishOptions))
-                                    <option value="{{ $catch['name'] }}" selected>{{ $catch['name'] }}</option>
-                                 @endif
-                              </select>
+                        <div class="flex items-start gap-6">
+                           <div id="catches-container" class="space-y-2 flex-1">
+                              @for ($i = 0; $i < $initialCount; $i++)
+                                 @php
+                                    $catch = $oldCatches[$i] ?? ['name' => '', 'count' => '', 'length_cm' => ''];
+                                 @endphp
+                                 <div class="flex flex-wrap items-center gap-3 catch-row">
+                                    <div class="w-full sm:w-auto">
+                                       <select class="w-full sm:w-48 rounded"
+                                          name="catches[{{ $i }}][name]">
+                                          <option value="">魚種を選択</option>
+                                          @foreach ($fishOptions as $opt)
+                                             <option value="{{ $opt }}" @selected(($catch['name'] ?? '') === $opt)>
+                                                {{ $opt }}</option>
+                                          @endforeach
+                                          {{-- ユーザーが以前入力した値が選択肢にない場合はその値を追加して選択状態にする --}}
+                                          @if (!empty($catch['name']) && !in_array($catch['name'], $fishOptions))
+                                             <option value="{{ $catch['name'] }}" selected>{{ $catch['name'] }}
+                                             </option>
+                                          @endif
+                                       </select>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                       <input class="w-20 sm:w-24 rounded text-right" type="number"
+                                          name="catches[{{ $i }}][count]"
+                                          value="{{ $catch['count'] ?? '' }}" placeholder="0" inputmode="numeric"
+                                          min="0" step="1" />
+                                       <span class="text-gray-600 hidden sm:inline">匹</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                       <input class="w-20 sm:w-24 rounded text-right" type="number"
+                                          name="catches[{{ $i }}][length_cm]"
+                                          value="{{ $catch['length_cm'] ?? '' }}" placeholder="0"
+                                          inputmode="numeric" min="0" step="1" />
+                                       <span class="text-gray-600 hidden sm:inline">cm</span>
+                                    </div>
+                                    <button type="button"
+                                       class="text-xs text-red-600 hover:underline remove-catch-row {{ $i === 0 ? 'hidden' : '' }}">
+                                       削除
+                                    </button>
+                                 </div>
+                              @endfor
                            </div>
-                           <div class="flex items-center gap-2">
-                              <input class="w-20 sm:w-24 rounded text-right" type="number"
-                                 name="catches[{{ $i }}][count]" value="{{ $catch['count'] ?? '' }}"
-                                 placeholder="0" inputmode="numeric" min="0" step="1" />
-                              <span class="text-gray-600 hidden sm:inline">匹</span>
-                           </div>
-                           <div class="flex items-center gap-2">
-                              <input class="w-20 sm:w-24 rounded text-right" type="number"
-                                 name="catches[{{ $i }}][length_cm]"
-                                 value="{{ $catch['length_cm'] ?? '' }}" placeholder="0" inputmode="numeric"
-                                 min="0" step="1" />
-                              <span class="text-gray-600 hidden sm:inline">cm</span>
-                           </div>
-                           <button type="button"
-                              class="text-xs text-red-600 hover:underline remove-catch-row {{ $i === 0 ? 'hidden' : '' }}">
-                              削除
+                        </div>
+                        <div class="mt-2">
+                           <button type="button" id="add-catch-row" class="text-sm text-blue-700 hover:underline">
+                              ＋釣果入力エリア追加（最大5件）
                            </button>
                         </div>
-                     @endfor
                      </div>
-                     <div id="catch-total" class="w-44 p-3 border rounded text-center">
-                        <div class="text-sm text-gray-600">合計</div>
-                        <div id="catch-total-number" class="text-2xl font-semibold">0</div>
-                        <div class="text-sm text-gray-600">匹</div>
+                     <div class="">
+                        <h2 class="text-sm text-gray-700 mt-2 mb-1">（魚名を追加）</h2>
+                        <input class="rounded w-60" type="text" name="new_fish" value="{{ old('new_fish') }}"
+                           placeholder="例: ヤマメ">
+                        {{-- エラーメッセージ（魚名追加） --}}
+                        <x-input-error class="mt-2" :messages="$errors->get('new_fish')" />
                      </div>
-                  </div>
-                  <div class="mt-2">
-                     <button type="button" id="add-catch-row" class="text-sm text-blue-700 hover:underline">
-                        ＋釣果を追加（最大5件）
-                     </button>
+                     <div id="catch-total" class="w-32 p-1 border rounded self-center mt-1">
+                        <div class="flex items-baseline justify-center gap-3">
+                           <div class="text-sm text-gray-600">合計</div>
+                           <div id="catch-total-number" class="text-2xl font-semibold">0</div>
+                           <div class="text-sm text-gray-600">匹</div>
+                        </div>
+                     </div>
                   </div>
                   {{-- エラーメッセージ（釣果の内訳） --}}
                   <x-input-error class="mt-2" :messages="$errors->get('catches.*.name')" />
