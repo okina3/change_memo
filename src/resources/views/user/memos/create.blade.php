@@ -58,7 +58,10 @@
                         </div>
                         <div class="">
                            <h2 class="text-sm text-gray-700 mb-1 mt-2">スポット（追加）</h2>
-                           <input class="rounded" type="text" name="location_name" placeholder="相模川上流">
+                           <input class="rounded" type="text" name="location_name" value="{{ old('location_name') }}"
+                              placeholder="相模川上流">
+                           {{-- エラーメッセージ（スポット追加） --}}
+                           <x-input-error class="mt-2" :messages="$errors->get('location_name')" />
                         </div>
                      </div>
                   </div>
@@ -210,34 +213,56 @@
 
                {{-- エサの入力 --}}
                <div class="mb-8">
-                  <h2 class="sub_heading mb-1">エサ</h2>
-                  @php
-                     $oldBaits = old('baits', []);
-                     $legacyBait = old('bait'); // 互換: 以前の単一セレクト値がある場合に復元
-                     if (empty($oldBaits) && !empty($legacyBait)) {
-                         $oldBaits = [$legacyBait];
-                     }
-                     $initialBaitCount = max(1, min(count($oldBaits), 5));
-                  @endphp
-                  <div id="baits-container" class="flex flex-wrap items-center gap-2">
-                     @for ($i = 0; $i < $initialBaitCount; $i++)
-                        <div class="flex items-center gap-2 bait-row">
-                           <input class="w-45 rounded" type="text" name="baits[{{ $i }}]"
-                              value="{{ $oldBaits[$i] ?? '' }}" placeholder="例: ミミズ " />
-                           <button type="button"
-                              class="text-xs text-red-600 hover:underline remove-bait-row {{ $i === 0 ? 'hidden' : '' }}">
-                              削除
-                           </button>
+                  <div class="flex gap-6">
+                     <div class="">
+                        <h2 class="sub_heading mb-1">エサ</h2>
+                        @php
+                           $oldBaits = old('baits', []);
+                           $legacyBait = old('bait'); // 互換: 以前の単一セレクト値がある場合に復元
+                           if (empty($oldBaits) && !empty($legacyBait)) {
+                               $oldBaits = [$legacyBait];
+                           }
+                           $initialBaitCount = max(1, min(count($oldBaits), 5));
+                        @endphp
+                        @php
+                           // エサの選択肢（将来的には DB から渡す想定）
+                           $baitOptions = ['ミミズ', 'イソメ', '砂虫', 'コマセ', 'ルアー', 'その他'];
+                        @endphp
+                        <div>
+                           <div id="baits-container" class="space-y-2">
+                              @for ($i = 0; $i < $initialBaitCount; $i++)
+                                 <div class="flex items-center gap-3 bait-row">
+                                    <select class="rounded w-60" name="baits[{{ $i }}]">
+                                       <option value="">選択してください</option>
+                                       @foreach ($baitOptions as $opt)
+                                          <option value="{{ $opt }}" @selected(($oldBaits[$i] ?? '') === $opt)>
+                                             {{ $opt }}</option>
+                                       @endforeach
+                                    </select>
+                                    <button type="button"
+                                       class="text-xs text-red-600 hover:underline remove-bait-row {{ $i === 0 ? 'hidden' : '' }}">
+                                       削除
+                                    </button>
+                                 </div>
+                              @endfor
+                           </div>
+                           <div class="mt-2">
+                              <button type="button" id="add-bait-row" class="text-sm text-blue-700 hover:underline">
+                                 ＋ エサを追加（最大5件）
+                              </button>
+                           </div>
+                           {{-- エラーメッセージ（エサ配列） --}}
+                           <x-input-error class="mt-2" :messages="$errors->get('baits.*')" />
                         </div>
-                     @endfor
+                     </div>
+                     <div class="">
+                        <h2 class="text-sm text-gray-700 mt-2 mb-1">エサ（追加）</h2>
+                        <input class="rounded w-60" type="text" name="new_bait" value="{{ old('new_bait') }}"
+                           placeholder="例: アオイソメ">
+                        {{-- エラーメッセージ（エサ追加） --}}
+                        <x-input-error class="mt-2" :messages="$errors->get('new_bait')" />
+                     </div>
                   </div>
-                  <div class="mt-2">
-                     <button type="button" id="add-bait-row" class="text-sm text-blue-700 hover:underline">
-                        ＋ エサを追加（最大5件）
-                     </button>
-                  </div>
-                  {{-- エラーメッセージ（エサ配列） --}}
-                  <x-input-error class="mt-2" :messages="$errors->get('baits.*')" />
                </div>
                {{-- 釣果の入力 --}}
                <div class="mb-8">
@@ -482,18 +507,17 @@
       const addBaitRowBtn = document.getElementById('add-bait-row');
       const MAX_BAIT_ROWS = 5;
 
-      function getBaitRows() {
-         return Array.from(baitsContainer?.querySelectorAll('.bait-row') || []);
-      }
+      const getBaitRows = () => Array.from(baitsContainer?.querySelectorAll('.bait-row') || []);
 
-      function reindexBaitRows() {
+      // 再インデックス＆UI更新
+      function updateBaitControls() {
          const rows = getBaitRows();
          rows.forEach((row, idx) => {
-            row.querySelectorAll('input[name^="baits["]').forEach(input => {
-               input.name = input.name.replace(/baits\[\d+\]/, `baits[${idx}]`);
+            row.querySelectorAll('select[name^="baits["], input[name^="baits["]').forEach(el => {
+               el.name = el.name.replace(/baits\[\d+\]/, `baits[${idx}]`);
             });
-            const delBtn = row.querySelector('.remove-bait-row');
-            if (delBtn) delBtn.classList.toggle('hidden', idx === 0);
+            const del = row.querySelector('.remove-bait-row');
+            if (del) del.classList.toggle('hidden', idx === 0);
          });
          const disabled = rows.length >= MAX_BAIT_ROWS;
          if (addBaitRowBtn) {
@@ -503,40 +527,34 @@
          }
       }
 
-      function attachBaitDeleteHandlers(scope) {
-         (scope || document).querySelectorAll('.remove-bait-row').forEach(btn => {
-            if (!btn._bound) {
-               btn.addEventListener('click', () => {
-                  const row = btn.closest('.bait-row');
-                  if (row && getBaitRows().length > 1) {
-                     row.remove();
-                     reindexBaitRows();
-                  }
-               });
-               btn._bound = true;
-            }
-         });
-      }
+      // イベント委譲で削除を処理（後から追加された要素も自動で扱える）
+      baitsContainer?.addEventListener('click', (e) => {
+         const btn = e.target.closest?.('.remove-bait-row');
+         if (!btn) return;
+         const row = btn.closest('.bait-row');
+         if (!row) return;
+         if (getBaitRows().length <= 1) return; // 最低1行を維持
+         row.remove();
+         updateBaitControls();
+      });
 
+      // 行の追加（最初の行をクローンして値をクリア）
       function addBaitRow() {
          const rows = getBaitRows();
          if (rows.length >= MAX_BAIT_ROWS) return;
          const base = rows[0];
          if (!base) return;
          const clone = base.cloneNode(true);
-         const input = clone.querySelector('input');
-         if (input) input.value = '';
-         const delBtn = clone.querySelector('.remove-bait-row');
-         if (delBtn) delBtn.classList.remove('hidden');
+         clone.querySelectorAll('select, input').forEach(el => {
+            if (el.tagName === 'SELECT') el.selectedIndex = 0;
+            else el.value = '';
+         });
          baitsContainer.appendChild(clone);
-         attachBaitDeleteHandlers(clone);
-         reindexBaitRows();
+         updateBaitControls();
       }
 
-      if (addBaitRowBtn && baitsContainer) {
-         addBaitRowBtn.addEventListener('click', addBaitRow);
-         attachBaitDeleteHandlers(baitsContainer);
-         reindexBaitRows();
-      }
+      addBaitRowBtn?.addEventListener('click', addBaitRow);
+      // 初期化
+      updateBaitControls();
    </script>
 </x-app-layout>
