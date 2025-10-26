@@ -43,7 +43,7 @@
                {{-- 気象状態 --}}
                <div class="mb-8">
                   <h2 class="sub_heading mb-1">気象状態</h2>
-                  <div class="flex flex-col md:flex-row md:items-start md:gap-28">
+                  <div class="flex flex-col md:flex-row md:items-start md:gap-16">
                      <div class="">
                         <label class="block text-sm text-gray-700 mb-1">天気</label>
                         <select name="weather" class="rounded w-56">
@@ -56,21 +56,28 @@
                         {{-- エラーメッセージ（天気） --}}
                         <x-input-error class="mt-2" :messages="$errors->get('weather')" />
                      </div>
-                     <div class="">
-                        <label class="block text-sm text-gray-700 mb-1">風速</label>
+                     <div>
+                        <label class="block text-sm text-gray-700 mb-1">気温</label>
                         <div class="flex items-center gap-2">
-                           <input class="rounded text-center" type="number" name="wind_speed_min"
-                              value="{{ old('wind_speed_min') }}" placeholder="1" inputmode="numeric" step="1"
-                              min="1" max="9" />
-                           <span class="text-gray-600">〜</span>
-                           <input class="rounded text-center" type="number" name="wind_speed_max"
-                              value="{{ old('wind_speed_max') }}" placeholder="2" inputmode="numeric" step="1"
+                           <input class="w-24 rounded text-right" type="number" name="air_temperature"
+                              value="{{ old('air_temperature') }}" placeholder="10" inputmode="numeric" step="1"
+                              min="0" max="60" />
+                           <span class="text-gray-600">℃</span>
+                        </div>
+                        {{-- エラーメッセージ（気温） --}}
+                        <x-input-error class="mt-2" :messages="$errors->get('air_temperature')" />
+                     </div>
+
+                     <div class="">
+                        <label class="block text-sm text-gray-700 mb-1">最大風速</label>
+                        <div class="flex items-center gap-2">
+                           <input class="rounded text-center" type="number" name="wind_speed"
+                              value="{{ old('wind_speed') }}" placeholder="1" inputmode="numeric" step="1"
                               min="1" max="9" />
                            <span class="text-gray-600">m/s</span>
                         </div>
                         {{-- エラーメッセージ（風速） --}}
-                        <x-input-error class="mt-2" :messages="$errors->get('wind_speed_min')" />
-                        <x-input-error class="mt-2" :messages="$errors->get('wind_speed_max')" />
+                        <x-input-error class="mt-2" :messages="$errors->get('wind_speed')" />
                      </div>
                      <div class="">
                         <label class="block text-sm text-gray-700 mb-1">風向</label>
@@ -177,86 +184,84 @@
                   </div>
                </div>
 
-               <div class="flex flex-col md:flex-row md:items-start md:gap-24">
-                  {{-- エサの入力 --}}
-                  <div class="mb-8">
-                     <h2 class="sub_heading mb-1">エサ</h2>
-                     @php
-                        $oldBaits = old('baits', []);
-                        $legacyBait = old('bait'); // 互換: 以前の単一セレクト値がある場合に復元
-                        if (empty($oldBaits) && !empty($legacyBait)) {
-                            $oldBaits = [$legacyBait];
-                        }
-                        $initialBaitCount = max(1, min(count($oldBaits), 5));
-                     @endphp
-                     <div id="baits-container" class="space-y-2">
-                        @for ($i = 0; $i < $initialBaitCount; $i++)
-                           <div class="flex items-center gap-2 bait-row">
-                              <input class="w-60 rounded" type="text" name="baits[{{ $i }}]"
-                                 value="{{ $oldBaits[$i] ?? '' }}" placeholder="例: ミミズ " />
-                              <button type="button"
-                                 class="text-xs text-red-600 hover:underline remove-bait-row {{ $i === 0 ? 'hidden' : '' }}">
-                                 削除
-                              </button>
-                           </div>
-                        @endfor
-                     </div>
-                     <div class="mt-2">
-                        <button type="button" id="add-bait-row" class="text-sm text-blue-700 hover:underline">
-                           ＋ エサを追加（最大5件）
-                        </button>
-                     </div>
-                     {{-- エラーメッセージ（エサ配列） --}}
-                     <x-input-error class="mt-2" :messages="$errors->get('baits.*')" />
+               {{-- エサの入力 --}}
+               <div class="mb-8">
+                  <h2 class="sub_heading mb-1">エサ</h2>
+                  @php
+                     $oldBaits = old('baits', []);
+                     $legacyBait = old('bait'); // 互換: 以前の単一セレクト値がある場合に復元
+                     if (empty($oldBaits) && !empty($legacyBait)) {
+                         $oldBaits = [$legacyBait];
+                     }
+                     $initialBaitCount = max(1, min(count($oldBaits), 5));
+                  @endphp
+                  <div id="baits-container" class="flex flex-wrap items-center gap-2">
+                     @for ($i = 0; $i < $initialBaitCount; $i++)
+                        <div class="flex items-center gap-2 bait-row">
+                           <input class="w-45 rounded" type="text" name="baits[{{ $i }}]"
+                              value="{{ $oldBaits[$i] ?? '' }}" placeholder="例: ミミズ " />
+                           <button type="button"
+                              class="text-xs text-red-600 hover:underline remove-bait-row {{ $i === 0 ? 'hidden' : '' }}">
+                              削除
+                           </button>
+                        </div>
+                     @endfor
                   </div>
-                  {{-- 釣果の入力 --}}
-                  <div class="mb-8">
-                     <h2 class="sub_heading mb-1">釣果</h2>
-                     @php
-                        $oldCatches = old('catches', []);
-                        $initialCount = max(1, min(count($oldCatches), 5));
-                     @endphp
-                     <div id="catches-container" class="space-y-2">
-                        @for ($i = 0; $i < $initialCount; $i++)
-                           @php
-                              $catch = $oldCatches[$i] ?? ['name' => '', 'count' => '', 'length_cm' => ''];
-                           @endphp
-                           <div class="flex flex-wrap items-center gap-3 catch-row">
-                              <div class="w-full sm:w-auto">
-                                 <input class="w-full sm:w-48 rounded" type="text"
-                                    name="catches[{{ $i }}][name]" value="{{ $catch['name'] ?? '' }}"
-                                    placeholder="魚種名（例: ヤマメ）" />
-                              </div>
-                              <div class="flex items-center gap-2">
-                                 <input class="w-20 sm:w-24 rounded text-right" type="number"
-                                    name="catches[{{ $i }}][count]" value="{{ $catch['count'] ?? '' }}"
-                                    placeholder="0" inputmode="numeric" min="0" step="1" />
-                                 <span class="text-gray-600 hidden sm:inline">匹</span>
-                              </div>
-                              <div class="flex items-center gap-2">
-                                 <input class="w-20 sm:w-24 rounded text-right" type="number"
-                                    name="catches[{{ $i }}][length_cm]"
-                                    value="{{ $catch['length_cm'] ?? '' }}" placeholder="0" inputmode="numeric"
-                                    min="0" step="1" />
-                                 <span class="text-gray-600 hidden sm:inline">cm</span>
-                              </div>
-                              <button type="button"
-                                 class="text-xs text-red-600 hover:underline remove-catch-row {{ $i === 0 ? 'hidden' : '' }}">
-                                 削除
-                              </button>
-                           </div>
-                        @endfor
-                     </div>
-                     <div class="mt-2">
-                        <button type="button" id="add-catch-row" class="text-sm text-blue-700 hover:underline">
-                           ＋釣果を追加（最大5件）
-                        </button>
-                     </div>
-                     {{-- エラーメッセージ（釣果の内訳） --}}
-                     <x-input-error class="mt-2" :messages="$errors->get('catches.*.name')" />
-                     <x-input-error class="mt-2" :messages="$errors->get('catches.*.count')" />
-                     <x-input-error class="mt-2" :messages="$errors->get('catches.*.length_cm')" />
+                  <div class="mt-2">
+                     <button type="button" id="add-bait-row" class="text-sm text-blue-700 hover:underline">
+                        ＋ エサを追加（最大5件）
+                     </button>
                   </div>
+                  {{-- エラーメッセージ（エサ配列） --}}
+                  <x-input-error class="mt-2" :messages="$errors->get('baits.*')" />
+               </div>
+               {{-- 釣果の入力 --}}
+               <div class="mb-8">
+                  <h2 class="sub_heading mb-1">釣果</h2>
+                  @php
+                     $oldCatches = old('catches', []);
+                     $initialCount = max(1, min(count($oldCatches), 5));
+                  @endphp
+                  <div id="catches-container" class="space-y-2">
+                     @for ($i = 0; $i < $initialCount; $i++)
+                        @php
+                           $catch = $oldCatches[$i] ?? ['name' => '', 'count' => '', 'length_cm' => ''];
+                        @endphp
+                        <div class="flex flex-wrap items-center gap-3 catch-row">
+                           <div class="w-full sm:w-auto">
+                              <input class="w-full sm:w-48 rounded" type="text"
+                                 name="catches[{{ $i }}][name]" value="{{ $catch['name'] ?? '' }}"
+                                 placeholder="魚種名（例: ヤマメ）" />
+                           </div>
+                           <div class="flex items-center gap-2">
+                              <input class="w-20 sm:w-24 rounded text-right" type="number"
+                                 name="catches[{{ $i }}][count]" value="{{ $catch['count'] ?? '' }}"
+                                 placeholder="0" inputmode="numeric" min="0" step="1" />
+                              <span class="text-gray-600 hidden sm:inline">匹</span>
+                           </div>
+                           <div class="flex items-center gap-2">
+                              <input class="w-20 sm:w-24 rounded text-right" type="number"
+                                 name="catches[{{ $i }}][length_cm]"
+                                 value="{{ $catch['length_cm'] ?? '' }}" placeholder="0" inputmode="numeric"
+                                 min="0" step="1" />
+                              <span class="text-gray-600 hidden sm:inline">cm</span>
+                           </div>
+                           <button type="button"
+                              class="text-xs text-red-600 hover:underline remove-catch-row {{ $i === 0 ? 'hidden' : '' }}">
+                              削除
+                           </button>
+                        </div>
+                     @endfor
+                  </div>
+                  <div class="mt-2">
+                     <button type="button" id="add-catch-row" class="text-sm text-blue-700 hover:underline">
+                        ＋釣果を追加（最大5件）
+                     </button>
+                  </div>
+                  {{-- エラーメッセージ（釣果の内訳） --}}
+                  <x-input-error class="mt-2" :messages="$errors->get('catches.*.name')" />
+                  <x-input-error class="mt-2" :messages="$errors->get('catches.*.count')" />
+                  <x-input-error class="mt-2" :messages="$errors->get('catches.*.length_cm')" />
                </div>
 
                {{-- メモの備考入力 --}}
