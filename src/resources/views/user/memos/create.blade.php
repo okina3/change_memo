@@ -264,6 +264,7 @@
                      </div>
                   </div>
                </div>
+               
                {{-- 釣果の入力 --}}
                <div class="mb-8">
                   <h2 class="sub_heading mb-1">釣果</h2>
@@ -283,7 +284,8 @@
                          'その他',
                      ];
                   @endphp
-                  <div id="catches-container" class="space-y-2">
+                  <div class="flex items-start gap-6">
+                     <div id="catches-container" class="space-y-2 flex-1">
                      @for ($i = 0; $i < $initialCount; $i++)
                         @php
                            $catch = $oldCatches[$i] ?? ['name' => '', 'count' => '', 'length_cm' => ''];
@@ -321,6 +323,12 @@
                            </button>
                         </div>
                      @endfor
+                     </div>
+                     <div id="catch-total" class="w-44 p-3 border rounded text-center">
+                        <div class="text-sm text-gray-600">合計</div>
+                        <div id="catch-total-number" class="text-2xl font-semibold">0</div>
+                        <div class="text-sm text-gray-600">匹</div>
+                     </div>
                   </div>
                   <div class="mt-2">
                      <button type="button" id="add-catch-row" class="text-sm text-blue-700 hover:underline">
@@ -466,9 +474,9 @@
       function reindexCatchRows() {
          const rows = getCatchRows();
          rows.forEach((row, idx) => {
-            // 入力name内のインデックスを書き換え
-            row.querySelectorAll('input[name^="catches["]').forEach(input => {
-               input.name = input.name.replace(/catches\[\d+\]/, `catches[${idx}]`);
+            // name 属性を持つ要素すべてのインデックスを書き換え（select や input に対応）
+            row.querySelectorAll('[name^="catches["]').forEach(el => {
+               el.name = el.name.replace(/catches\[\d+\]/, `catches[${idx}]`);
             });
             // 1行目は削除ボタンを非表示、それ以外は表示
             const delBtn = row.querySelector('.remove-catch-row');
@@ -491,6 +499,7 @@
                   if (row && getCatchRows().length > 1) {
                      row.remove();
                      reindexCatchRows();
+                     computeTotalCatches();
                   }
                });
                btn._bound = true;
@@ -504,22 +513,53 @@
          const base = rows[0];
          if (!base) return;
          const clone = base.cloneNode(true);
-         // 値をクリア
-         clone.querySelectorAll('input').forEach(input => {
-            input.value = '';
+         // 値をクリア（input と select に対応）
+         clone.querySelectorAll('input, select').forEach(el => {
+            if (el.tagName === 'SELECT') el.selectedIndex = 0;
+            else el.value = '';
          });
          // 削除ボタンを表示（1行目以外）
          const delBtn = clone.querySelector('.remove-catch-row');
          if (delBtn) delBtn.classList.remove('hidden');
          catchesContainer.appendChild(clone);
          attachDeleteHandlers(clone);
+         attachCountListeners(clone);
          reindexCatchRows();
+         computeTotalCatches();
       }
 
       if (addCatchRowBtn && catchesContainer) {
          addCatchRowBtn.addEventListener('click', addCatchRow);
          attachDeleteHandlers(catchesContainer);
+         attachCountListeners(catchesContainer);
          reindexCatchRows();
+         computeTotalCatches();
+      }
+
+      // 合計を計算して表示
+      function computeTotalCatches() {
+         const rows = getCatchRows();
+         let total = 0;
+         rows.forEach(row => {
+            const input = row.querySelector('input[name$="[count]"]');
+            if (!input) return;
+            const v = parseInt(input.value, 10);
+            if (!Number.isNaN(v)) total += v;
+         });
+         const totalNumberEl = document.getElementById('catch-total-number');
+         if (totalNumberEl) totalNumberEl.textContent = String(total);
+      }
+
+      // カウント入力のイベントを行単位に追加（委譲ではなく個別バインド）
+      function attachCountListeners(scope) {
+         (scope || document).querySelectorAll('input[name$="[count]"]').forEach(input => {
+            if (!input._countBound) {
+               input.addEventListener('input', () => {
+                  computeTotalCatches();
+               });
+               input._countBound = true;
+            }
+         });
       }
 
       // --- エサの行 追加/削除（最大5件） ---
