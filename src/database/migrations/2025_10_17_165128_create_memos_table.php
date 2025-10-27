@@ -32,8 +32,8 @@ return new class extends Migration
             $table->decimal('max_wind', 3, 1)->nullable();
             $table->string('wind_dir', 2)->nullable();
 
-            // 川の状態
-            $table->unsignedTinyInteger('river_flow')->nullable();
+            // 川の状態 
+            $table->string('river_flow', 20)->nullable();
             $table->unsignedTinyInteger('turbidity')->nullable();
             $table->unsignedTinyInteger('debris')->nullable();
             $table->decimal('water_level', 4, 1)->nullable();

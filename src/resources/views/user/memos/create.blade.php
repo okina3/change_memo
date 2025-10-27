@@ -80,41 +80,40 @@
                      <div>
                         <label class="block text-sm text-gray-700 mb-1">気温</label>
                         <div class="flex items-center gap-2">
-                           <input class="w-24 rounded text-right" type="number" name="air_temperature"
-                              value="{{ old('air_temperature') }}" placeholder="10" inputmode="numeric" step="1"
+                           <input class="w-24 rounded text-right" type="number" name="air_temp"
+                              value="{{ old('air_temp') }}" placeholder="10" inputmode="numeric" step="1"
                               min="0" max="60" />
                            <span class="text-gray-600">℃</span>
                         </div>
                         {{-- エラーメッセージ（気温） --}}
-                        <x-input-error class="mt-2" :messages="$errors->get('air_temperature')" />
+                        <x-input-error class="mt-2" :messages="$errors->get('air_temp')" />
                      </div>
-
                      <div class="">
                         <label class="block text-sm text-gray-700 mb-1">最大風速</label>
                         <div class="flex items-center gap-2">
-                           <input class="rounded text-center" type="number" name="wind_speed"
-                              value="{{ old('wind_speed') }}" placeholder="1" inputmode="numeric" step="1"
-                              min="1" max="9" />
+                           <input class="rounded text-center" type="number" name="max_wind"
+                              value="{{ old('max_wind') }}" placeholder="1" inputmode="decimal" step="0.1"
+                              min="0" max="99.9" />
                            <span class="text-gray-600">m/s</span>
                         </div>
                         {{-- エラーメッセージ（風速） --}}
-                        <x-input-error class="mt-2" :messages="$errors->get('wind_speed')" />
+                        <x-input-error class="mt-2" :messages="$errors->get('max_wind')" />
                      </div>
                      <div class="">
                         <label class="block text-sm text-gray-700 mb-1">風向</label>
-                        <select name="wind_direction" class="rounded">
-                           <option value="" @selected(old('wind_direction', '') === '')>未選択</option>
-                           <option value="N" @selected(old('wind_direction') === 'N')>北</option>
-                           <option value="NE" @selected(old('wind_direction') === 'NE')>北東</option>
-                           <option value="E" @selected(old('wind_direction') === 'E')>東</option>
-                           <option value="SE" @selected(old('wind_direction') === 'SE')>南東</option>
-                           <option value="S" @selected(old('wind_direction') === 'S')>南</option>
-                           <option value="SW" @selected(old('wind_direction') === 'SW')>南西</option>
-                           <option value="W" @selected(old('wind_direction') === 'W')>西</option>
-                           <option value="NW" @selected(old('wind_direction') === 'NW')>北西</option>
+                        <select name="wind_dir" class="rounded">
+                           <option value="" @selected(old('wind_dir', '') === '')>未選択</option>
+                           <option value="N" @selected(old('wind_dir') === 'N')>北</option>
+                           <option value="NE" @selected(old('wind_dir') === 'NE')>北東</option>
+                           <option value="E" @selected(old('wind_dir') === 'E')>東</option>
+                           <option value="SE" @selected(old('wind_dir') === 'SE')>南東</option>
+                           <option value="S" @selected(old('wind_dir') === 'S')>南</option>
+                           <option value="SW" @selected(old('wind_dir') === 'SW')>南西</option>
+                           <option value="W" @selected(old('wind_dir') === 'W')>西</option>
+                           <option value="NW" @selected(old('wind_dir') === 'NW')>北西</option>
                         </select>
                         {{-- エラーメッセージ（風向） --}}
-                        <x-input-error class="mt-2" :messages="$errors->get('wind_direction')" />
+                        <x-input-error class="mt-2" :messages="$errors->get('wind_dir')" />
                      </div>
                   </div>
                </div>
@@ -125,19 +124,19 @@
                   <div class="flex flex-wrap gap-12">
                      <div>
                         <label class="block text-sm text-gray-700 mb-1">川の流れ</label>
-                        <select name="has_flow" class="rounded">
-                           <option value="" @selected(old('has_flow', '') === '')>
+                        <select name="river_flow" class="rounded">
+                           <option value="" @selected(old('river_flow', '') === '')>
                               未選択
                            </option>
-                           <option value="1" @selected(old('has_flow') === '1')>
+                           <option value="flow" @selected(old('river_flow') === 'flow')>
                               流れあり
                            </option>
-                           <option value="0" @selected(old('has_flow') === '0')>
+                           <option value="no_flow" @selected(old('river_flow') === 'no_flow')>
                               流れなし
                            </option>
                         </select>
                         {{-- エラーメッセージ（川の流れ） --}}
-                        <x-input-error class="mt-2" :messages="$errors->get('has_flow')" />
+                        <x-input-error class="mt-2" :messages="$errors->get('river_flow')" />
                      </div>
                      <div>
                         <label class="block text-sm text-gray-700 mb-1">濁り</label>
