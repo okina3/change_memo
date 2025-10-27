@@ -110,57 +110,8 @@ class MemoController extends Controller
                     }
                 }
 
-                // 気象状態（任意入力）
-                $weatherData = collect([
-                    'weather_code' => $request->input('weather'),
-                    'wind_speed_min' => $request->filled('wind_speed_min') ? (int) $request->input('wind_speed_min') : null,
-                    'wind_speed_max' => $request->filled('wind_speed_max') ? (int) $request->input('wind_speed_max') : null,
-                    'wind_direction' => $request->input('wind_direction'),
-                ])->filter(fn($v) => $v !== null && $v !== '')->toArray();
 
-                if (!empty($weatherData)) {
-                    $memo->weatherCondition()->create($weatherData);
-                }
 
-                // 川の状態（任意入力）
-                $riverData = collect([
-                    'has_flow' => $request->filled('has_flow') ? (bool) ((int) $request->input('has_flow')) : null,
-                    'water_clarity' => $request->input('water_clarity'),
-                    'underwater_debris' => $request->input('underwater_debris'),
-                    'water_level' => $request->filled('water_level') ? $request->input('water_level') : null,
-                    'water_temp' => $request->filled('water_temp') ? (int) $request->input('water_temp') : null,
-                ])->filter(fn($v) => $v !== null && $v !== '')->toArray();
-
-                if (!empty($riverData)) {
-                    $memo->riverCondition()->create($riverData);
-                }
-
-                // エサ
-                collect($request->input('baits', []))
-                    ->map(fn($v) => is_string($v) ? trim($v) : '')
-                    ->filter(fn($v) => $v !== '')
-                    ->values()
-                    ->each(fn($name, $idx) => $memo->baits()->create([
-                        'name' => $name,
-                        'position' => $idx,
-                    ]));
-
-                // 釣果
-                collect($request->input('catches', []))
-                    ->filter(fn($r) => is_array($r))
-                    ->map(fn($r) => [
-                        'name' => array_key_exists('name', $r) ? trim((string) ($r['name'] ?? '')) : '',
-                        'count' => array_key_exists('count', $r) && $r['count'] !== '' ? max(0, (int) $r['count']) : 0,
-                        'length_cm' => array_key_exists('length_cm', $r) && $r['length_cm'] !== '' ? max(0, (int) $r['length_cm']) : null,
-                    ])
-                    ->filter(fn($row) => $row['name'] !== '' || $row['count'] > 0 || $row['length_cm'] !== null)
-                    ->values()
-                    ->each(fn($row, $idx) => $memo->catches()->create([
-                        'name' => $row['name'] !== '' ? $row['name'] : null,
-                        'count' => $row['count'],
-                        'length_cm' => $row['length_cm'],
-                        'position' => $idx,
-                    ]));
                 // 新規タグの入力があれば、各データを保存。
                 TagService::storeNewTag($request->new_tag, $memo->id);
                 // 既存のタグと画像の選択があれば、メモに紐付けて中間テーブルに保存
