@@ -9,28 +9,30 @@
                @csrf
                {{-- 釣行日・釣行時間・釣り場所 --}}
                <div class="mb-8">
-                  <div class="flex flex-wrap items-start gap-20">
-                     <div class="">
-                        <h2 class="sub_heading mb-1">釣行日</h2>
-                        <input class="rounded" type="date" name="fishing_date" value="{{ old('fishing_date') }}"
-                           max="{{ now()->toDateString() }}" />
-                        {{-- エラーメッセージ（釣行日） --}}
-                        <x-input-error class="mt-2" :messages="$errors->get('fishing_date')" />
-                     </div>
-                     <div class="">
-                        <h2 class="sub_heading mb-1">釣行時間</h2>
-                        <div class="flex items-center gap-2">
-                           <input class="rounded text-center" type="time" name="fishing_time_start"
-                              value="{{ old('fishing_time_start') }}" step="60" />
-                           <span class="text-gray-600">〜</span>
-                           <input class="rounded text-center" type="time" name="fishing_time_end"
-                              value="{{ old('fishing_time_end') }}" step="60" />
+                  <div class="flex flex-wrap items-start">
+                     <div class="flex flex-wrap items-start">
+                        <div class="">
+                           <h2 class="sub_heading mb-1">釣行日</h2>
+                           <input class="rounded" type="date" name="fishing_date" value="{{ old('fishing_date') }}"
+                              max="{{ now()->toDateString() }}" />
+                           {{-- エラーメッセージ（釣行日） --}}
+                           <x-input-error class="mt-2" :messages="$errors->get('fishing_date')" />
                         </div>
-                        {{-- エラーメッセージ（釣行時間） --}}
-                        <x-input-error class="mt-2" :messages="$errors->get('fishing_time_start')" />
-                        <x-input-error class="mt-2" :messages="$errors->get('fishing_time_end')" />
+                        <div class="ml-8">
+                           <h2 class="sub_heading mb-1">釣行時間</h2>
+                           <div class="flex items-center">
+                              <input class="rounded text-center" type="time" name="fishing_time_start"
+                                 value="{{ old('fishing_time_start') }}" step="60" />
+                              <span class="my-0 mx-1 text-gray-600">〜</span>
+                              <input class="rounded text-center" type="time" name="fishing_time_end"
+                                 value="{{ old('fishing_time_end') }}" step="60" />
+                           </div>
+                           {{-- エラーメッセージ（釣行時間） --}}
+                           <x-input-error class="mt-2" :messages="$errors->get('fishing_time_start')" />
+                           <x-input-error class="mt-2" :messages="$errors->get('fishing_time_end')" />
+                        </div>
                      </div>
-                     <div class="flex items-center gap-2">
+                     <div class="flex items-center ml-12">
                         <div class="">
                            <h2 class="sub_heading mb-1">スポット</h2>
                            <select name="fishing_spot" class="rounded">
@@ -56,7 +58,7 @@
                            {{-- エラーメッセージ（スポット） --}}
                            <x-input-error class="mt-2" :messages="$errors->get('fishing_spot')" />
                         </div>
-                        <div class="">
+                        <div class="ml-2">
                            <h2 class="text-sm text-gray-700 mb-1 mt-2">（スポット名を追加）</h2>
                            <input class="rounded" type="text" name="location_name" value="{{ old('location_name') }}"
                               placeholder="相模川上流">
