@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,47 +24,34 @@ class Memo extends Model
         'user_id',
     ];
 
-    protected $casts = [
-        'fishing_date' => 'date',
-    ];
 
     /**
-     * WeatherCondition（気象状態）モデルとの一対一のリレーションを定義。
-     * @return HasOne
+     * Baitモデルとの多対多のリレーションを定義。
+     * @return BelongsToMany
      */
-    public function weatherCondition(): HasOne
+    public function baits(): BelongsToMany
     {
-        return $this->hasOne(WeatherCondition::class);
+        return $this->belongsToMany(Tag::class, 'memo_baits');
     }
 
     /**
-     * RiverCondition（川の状態）モデルとの一対一のリレーションを定義。
-     * @return HasOne
+     * FishNameモデルとの多対多のリレーションを定義。
+     * @return BelongsToMany
      */
-    public function riverCondition(): HasOne
+    public function fish_names(): BelongsToMany
     {
-        return $this->hasOne(RiverCondition::class);
+        return $this->belongsToMany(Tag::class, 'memo_fish_names');
     }
 
-    /**
-     * Baitモデル（エサ）との一対多のリレーションを定義。
-     * @return HasMany
-     */
-    public function baits(): HasMany
-    {
-        return $this->hasMany(Bait::class)
-            ->orderBy('position');
-    }
-
-    /**
-     * CatchRecord(釣果)との一対多のリレーションを定義。
-     * @return HasMany
-     */
-    public function catches(): HasMany
-    {
-        return $this->hasMany(CatchRecord::class)
-            ->orderBy('position');
-    }
+    // /**
+    //  * CatchRecord(釣果)との一対多のリレーションを定義。
+    //  * @return HasMany
+    //  */
+    // public function catches(): HasMany
+    // {
+    //     return $this->hasMany(CatchRecord::class)
+    //         ->orderBy('position');
+    // }
 
     /**
      * Tagモデルとの多対多のリレーションを定義。
