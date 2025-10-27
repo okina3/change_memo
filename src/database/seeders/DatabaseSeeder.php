@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminSeeder::class,
             UserSeeder::class,
+            SpotSeeder::class,
             MemoSeeder::class,
             TagSeeder::class,
             ImageSeeder::class,

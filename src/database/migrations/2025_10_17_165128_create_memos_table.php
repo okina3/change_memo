@@ -22,20 +22,20 @@ return new class extends Migration
                 ->restrictOnDelete();
 
             // 釣行日時
-            $table->date('fishing_date');
-            $table->time('start_time');
-            $table->time('end_time');
+            $table->date('fishing_date')->nullable();
+            $table->time('start_time')->nullable();
+            $table->time('end_time')->nullable();
 
             // 天候・気象
-            $table->string('weather', 15);
+            $table->string('weather', 15)->nullable();
             $table->decimal('air_temp', 3, 1)->nullable();
             $table->decimal('max_wind', 3, 1)->nullable();
             $table->string('wind_dir', 2)->nullable();
 
             // 川の状態
-            $table->unsignedTinyInteger('river_flow');
-            $table->unsignedTinyInteger('turbidity');
-            $table->unsignedTinyInteger('debris');
+            $table->unsignedTinyInteger('river_flow')->nullable();
+            $table->unsignedTinyInteger('turbidity')->nullable();
+            $table->unsignedTinyInteger('debris')->nullable();
             $table->decimal('water_level', 4, 1)->nullable();
             $table->decimal('water_temp', 3, 1)->nullable();
 
