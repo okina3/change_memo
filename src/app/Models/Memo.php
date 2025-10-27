@@ -16,12 +16,39 @@ class Memo extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'fishing_date',
-        'fishing_time_start',
-        'fishing_time_end',
-        'fishing_spot',
-        'content',
         'user_id',
+        'spot_id',
+        'fishing_date',
+        'start_time',
+        'end_time',
+        'weather',
+        'air_temp',
+        'max_wind',
+        'wind_dir',
+        'river_flow',
+        'turbidity',
+        'debris',
+        'water_level',
+        'water_temp',
+        'content',
+    ];
+
+    /**
+     * 型キャスト
+     * @var array
+     */
+    protected $casts = [
+        'fishing_date' => 'date',
+        'start_time' => 'string',
+        'end_time' => 'string',
+        'air_temp' => 'float',
+        'max_wind' => 'float',
+        'wind_dir' => 'string',
+        'river_flow' => 'integer',
+        'turbidity' => 'integer',
+        'debris' => 'integer',
+        'water_level' => 'float',
+        'water_temp' => 'float',
     ];
 
 
@@ -31,7 +58,7 @@ class Memo extends Model
      */
     public function baits(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class, 'memo_baits');
+        return $this->belongsToMany(Bait::class, 'memo_baits');
     }
 
     /**
@@ -40,18 +67,8 @@ class Memo extends Model
      */
     public function fish_names(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class, 'memo_fish_names');
+        return $this->belongsToMany(FishName::class, 'memo_fish_names');
     }
-
-    // /**
-    //  * CatchRecord(釣果)との一対多のリレーションを定義。
-    //  * @return HasMany
-    //  */
-    // public function catches(): HasMany
-    // {
-    //     return $this->hasMany(CatchRecord::class)
-    //         ->orderBy('position');
-    // }
 
     /**
      * Tagモデルとの多対多のリレーションを定義。
@@ -69,6 +86,15 @@ class Memo extends Model
     public function images(): BelongsToMany
     {
         return $this->belongsToMany(Image::class, 'memo_images');
+    }
+
+    /**
+     * Spotモデルとの一対多のリレーションを返す。
+     * @return BelongsTo
+     */
+    public function spot(): BelongsTo
+    {
+        return $this->belongsTo(Spot::class);
     }
 
     /**

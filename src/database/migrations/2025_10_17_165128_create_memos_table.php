@@ -21,24 +21,23 @@ return new class extends Migration
                 ->constrained('spots')
                 ->restrictOnDelete();
 
+            // 釣行日時
             $table->date('fishing_date');
             $table->time('start_time');
             $table->time('end_time');
 
-            $table->string('weather', 50);
-            $table->decimal('air_temp_c', 4, 1)->nullable();
-            $table->decimal('max_wind_ms', 4, 1)->nullable();
+            // 天候・気象
+            $table->string('weather', 15);
+            $table->decimal('air_temp', 3, 1)->nullable();
+            $table->decimal('max_wind', 3, 1)->nullable();
+            $table->string('wind_dir', 2)->nullable();
 
-            // 16方位コード: 0=N, 1=NNE, ..., 15=NNW
-            $table->unsignedTinyInteger('wind_dir')->nullable()->comment('0..15');
-
-            // アプリ側 enum コード（0,1,2...）
-            $table->unsignedTinyInteger('river_flow')->nullable();
-            $table->unsignedTinyInteger('turbidity')->nullable();
-            $table->unsignedTinyInteger('debris')->nullable();
-
-            $table->decimal('water_level_cm', 5, 1)->nullable(); // 負数あり得るが桁は十分
-            $table->decimal('water_temp_c', 4, 1)->nullable();
+            // 川の状態
+            $table->unsignedTinyInteger('river_flow');
+            $table->unsignedTinyInteger('turbidity');
+            $table->unsignedTinyInteger('debris');
+            $table->decimal('water_level', 4, 1)->nullable();
+            $table->decimal('water_temp', 3, 1)->nullable();
 
             $table->text('content');
             //ソフトデリート
