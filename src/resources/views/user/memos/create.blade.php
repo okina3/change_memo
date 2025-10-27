@@ -21,15 +21,15 @@
                         <div class="ml-8">
                            <h2 class="sub_heading mb-1">釣行時間</h2>
                            <div class="flex items-center">
-                              <input class="rounded text-center" type="time" name="fishing_time_start"
-                                 value="{{ old('fishing_time_start') }}" step="60" />
+                              <input class="rounded text-center" type="time" name="start_time"
+                                 value="{{ old('start_time') }}" step="60" />
                               <span class="my-0 mx-1 text-gray-600">〜</span>
-                              <input class="rounded text-center" type="time" name="fishing_time_end"
-                                 value="{{ old('fishing_time_end') }}" step="60" />
+                              <input class="rounded text-center" type="time" name="end_time"
+                                 value="{{ old('end_time') }}" step="60" />
                            </div>
                            {{-- エラーメッセージ（釣行時間） --}}
-                           <x-input-error class="mt-2" :messages="$errors->get('fishing_time_start')" />
-                           <x-input-error class="mt-2" :messages="$errors->get('fishing_time_end')" />
+                           <x-input-error class="mt-2" :messages="$errors->get('start_time')" />
+                           <x-input-error class="mt-2" :messages="$errors->get('end_time')" />
                         </div>
                      </div>
                      <div class="flex items-center ml-12">
@@ -39,21 +39,13 @@
                               <option value="" @selected(old('fishing_spot', '') === '')>
                                  スポットを選択
                               </option>
-                              <option value="港" @selected(old('fishing_spot') === '港')>
-                                 港
-                              </option>
-                              <option value="河川" @selected(old('fishing_spot') === '河川')>
-                                 河川
-                              </option>
-                              <option value="湖" @selected(old('fishing_spot') === '湖')>
-                                 湖
-                              </option>
-                              <option value="防波堤" @selected(old('fishing_spot') === '防波堤')>
-                                 防波堤
-                              </option>
-                              <option value="その他" @selected(old('fishing_spot') === 'その他')>
-                                 その他
-                              </option>
+                              @if (isset($spots) && $spots->isNotEmpty())
+                                 @foreach ($spots as $spot)
+                                    <option value="{{ $spot->name }}" @selected(old('fishing_spot') === $spot->name)>
+                                       {{ $spot->name }}
+                                    </option>
+                                 @endforeach
+                              @endif
                            </select>
                            {{-- エラーメッセージ（スポット） --}}
                            <x-input-error class="mt-2" :messages="$errors->get('fishing_spot')" />

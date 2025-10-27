@@ -9,6 +9,7 @@ use App\Models\Memo;
 use App\Models\MemoImage;
 use App\Models\MemoTag;
 use App\Models\Tag;
+use App\Models\Spot;
 use App\Services\ImageService;
 use App\Services\MemoService;
 use App\Services\SessionService;
@@ -60,10 +61,12 @@ class MemoController extends Controller
         $all_tags = Tag::availableAllTags()->get();
         // 全画像を取得する
         $all_images = Image::availableAllImages()->get();
+        // ユーザーが登録しているスポット一覧を取得（将来的に公開スポットなどを含める場合は拡張可）
+        $spots = Spot::where('user_id', Auth::id())->get();
         // ブラウザバック対策（値を持たせる）
         SessionService::setBrowserBackSession();
 
-        return view('user.memos.create', compact('all_tags', 'all_images'));
+        return view('user.memos.create', compact('all_tags', 'all_images', 'spots'));
     }
 
     /**
