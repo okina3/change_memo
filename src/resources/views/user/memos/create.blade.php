@@ -52,10 +52,10 @@
                         </div>
                         <div class="ml-2">
                            <h2 class="text-sm text-gray-700 mb-1 mt-2">（スポット名を追加）</h2>
-                           <input class="rounded" type="text" name="location_name" value="{{ old('location_name') }}"
+                           <input class="rounded" type="text" name="new_spot" value="{{ old('new_spot') }}"
                               placeholder="相模川上流">
                            {{-- エラーメッセージ（スポット追加） --}}
-                           <x-input-error class="mt-2" :messages="$errors->get('location_name')" />
+                           <x-input-error class="mt-2" :messages="$errors->get('new_spot')" />
                         </div>
                      </div>
                   </div>
