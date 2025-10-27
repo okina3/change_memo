@@ -62,7 +62,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Memoモデルとのリレーション（一対多）
+     * Memoモデルとの一対多のリレーションを定義。
      * @return HasMany
      */
     public function memos(): HasMany

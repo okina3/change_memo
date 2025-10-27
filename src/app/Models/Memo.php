@@ -89,7 +89,7 @@ class Memo extends Model
     }
 
     /**
-     * Spotモデルとの一対多のリレーションを返す。
+     * Spotモデルへのリレーションを返す（一対多）。
      * @return BelongsTo
      */
     public function spot(): BelongsTo

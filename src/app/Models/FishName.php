@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FishName extends Model
 {
@@ -21,5 +22,14 @@ class FishName extends Model
     public function memos(): BelongsToMany
     {
         return $this->belongsToMany(Memo::class, 'memo_fish_names');
+    }
+
+    /**
+     * Userモデルへのリレーションを返す（一対多）。
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

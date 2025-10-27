@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Spot extends Model
@@ -16,11 +17,20 @@ class Spot extends Model
     ];
 
     /**
-     * Memoモデルへのリレーションを返す（一対多）。
+     * Memoモデルとの一対多のリレーションを定義。
+     * @return HasMany
+     */
+    public function memos(): HasMany
+    {
+        return $this->hasMany(Memo::class);
+    }
+
+    /**
+     * Userモデルへのリレーションを返す（一対多）。
      * @return BelongsTo
      */
-    public function memo(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Memo::class);
+        return $this->belongsTo(User::class);
     }
 }
