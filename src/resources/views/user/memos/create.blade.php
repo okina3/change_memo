@@ -39,17 +39,16 @@
                               <option value="" @selected(old('fishing_spot', '') === '')>
                                  スポットを選択
                               </option>
-                              @if (isset($spots) && $spots->isNotEmpty())
-                                 @foreach ($spots as $spot)
-                                    <option value="{{ $spot->name }}" @selected(old('fishing_spot') === $spot->name)>
-                                       {{ $spot->name }}
-                                    </option>
-                                 @endforeach
-                              @endif
+                              @foreach ($spots as $spot)
+                                 <option value="{{ $spot->name }}" @selected(old('fishing_spot') === $spot->name)>
+                                    {{ $spot->name }}
+                                 </option>
+                              @endforeach
                            </select>
                            {{-- エラーメッセージ（スポット） --}}
                            <x-input-error class="mt-2" :messages="$errors->get('fishing_spot')" />
                         </div>
+                        {{-- 新規スポット入力 --}}
                         <div class="ml-2">
                            <h2 class="text-sm text-gray-700 mb-1 mt-2">（スポット名を追加）</h2>
                            <input class="rounded" type="text" name="new_spot" value="{{ old('new_spot') }}"
@@ -140,52 +139,52 @@
                      </div>
                      <div>
                         <label class="block text-sm text-gray-700 mb-1">濁り</label>
-                        <select name="water_clarity" class="rounded">
-                           <option value="" @selected(old('water_clarity', '') === '')>
+                        <select name="turbidity" class="rounded">
+                           <option value="" @selected(old('turbidity', '') === '')>
                               未選択
                            </option>
-                           <option value="clear" @selected(old('water_clarity') === 'clear')>
+                           <option value="clear" @selected(old('turbidity') === 'clear')>
                               クリア
                            </option>
-                           <option value="slightly" @selected(old('water_clarity') === 'slightly')>
+                           <option value="slightly" @selected(old('turbidity') === 'slightly')>
                               やや濁り
                            </option>
-                           <option value="turbid" @selected(old('water_clarity') === 'turbid')>
+                           <option value="turbid" @selected(old('turbidity') === 'turbid')>
                               濁り
                            </option>
-                           <option value="very_turbid" @selected(old('water_clarity') === 'very_turbid')>
+                           <option value="very_turbid" @selected(old('turbidity') === 'very_turbid')>
                               強い濁り
                            </option>
                         </select>
                         {{-- エラーメッセージ（濁り） --}}
-                        <x-input-error class="mt-2" :messages="$errors->get('water_clarity')" />
+                        <x-input-error class="mt-2" :messages="$errors->get('turbidity')" />
                      </div>
                      <div>
                         <label class="block text-sm text-gray-700 mb-1">水中のゴミ</label>
-                        <select name="underwater_debris" class="rounded">
-                           <option value="" @selected(old('underwater_debris', '') === '')>
+                        <select name="debris" class="rounded">
+                           <option value="" @selected(old('debris', '') === '')>
                               未選択
                            </option>
-                           <option value="none" @selected(old('underwater_debris') === 'none')>
+                           <option value="none" @selected(old('debris') === 'none')>
                               なし
                            </option>
-                           <option value="slightly" @selected(old('underwater_debris') === 'slightly')>
+                           <option value="slightly" @selected(old('debris') === 'slightly')>
                               ややあり
                            </option>
-                           <option value="present" @selected(old('underwater_debris') === 'present')>
+                           <option value="present" @selected(old('debris') === 'present')>
                               あり
                            </option>
                         </select>
                         {{-- エラーメッセージ（水中のゴミ） --}}
-                        <x-input-error class="mt-2" :messages="$errors->get('underwater_debris')" />
+                        <x-input-error class="mt-2" :messages="$errors->get('debris')" />
                      </div>
                      <div>
                         <label class="block text-sm text-gray-700 mb-1">水位</label>
                         <div class="flex items-center gap-2">
-                           <input class="w-24 rounded text-right" type="text" name="water_level"
-                              value="{{ old('water_level') }}" placeholder="-0.5" inputmode="decimal"
-                              pattern="^-?\d*(\.\d+)?$" />
-                           <span class="text-gray-600">cm</span>
+                           <input class="w-24 rounded text-right" type="number" name="water_level"
+                              value="{{ old('water_level') }}" placeholder="0.0" inputmode="decimal" step="0.1"
+                              min="0" max="999.9" />
+                           <span class="text-gray-600">m</span>
                         </div>
                         {{-- エラーメッセージ（水位） --}}
                         <x-input-error class="mt-2" :messages="$errors->get('water_level')" />
@@ -195,7 +194,7 @@
                         <div class="flex items-center gap-2">
                            <input class="w-24 rounded text-right" type="number" name="water_temp"
                               value="{{ old('water_temp') }}" placeholder="10" inputmode="numeric" step="1"
-                              min="0" max="35" />
+                              min="0" max="99" />
                            <span class="text-gray-600">℃</span>
                         </div>
                         {{-- エラーメッセージ（水温） --}}
@@ -248,9 +247,10 @@
                            <x-input-error class="mt-2" :messages="$errors->get('baits.*')" />
                         </div>
                      </div>
+                     {{-- 新規エサ入力 --}}
                      <div class="">
                         <h2 class="text-sm text-gray-700 mt-2 mb-1">（エサ名を追加）</h2>
-                        <input class="rounded w-60" type="text" name="new_bait" value="{{ old('new_bait') }}"
+                        <input class="w-60rounded" type="text" name="new_bait" value="{{ old('new_bait') }}"
                            placeholder="例: アオイソメ">
                         {{-- エラーメッセージ（エサ追加） --}}
                         <x-input-error class="mt-2" :messages="$errors->get('new_bait')" />

@@ -34,8 +34,8 @@ return new class extends Migration
 
             // 川の状態 
             $table->string('river_flow', 20)->nullable();
-            $table->unsignedTinyInteger('turbidity')->nullable();
-            $table->unsignedTinyInteger('debris')->nullable();
+            $table->string('turbidity', 20)->nullable();
+            $table->string('debris', 20)->nullable();
             $table->decimal('water_level', 4, 1)->nullable();
             $table->decimal('water_temp', 3, 1)->nullable();
 
