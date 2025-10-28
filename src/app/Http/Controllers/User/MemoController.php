@@ -11,6 +11,7 @@ use App\Models\MemoTag;
 use App\Models\Tag;
 use App\Models\Spot;
 use App\Models\Bait;
+use App\Models\FishName;
 use App\Services\ImageService;
 use App\Services\MemoService;
 use App\Services\SessionService;
@@ -66,10 +67,12 @@ class MemoController extends Controller
         $all_spots = Spot::where('user_id', Auth::id())->get();
         // 全エサを取得する
         $all_baits = Bait::where('user_id', Auth::id())->get();
+        // 全魚名を取得する
+        $all_fish_names = FishName::where('user_id', Auth::id())->get();
         // ブラウザバック対策（値を持たせる）
         SessionService::setBrowserBackSession();
 
-        return view('user.memos.create', compact('all_tags', 'all_images', 'all_spots', 'all_baits'));
+        return view('user.memos.create', compact('all_tags', 'all_images', 'all_spots', 'all_baits', 'all_fish_names'));
     }
 
     /**

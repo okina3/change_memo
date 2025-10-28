@@ -209,14 +209,12 @@
                      <div class="">
                         <h2 class="sub_heading mb-1">エサ</h2>
                         @php
-                           // old 値の復元（互換 bait を含む）と初期行数（最大5）
                            $oldBaits = old('baits', []);
                            if (empty($oldBaits) && ($legacy = old('bait'))) {
                                $oldBaits = [$legacy];
                            }
                            $initial = max(1, min(count($oldBaits), 5));
                         @endphp
-
                         <div>
                            <div id="baits-container" class="space-y-2">
                               @for ($i = 0; $i < $initial; $i++)
@@ -225,10 +223,10 @@
                                        <option value="">選択してください</option>
                                        @foreach ($all_baits as $bait)
                                           <option value="{{ $bait->name }}" @selected(($oldBaits[$i] ?? '') === $bait->name)>
-                                             {{ $bait->name }}</option>
+                                             {{ $bait->name }}
+                                          </option>
                                        @endforeach
                                     </select>
-
                                     <button type="button"
                                        class="text-xs text-red-600 hover:underline remove-bait-row {{ $i === 0 ? 'hidden' : '' }}">
                                        削除
@@ -236,7 +234,6 @@
                                  </div>
                               @endfor
                            </div>
-
                            <div class="mt-2">
                               <button type="button" id="add-bait-row" class="text-sm text-blue-700 hover:underline">
                                  ＋ エサ入力エリアを追加（最大5件）
@@ -265,18 +262,6 @@
                         @php
                            $oldCatches = old('catches', []);
                            $initialCount = max(1, min(count($oldCatches), 5));
-                           // 魚種の選択肢（必要に応じてここで追加・編集してください）
-                           $fishOptions = [
-                               'ヤマメ',
-                               'アマゴ',
-                               'イワナ',
-                               'ニジマス',
-                               'ブラックバス',
-                               'メバル',
-                               'アジ',
-                               'サバ',
-                               'その他',
-                           ];
                         @endphp
                         <div class="flex items-start gap-6">
                            <div id="catches-container" class="space-y-2 flex-1">
@@ -289,12 +274,13 @@
                                        <select class="w-full sm:w-48 rounded"
                                           name="catches[{{ $i }}][name]">
                                           <option value="">魚種を選択</option>
-                                          @foreach ($fishOptions as $opt)
-                                             <option value="{{ $opt }}" @selected(($catch['name'] ?? '') === $opt)>
-                                                {{ $opt }}</option>
+                                          @foreach ($all_fish_names as $fish)
+                                             <option value="{{ $fish->name }}" @selected(($catch['name'] ?? '') === $fish->name)>
+                                                {{ $fish->name }}
+                                             </option>
                                           @endforeach
                                           {{-- ユーザーが以前入力した値が選択肢にない場合はその値を追加して選択状態にする --}}
-                                          @if (!empty($catch['name']) && !in_array($catch['name'], $fishOptions))
+                                          @if (!empty($catch['name']) && !$all_fish_names->contains('name', $catch['name']))
                                              <option value="{{ $catch['name'] }}" selected>{{ $catch['name'] }}
                                              </option>
                                           @endif
@@ -332,9 +318,10 @@
                         <h2 class="text-sm text-gray-700 mt-2 mb-1">（魚名を追加）</h2>
                         <input class="rounded w-60" type="text" name="new_fish" value="{{ old('new_fish') }}"
                            placeholder="例: ヤマメ">
-                        {{-- エラーメッセージ（魚名追加） --}}
+                        {{-- エラーメッセージ（魚名の追加） --}}
                         <x-input-error class="mt-2" :messages="$errors->get('new_fish')" />
                      </div>
+                     {{-- 釣果合計 --}}
                      <div id="catch-total" class="w-32 p-1 border rounded self-center mt-1">
                         <div class="flex items-baseline justify-center gap-3">
                            <div class="text-sm text-gray-600">合計</div>
