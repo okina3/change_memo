@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('baits', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 30);
             $table->foreignId('user_id')
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->string('name', 30);
             $table->timestamps();
 
             $table->unique(['user_id', 'name']);

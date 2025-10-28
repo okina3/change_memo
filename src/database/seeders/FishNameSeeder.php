@@ -12,7 +12,7 @@ class FishNameSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('baits')->insert([
+        DB::table('fish_names')->insert([
             // ユーザー1のダミーデータ
             [
                 'name' => '魚１',

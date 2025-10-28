@@ -22,13 +22,16 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminSeeder::class,
             UserSeeder::class,
-            BaitSeeder::class,
             SpotSeeder::class,
             MemoSeeder::class,
             TagSeeder::class,
             ImageSeeder::class,
+            BaitSeeder::class,
+            FishNameSeeder::class,
             MemoTagSeeder::class,
             MemoImageSeeder::class,
+            MemoFishNameSeeder::class,
+            MemoBaitSeeder::class,
             ShareSettingsSeeder::class,
         ]);
     }

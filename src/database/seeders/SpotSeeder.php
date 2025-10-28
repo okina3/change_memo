@@ -17,36 +17,36 @@ class SpotSeeder extends Seeder
          [
             'user_id' => '1',
             'name' => 'ダミースポット1',
-            'created_at' => now(),
-            'updated_at' => now(),
+            'created_at' => '2023-10-01 11:11:11',
+            'updated_at' => '2023-10-01 11:11:11',
          ],
          //ユーザー２のダミーデータ
          [
             'user_id' => '2',
             'name' => 'ダミースポット２',
-            'created_at' => now(),
-            'updated_at' => now(),
+            'created_at' => '2023-10-01 11:11:11',
+            'updated_at' => '2023-10-01 11:11:11',
          ],
          //ユーザー３のダミーデータ
          [
             'user_id' => '3',
             'name' => 'ダミースポット３',
-            'created_at' => now(),
-            'updated_at' => now(),
+            'created_at' => '2023-10-01 11:11:11',
+            'updated_at' => '2023-10-01 11:11:11',
          ],
          //ユーザー４のダミーデータ
          [
             'user_id' => '4',
             'name' => 'ダミースポット４',
-            'created_at' => now(),
-            'updated_at' => now(),
+            'created_at' => '2023-10-01 11:11:11',
+            'updated_at' => '2023-10-01 11:11:11',
          ],
          //ユーザー５のダミーデータ
          [
             'user_id' => '5',
             'name' => 'ダミースポット５',
-            'created_at' => now(),
-            'updated_at' => now(),
+            'created_at' => '2023-10-01 11:11:11',
+            'updated_at' => '2023-10-01 11:11:11',
          ],
       ]);
    }

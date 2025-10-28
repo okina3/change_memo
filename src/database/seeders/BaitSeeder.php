@@ -18,19 +18,16 @@ class BaitSeeder extends Seeder
             'name' => 'エサ１',
             'user_id' => 1,
             'created_at' => '2023-10-01 11:11:11',
-            'updated_at' => '2023-10-01 11:11:11',
          ],
          [
             'name' => 'エサ１-2',
             'user_id' => 1,
             'created_at' => '2023-10-01 11:11:11',
-            'updated_at' => '2023-10-01 11:11:11',
          ],
          [
             'name' => 'エサ１-3',
             'user_id' => 1,
             'created_at' => '2023-10-01 11:11:11',
-            'updated_at' => '2023-10-01 11:11:11',
          ],
 
          // ユーザー2のダミーデータ
@@ -38,19 +35,16 @@ class BaitSeeder extends Seeder
             'name' => 'エサ２',
             'user_id' => 2,
             'created_at' => '2023-10-01 11:11:11',
-            'updated_at' => '2023-10-01 11:11:11',
          ],
          [
             'name' => 'エサ２-1',
             'user_id' => 2,
             'created_at' => '2023-10-01 11:11:11',
-            'updated_at' => '2023-10-01 11:11:11',
          ],
          [
             'name' => 'エサ２-2',
             'user_id' => 2,
             'created_at' => '2023-10-01 11:11:11',
-            'updated_at' => '2023-10-01 11:11:11',
          ],
 
          // ユーザー3のダミーデータ
@@ -58,19 +52,16 @@ class BaitSeeder extends Seeder
             'name' => 'エサ３',
             'user_id' => 3,
             'created_at' => '2023-10-01 11:11:11',
-            'updated_at' => '2023-10-01 11:11:11',
          ],
          [
             'name' => 'エサ３-1',
             'user_id' => 3,
             'created_at' => '2023-10-01 11:11:11',
-            'updated_at' => '2023-10-01 11:11:11',
          ],
          [
             'name' => 'エサ３-2',
             'user_id' => 3,
             'created_at' => '2023-10-01 11:11:11',
-            'updated_at' => '2023-10-01 11:11:11',
          ],
 
          // ユーザー4のダミーデータ
@@ -78,19 +69,16 @@ class BaitSeeder extends Seeder
             'name' => 'エサ４',
             'user_id' => 4,
             'created_at' => '2023-10-01 11:11:11',
-            'updated_at' => '2023-10-01 11:11:11',
          ],
          [
             'name' => 'エサ４-1',
             'user_id' => 4,
             'created_at' => '2023-10-01 11:11:11',
-            'updated_at' => '2023-10-01 11:11:11',
          ],
          [
             'name' => 'エサ４-2',
             'user_id' => 4,
             'created_at' => '2023-10-01 11:11:11',
-            'updated_at' => '2023-10-01 11:11:11',
          ],
 
          // ユーザー5のダミーデータ
@@ -98,19 +86,16 @@ class BaitSeeder extends Seeder
             'name' => 'エサ５',
             'user_id' => 5,
             'created_at' => '2023-10-01 11:11:11',
-            'updated_at' => '2023-10-01 11:11:11',
          ],
          [
             'name' => 'エサ５-1',
             'user_id' => 5,
             'created_at' => '2023-10-01 11:11:11',
-            'updated_at' => '2023-10-01 11:11:11',
          ],
          [
             'name' => 'エサ５-2',
             'user_id' => 5,
             'created_at' => '2023-10-01 11:11:11',
-            'updated_at' => '2023-10-01 11:11:11',
          ],
       ]);
    }
