@@ -39,7 +39,7 @@
                               <option value="" @selected(old('fishing_spot', '') === '')>
                                  スポットを選択
                               </option>
-                              @foreach ($spots as $spot)
+                              @foreach ($all_spots as $spot)
                                  <option value="{{ $spot->name }}" @selected(old('fishing_spot') === $spot->name)>
                                     {{ $spot->name }}
                                  </option>
@@ -209,28 +209,26 @@
                      <div class="">
                         <h2 class="sub_heading mb-1">エサ</h2>
                         @php
+                           // old 値の復元（互換 bait を含む）と初期行数（最大5）
                            $oldBaits = old('baits', []);
-                           $legacyBait = old('bait'); // 互換: 以前の単一セレクト値がある場合に復元
-                           if (empty($oldBaits) && !empty($legacyBait)) {
-                               $oldBaits = [$legacyBait];
+                           if (empty($oldBaits) && ($legacy = old('bait'))) {
+                               $oldBaits = [$legacy];
                            }
-                           $initialBaitCount = max(1, min(count($oldBaits), 5));
+                           $initial = max(1, min(count($oldBaits), 5));
                         @endphp
-                        @php
-                           // エサの選択肢（将来的には DB から渡す想定）
-                           $baitOptions = ['ミミズ', 'イソメ', '砂虫', 'コマセ', 'ルアー', 'その他'];
-                        @endphp
+
                         <div>
                            <div id="baits-container" class="space-y-2">
-                              @for ($i = 0; $i < $initialBaitCount; $i++)
+                              @for ($i = 0; $i < $initial; $i++)
                                  <div class="flex items-center gap-3 bait-row">
                                     <select class="rounded w-60" name="baits[{{ $i }}]">
                                        <option value="">選択してください</option>
-                                       @foreach ($baitOptions as $opt)
-                                          <option value="{{ $opt }}" @selected(($oldBaits[$i] ?? '') === $opt)>
-                                             {{ $opt }}</option>
+                                       @foreach ($all_baits as $bait)
+                                          <option value="{{ $bait->name }}" @selected(($oldBaits[$i] ?? '') === $bait->name)>
+                                             {{ $bait->name }}</option>
                                        @endforeach
                                     </select>
+
                                     <button type="button"
                                        class="text-xs text-red-600 hover:underline remove-bait-row {{ $i === 0 ? 'hidden' : '' }}">
                                        削除
@@ -238,6 +236,7 @@
                                  </div>
                               @endfor
                            </div>
+
                            <div class="mt-2">
                               <button type="button" id="add-bait-row" class="text-sm text-blue-700 hover:underline">
                                  ＋ エサ入力エリアを追加（最大5件）
