@@ -9,22 +9,22 @@
                @csrf
                {{-- 釣行日・釣行時間・釣り場所 --}}
                <div class="mb-8">
-                  <div class="flex flex-wrap items-start">
-                     <div class="flex flex-wrap items-start">
-                        <div class="">
+                  <div class="flex flex-col md:flex-row md:flex-wrap items-start gap-6 md:gap-12">
+                     <div class="flex items-start gap-8">
+                        <div>
                            <h2 class="sub_heading mb-1">釣行日</h2>
-                           <input class="rounded" type="date" name="fishing_date" value="{{ old('fishing_date') }}"
+                           <input class="w-44 rounded" type="date" name="fishing_date" value="{{ old('fishing_date') }}"
                               max="{{ now()->toDateString() }}" />
                            {{-- エラーメッセージ（釣行日） --}}
                            <x-input-error class="mt-2" :messages="$errors->get('fishing_date')" />
                         </div>
-                        <div class="ml-8">
+                        <div>
                            <h2 class="sub_heading mb-1">釣行時間</h2>
                            <div class="flex items-center">
-                              <input class="rounded text-center" type="time" name="start_time"
+                              <input class="w-28 rounded text-center" type="time" name="start_time"
                                  value="{{ old('start_time') }}" step="60" />
                               <span class="my-0 mx-1 text-gray-600">〜</span>
-                              <input class="rounded text-center" type="time" name="end_time"
+                              <input class="w-28 rounded text-center" type="time" name="end_time"
                                  value="{{ old('end_time') }}" step="60" />
                            </div>
                            {{-- エラーメッセージ（釣行時間） --}}
@@ -32,10 +32,10 @@
                            <x-input-error class="mt-2" :messages="$errors->get('end_time')" />
                         </div>
                      </div>
-                     <div class="flex items-center ml-12">
-                        <div class="">
+                     <div class="flex items-center gap-4">
+                        <div>
                            <h2 class="sub_heading mb-1">スポット</h2>
-                           <select name="fishing_spot" class="rounded">
+                           <select name="fishing_spot" class="w-56 rounded">
                               <option value="" @selected(old('fishing_spot', '') === '')>
                                  スポットを選択
                               </option>
@@ -49,9 +49,9 @@
                            <x-input-error class="mt-2" :messages="$errors->get('fishing_spot')" />
                         </div>
                         {{-- 新規スポット入力 --}}
-                        <div class="ml-2">
+                        <div>
                            <h2 class="text-sm text-gray-700 mb-1 mt-2">（スポット名を追加）</h2>
-                           <input class="rounded" type="text" name="new_spot" value="{{ old('new_spot') }}"
+                           <input class="w-56 rounded" type="text" name="new_spot" value="{{ old('new_spot') }}"
                               placeholder="相模川上流">
                            {{-- エラーメッセージ（スポット追加） --}}
                            <x-input-error class="mt-2" :messages="$errors->get('new_spot')" />
@@ -63,10 +63,10 @@
                {{-- 気象状態 --}}
                <div class="mb-8">
                   <h2 class="sub_heading mb-1">気象状態</h2>
-                  <div class="flex flex-col md:flex-row md:items-start md:gap-16">
+                  <div class="flex flex-col md:flex-row items-start gap-6 md:gap-12">
                      <div class="">
                         <label class="block text-sm text-gray-700 mb-1">天気</label>
-                        <select name="weather" class="rounded w-56">
+                        <select name="weather" class="w-60 rounded">
                            <option value="" @selected(old('weather', '') === '')>未選択</option>
                            <option value="sunny" @selected(old('weather') === 'sunny')>晴れ</option>
                            <option value="cloudy" @selected(old('weather') === 'cloudy')>曇り</option>
@@ -90,7 +90,7 @@
                      <div class="">
                         <label class="block text-sm text-gray-700 mb-1">最大風速</label>
                         <div class="flex items-center gap-2">
-                           <input class="rounded text-center" type="number" name="max_wind"
+                           <input class="w-24 rounded text-right" type="number" name="max_wind"
                               value="{{ old('max_wind') }}" placeholder="1" inputmode="decimal" step="0.1"
                               min="0" max="99.9" />
                            <span class="text-gray-600">m/s</span>
@@ -100,7 +100,7 @@
                      </div>
                      <div class="">
                         <label class="block text-sm text-gray-700 mb-1">風向</label>
-                        <select name="wind_dir" class="rounded">
+                        <select name="wind_dir" class="w-40 rounded">
                            <option value="" @selected(old('wind_dir', '') === '')>未選択</option>
                            <option value="N" @selected(old('wind_dir') === 'N')>北</option>
                            <option value="NE" @selected(old('wind_dir') === 'NE')>北東</option>
@@ -120,10 +120,10 @@
                {{-- 川の状態 --}}
                <div class="mb-8">
                   <h2 class="sub_heading mb-1">川の状態</h2>
-                  <div class="flex flex-wrap gap-12">
+                  <div class="flex flex-wrap gap-x-12 gap-y-6">
                      <div>
                         <label class="block text-sm text-gray-700 mb-1">川の流れ</label>
-                        <select name="river_flow" class="rounded">
+                        <select name="river_flow" class="w-44 rounded">
                            <option value="" @selected(old('river_flow', '') === '')>
                               未選択
                            </option>
@@ -139,7 +139,7 @@
                      </div>
                      <div>
                         <label class="block text-sm text-gray-700 mb-1">濁り</label>
-                        <select name="turbidity" class="rounded">
+                        <select name="turbidity" class="w-44 rounded">
                            <option value="" @selected(old('turbidity', '') === '')>
                               未選択
                            </option>
@@ -161,7 +161,7 @@
                      </div>
                      <div>
                         <label class="block text-sm text-gray-700 mb-1">水中のゴミ</label>
-                        <select name="debris" class="rounded">
+                        <select name="debris" class="w-44 rounded">
                            <option value="" @selected(old('debris', '') === '')>
                               未選択
                            </option>
@@ -242,7 +242,7 @@
                      {{-- 新規エサ入力 --}}
                      <div class="">
                         <h2 class="text-sm text-gray-700 mt-2 mb-1">（エサ名を追加）</h2>
-                        <input class="w-60rounded" type="text" name="new_bait" value="{{ old('new_bait') }}"
+                        <input class="w-60 rounded" type="text" name="new_bait" value="{{ old('new_bait') }}"
                            placeholder="例: アオイソメ">
                         {{-- エラーメッセージ（エサ追加） --}}
                         <x-input-error class="mt-2" :messages="$errors->get('new_bait')" />
@@ -267,7 +267,7 @@
                                  @endphp
                                  <div class="flex flex-wrap items-center gap-3 catch-row">
                                     <div class="w-full sm:w-auto">
-                                       <select class="w-full sm:w-48 rounded"
+                                       <select class="w-full sm:w-60 rounded"
                                           name="catches[{{ $i }}][name]">
                                           <option value="">魚種を選択</option>
                                           @foreach ($all_fish_names as $fish)
@@ -338,13 +338,15 @@
                {{-- 既存タグの選択 --}}
                <div class="mb-10">
                   <h2 class="sub_heading mb-1">既存タグの選択</h2>
-                  @foreach ($all_tags as $tag)
-                     <div class="inline mr-3 hover:font-semibold">
-                        <input class="mb-1 rounded" type="checkbox" name="tags[]" id="{{ $tag->id }}"
-                           value="{{ $tag->id }}" @checked(in_array($tag->id, old('tags', []))) />
-                        <label for="{{ $tag->id }}">{{ $tag->name }}</label>
-                     </div>
-                  @endforeach
+                  <div class="flex flex-wrap gap-3">
+                     @foreach ($all_tags as $tag)
+                        <div class="flex items-center gap-1 hover:font-semibold">
+                           <input class="mb-1 rounded" type="checkbox" name="tags[]" id="{{ $tag->id }}"
+                              value="{{ $tag->id }}" @checked(in_array($tag->id, old('tags', []))) />
+                           <label for="{{ $tag->id }}">{{ $tag->name }}</label>
+                        </div>
+                     @endforeach
+                  </div>
                </div>
                {{-- 新規タグ入力 --}}
                <div class="mb-10">
