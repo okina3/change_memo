@@ -9,18 +9,18 @@
                @csrf
                {{-- 釣行日・釣行時間・釣り場所 --}}
                <div class="mb-8">
-                  <div class="flex flex-col md:flex-row md:flex-wrap items-start gap-6 md:gap-8 lg:gap-12">
-                     <div class="flex items-start gap-6 md:gap-8">
+                  <div class="md:flex-row md:flex-wrap md:gap-8 lg:gap-12 flex flex-col items-start gap-6">
+                     <div class="sm:flex-row sm:gap-6 md:gap-8 flex flex-col items-start gap-4">
                         <div>
-                           <h2 class="sub_heading mb-1">釣行日</h2>
-                           <input class="w-44 rounded" type="date" name="fishing_date"
+                           <h2 class="mb-1 sub_heading">釣行日</h2>
+                           <input class="sm:w-44 md:w-44 w-full rounded" type="date" name="fishing_date"
                               value="{{ old('fishing_date') }}" max="{{ now()->toDateString() }}" />
                            {{-- エラーメッセージ（釣行日） --}}
                            <x-input-error class="mt-2" :messages="$errors->get('fishing_date')" />
                         </div>
                         <div>
-                           <h2 class="sub_heading mb-1">釣行時間</h2>
-                           <div class="flex items-center">
+                           <h2 class="mb-1 sub_heading">釣行時間</h2>
+                           <div class="flex items-center w-full">
                               <input class="w-28 rounded text-center" type="time" name="start_time"
                                  value="{{ old('start_time') }}" step="60" />
                               <span class="my-0 mx-1 text-gray-600">〜</span>
@@ -32,10 +32,10 @@
                            <x-input-error class="mt-2" :messages="$errors->get('end_time')" />
                         </div>
                      </div>
-                     <div class="flex items-center gap-4">
+                     <div class="sm:flex-row sm:gap-6 md:gap-6 flex flex-col items-start gap-4">
                         <div>
-                           <h2 class="sub_heading mb-1">スポット</h2>
-                           <select name="fishing_spot" class="w-56 rounded">
+                           <h2 class="mb-1 sub_heading">スポット</h2>
+                           <select name="fishing_spot" class="sm:w-56 md:w-56 w-full rounded">
                               <option value="" @selected(old('fishing_spot', '') === '')>
                                  スポットを選択
                               </option>
@@ -50,9 +50,9 @@
                         </div>
                         {{-- 新規スポット入力 --}}
                         <div>
-                           <h2 class="text-sm text-gray-700 mb-1 mt-2">（スポット名を追加）</h2>
-                           <input class="w-56 rounded" type="text" name="new_spot" value="{{ old('new_spot') }}"
-                              placeholder="相模川上流">
+                           <h2 class="mb-1 mt-2 text-sm text-gray-700">（スポット名を追加）</h2>
+                           <input class="sm:w-56 md:w-56 w-full rounded" type="text" name="new_spot"
+                              value="{{ old('new_spot') }}" placeholder="相模川上流">
                            {{-- エラーメッセージ（スポット追加） --}}
                            <x-input-error class="mt-2" :messages="$errors->get('new_spot')" />
                         </div>
@@ -62,11 +62,11 @@
 
                {{-- 気象状態 --}}
                <div class="mb-8">
-                  <h2 class="sub_heading mb-1">気象状態</h2>
-                  <div class="flex flex-col md:flex-row md:flex-wrap items-start gap-6 md:gap-8 lg:gap-12">
+                  <h2 class="mb-1 sub_heading">気象状態</h2>
+                  <div class="sm:flex-row sm:flex-wrap sm:gap-6 md:gap-8 lg:gap-12 flex flex-col items-start gap-6">
                      <div class="">
-                        <label class="block text-sm text-gray-700 mb-1">天気</label>
-                        <select name="weather" class="w-56 lg:w-60 rounded">
+                        <label class="mb-1 block text-sm text-gray-700">天気</label>
+                        <select name="weather" class="lg:w-60 w-56 rounded">
                            <option value="" @selected(old('weather', '') === '')>未選択</option>
                            <option value="sunny" @selected(old('weather') === 'sunny')>晴れ</option>
                            <option value="cloudy" @selected(old('weather') === 'cloudy')>曇り</option>
@@ -77,7 +77,7 @@
                         <x-input-error class="mt-2" :messages="$errors->get('weather')" />
                      </div>
                      <div>
-                        <label class="block text-sm text-gray-700 mb-1">気温</label>
+                        <label class="mb-1 block text-sm text-gray-700">気温</label>
                         <div class="flex items-center gap-2">
                            <input class="w-24 rounded text-right" type="number" name="air_temp"
                               value="{{ old('air_temp') }}" placeholder="10" inputmode="numeric" step="1"
@@ -88,7 +88,7 @@
                         <x-input-error class="mt-2" :messages="$errors->get('air_temp')" />
                      </div>
                      <div class="">
-                        <label class="block text-sm text-gray-700 mb-1">最大風速</label>
+                        <label class="mb-1 block text-sm text-gray-700">最大風速</label>
                         <div class="flex items-center gap-2">
                            <input class="w-24 rounded text-right" type="number" name="max_wind"
                               value="{{ old('max_wind') }}" placeholder="1" inputmode="decimal" step="0.1"
@@ -99,8 +99,8 @@
                         <x-input-error class="mt-2" :messages="$errors->get('max_wind')" />
                      </div>
                      <div class="">
-                        <label class="block text-sm text-gray-700 mb-1">風向</label>
-                        <select name="wind_dir" class="w-36 lg:w-40 rounded">
+                        <label class="mb-1 block text-sm text-gray-700">風向</label>
+                        <select name="wind_dir" class="lg:w-40 w-36 rounded">
                            <option value="" @selected(old('wind_dir', '') === '')>未選択</option>
                            <option value="N" @selected(old('wind_dir') === 'N')>北</option>
                            <option value="NE" @selected(old('wind_dir') === 'NE')>北東</option>
@@ -119,10 +119,10 @@
 
                {{-- 川の状態 --}}
                <div class="mb-8">
-                  <h2 class="sub_heading mb-1">川の状態</h2>
-                  <div class="flex flex-wrap gap-x-12 gap-y-6">
-                     <div>
-                        <label class="block text-sm text-gray-700 mb-1">川の流れ</label>
+                  <h2 class="mb-1 sub_heading">川の状態</h2>
+                  <div class="sm:flex-row sm:flex-wrap sm:gap-6 md:gap-8 lg:gap-12 flex flex-col items-start gap-6">
+                     <div class="">
+                        <label class="mb-1 block text-sm text-gray-700">川の流れ</label>
                         <select name="river_flow" class="w-44 rounded">
                            <option value="" @selected(old('river_flow', '') === '')>
                               未選択
@@ -137,8 +137,8 @@
                         {{-- エラーメッセージ（川の流れ） --}}
                         <x-input-error class="mt-2" :messages="$errors->get('river_flow')" />
                      </div>
-                     <div>
-                        <label class="block text-sm text-gray-700 mb-1">濁り</label>
+                     <div class="">
+                        <label class="mb-1 block text-sm text-gray-700">濁り</label>
                         <select name="turbidity" class="w-44 rounded">
                            <option value="" @selected(old('turbidity', '') === '')>
                               未選択
@@ -159,8 +159,8 @@
                         {{-- エラーメッセージ（濁り） --}}
                         <x-input-error class="mt-2" :messages="$errors->get('turbidity')" />
                      </div>
-                     <div>
-                        <label class="block text-sm text-gray-700 mb-1">水中のゴミ</label>
+                     <div class="">
+                        <label class="mb-1 block text-sm text-gray-700">水中のゴミ</label>
                         <select name="debris" class="w-44 rounded">
                            <option value="" @selected(old('debris', '') === '')>
                               未選択
@@ -178,8 +178,8 @@
                         {{-- エラーメッセージ（水中のゴミ） --}}
                         <x-input-error class="mt-2" :messages="$errors->get('debris')" />
                      </div>
-                     <div>
-                        <label class="block text-sm text-gray-700 mb-1">水位</label>
+                     <div class="">
+                        <label class="mb-1 block text-sm text-gray-700">水位</label>
                         <div class="flex items-center gap-2">
                            <input class="w-24 rounded text-right" type="number" name="water_level"
                               value="{{ old('water_level') }}" placeholder="0.0" inputmode="decimal" step="0.1"
@@ -189,8 +189,8 @@
                         {{-- エラーメッセージ（水位） --}}
                         <x-input-error class="mt-2" :messages="$errors->get('water_level')" />
                      </div>
-                     <div>
-                        <label class="block text-sm text-gray-700 mb-1">水温</label>
+                     <div class="">
+                        <label class="mb-1 block text-sm text-gray-700">水温</label>
                         <div class="flex items-center gap-2">
                            <input class="w-24 rounded text-right" type="number" name="water_temp"
                               value="{{ old('water_temp') }}" placeholder="10" inputmode="numeric" step="1"
@@ -205,9 +205,9 @@
 
                {{-- エサの入力 --}}
                <div class="mb-8">
-                  <div class="flex gap-6">
+                  <div class="md:flex-row md:gap-8 lg:gap-12 flex flex-col items-start gap-6">
                      <div class="">
-                        <h2 class="sub_heading mb-1">エサ</h2>
+                        <h2 class="mb-1 sub_heading">エサ</h2>
                         @php
                            // 初期表示行数（最低1、最大5）
                            $initialRows = max(1, min(count(old('baits', [])), 5));
@@ -241,7 +241,7 @@
                      </div>
                      {{-- 新規エサ入力 --}}
                      <div class="">
-                        <h2 class="text-sm text-gray-700 mt-2 mb-1">（エサ名を追加）</h2>
+                        <h2 class="mt-2 mb-1 text-sm text-gray-700">（エサ名を追加）</h2>
                         <input class="w-60 rounded" type="text" name="new_bait" value="{{ old('new_bait') }}"
                            placeholder="例: アオイソメ">
                         {{-- エラーメッセージ（エサ追加） --}}
@@ -252,9 +252,9 @@
 
                {{-- 釣果の入力 --}}
                <div class="mb-8">
-                  <div class="flex gap-6">
+                  <div class="md:gap-8 md:flex-row md:flex-wrap lg:gap-12 flex flex-col items-start gap-6 ">
                      <div class="">
-                        <h2 class="sub_heading mb-1">釣果</h2>
+                        <h2 class="mb-1 sub_heading">釣果</h2>
                         @php
                            // 初期表示行数（最低1、最大5）
                            $initialRows = max(1, min(count(old('catches', [])), 5));
@@ -266,8 +266,8 @@
                                     $catch = old('catches', [])[$i] ?? ['name' => '', 'count' => '', 'length_cm' => ''];
                                  @endphp
                                  <div class="flex flex-wrap items-center gap-3 catch-row">
-                                    <div class="w-full sm:w-auto">
-                                       <select class="w-full sm:w-60 rounded"
+                                    <div class="md:w-auto w-full">
+                                       <select class="md:w-60 w-full rounded"
                                           name="catches[{{ $i }}][name]">
                                           <option value="">魚種を選択</option>
                                           @foreach ($all_fish_names as $fish)
@@ -278,19 +278,19 @@
                                     </div>
                                     {{-- 釣果（匹） --}}
                                     <div class="flex items-center gap-2">
-                                       <input class="w-20 sm:w-24 rounded text-right" type="number"
+                                       <input class="md:w-24 w-20 rounded text-right" type="number"
                                           name="catches[{{ $i }}][count]"
                                           value="{{ $catch['count'] ?? '' }}" placeholder="0" inputmode="numeric"
                                           min="0" step="1" />
-                                       <span class="text-gray-600 hidden sm:inline">匹</span>
+                                       <span class="text-gray-600">匹</span>
                                     </div>
                                     {{-- サイズ（cm） --}}
                                     <div class="flex items-center gap-2">
-                                       <input class="w-20 sm:w-24 rounded text-right" type="number"
+                                       <input class="md:w-24 w-20 rounded text-right" type="number"
                                           name="catches[{{ $i }}][length_cm]"
                                           value="{{ $catch['length_cm'] ?? '' }}" placeholder="0"
                                           inputmode="numeric" min="0" step="1" />
-                                       <span class="text-gray-600 hidden sm:inline">cm</span>
+                                       <span class="text-gray-600">cm</span>
                                     </div>
                                     <button type="button"
                                        class="text-xs text-red-600 hover:underline remove-catch-row {{ $i === 0 ? 'hidden' : '' }}">
@@ -308,14 +308,14 @@
                      </div>
                      <div class="lg:flex gap-6">
                         <div class="">
-                           <h2 class="text-sm text-gray-700 mt-2 mb-1">（魚名を追加）</h2>
+                           <h2 class="mt-2 mb-1 text-sm text-gray-700">（魚名を追加）</h2>
                            <input class="rounded w-60" type="text" name="new_fish" value="{{ old('new_fish') }}"
                               placeholder="例: ヤマメ">
                            {{-- エラーメッセージ（魚名の追加） --}}
                            <x-input-error class="mt-2" :messages="$errors->get('new_fish')" />
                         </div>
                         {{-- 釣果合計 --}}
-                        <div id="catch-total" class="mt-3 lg:mt-0 w-32 p-1 border rounded self-center">
+                        <div id="catch-total" class="mt-3 p-1 lg:mt-0 w-32 border rounded self-center">
                            <div class="flex items-baseline justify-center gap-3">
                               <div class="text-sm text-gray-600">合計</div>
                               <div id="catch-total-number" class="text-2xl font-semibold">0</div>
