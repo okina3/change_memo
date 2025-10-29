@@ -209,22 +209,18 @@
                      <div class="">
                         <h2 class="sub_heading mb-1">エサ</h2>
                         @php
-                           $oldBaits = old('baits', []);
-                           if (empty($oldBaits) && ($legacy = old('bait'))) {
-                               $oldBaits = [$legacy];
-                           }
-                           $initial = max(1, min(count($oldBaits), 5));
+                           // 初期表示行数（最低1、最大5）
+                           $initialRows = max(1, min(count(old('baits', [])), 5));
                         @endphp
                         <div>
                            <div id="baits-container" class="space-y-2">
-                              @for ($i = 0; $i < $initial; $i++)
+                              @for ($i = 0; $i < $initialRows; $i++)
                                  <div class="flex items-center gap-3 bait-row">
                                     <select class="rounded w-60" name="baits[{{ $i }}]">
                                        <option value="">選択してください</option>
                                        @foreach ($all_baits as $bait)
-                                          <option value="{{ $bait->name }}" @selected(($oldBaits[$i] ?? '') === $bait->name)>
-                                             {{ $bait->name }}
-                                          </option>
+                                          <option value="{{ $bait->name }}" @selected((old('baits', [])[$i] ?? '') === $bait->name)>
+                                             {{ $bait->name }}</option>
                                        @endforeach
                                     </select>
                                     <button type="button"
@@ -260,14 +256,14 @@
                      <div class="">
                         <h2 class="sub_heading mb-1">釣果</h2>
                         @php
-                           $oldCatches = old('catches', []);
-                           $initialCount = max(1, min(count($oldCatches), 5));
+                           // 初期表示行数（最低1、最大5）
+                           $initialRows = max(1, min(count(old('catches', [])), 5));
                         @endphp
                         <div class="flex items-start gap-6">
                            <div id="catches-container" class="space-y-2 flex-1">
-                              @for ($i = 0; $i < $initialCount; $i++)
+                              @for ($i = 0; $i < $initialRows; $i++)
                                  @php
-                                    $catch = $oldCatches[$i] ?? ['name' => '', 'count' => '', 'length_cm' => ''];
+                                    $catch = old('catches', [])[$i] ?? ['name' => '', 'count' => '', 'length_cm' => ''];
                                  @endphp
                                  <div class="flex flex-wrap items-center gap-3 catch-row">
                                     <div class="w-full sm:w-auto">
@@ -276,16 +272,11 @@
                                           <option value="">魚種を選択</option>
                                           @foreach ($all_fish_names as $fish)
                                              <option value="{{ $fish->name }}" @selected(($catch['name'] ?? '') === $fish->name)>
-                                                {{ $fish->name }}
-                                             </option>
+                                                {{ $fish->name }}</option>
                                           @endforeach
-                                          {{-- ユーザーが以前入力した値が選択肢にない場合はその値を追加して選択状態にする --}}
-                                          @if (!empty($catch['name']) && !$all_fish_names->contains('name', $catch['name']))
-                                             <option value="{{ $catch['name'] }}" selected>{{ $catch['name'] }}
-                                             </option>
-                                          @endif
                                        </select>
                                     </div>
+                                    {{-- 釣果（匹） --}}
                                     <div class="flex items-center gap-2">
                                        <input class="w-20 sm:w-24 rounded text-right" type="number"
                                           name="catches[{{ $i }}][count]"
@@ -293,6 +284,7 @@
                                           min="0" step="1" />
                                        <span class="text-gray-600 hidden sm:inline">匹</span>
                                     </div>
+                                    {{-- サイズ（cm） --}}
                                     <div class="flex items-center gap-2">
                                        <input class="w-20 sm:w-24 rounded text-right" type="number"
                                           name="catches[{{ $i }}][length_cm]"

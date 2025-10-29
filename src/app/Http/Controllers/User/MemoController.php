@@ -90,8 +90,8 @@ class MemoController extends Controller
                 // メモを保存
                 $memo = Memo::create([
                     'fishing_date' => $request->input('fishing_date'),
-                    'fishing_time_start' => $request->input('fishing_time_start'),
-                    'fishing_time_end' => $request->input('fishing_time_end'),
+                    'start_time' => $request->input('start_time'),
+                    'end_time' => $request->input('end_time'),
                     'fishing_spot' => $request->input('fishing_spot'),
                     'content' => $request->input('content'),
                     'user_id' => Auth::id(),
@@ -116,7 +116,60 @@ class MemoController extends Controller
                     }
                 }
 
+                // --- エサ（baits）の保存 ---
+                // new_bait があれば作成
+                if ($request->filled('new_bait')) {
+                    $name = trim((string) $request->input('new_bait'));
+                    if ($name !== '') {
+                        Bait::firstOrCreate([
+                            'user_id' => Auth::id(),
+                            'name' => $name,
+                        ]);
+                    }
+                }
+                // 選択されたエサを pivot に紐付ける
+                $baits = $request->input('baits', []);
+                if (!empty($baits) && is_array($baits)) {
+                    foreach ($baits as $baitName) {
+                        $baitName = trim((string) $baitName);
+                        if ($baitName === '') continue;
+                        $bait = Bait::firstOrCreate([
+                            'user_id' => Auth::id(),
+                            'name' => $baitName,
+                        ]);
+                        // 重複防止のため sync ではなく attach の前に存在確認
+                        if (!$memo->baits()->where('baits.id', $bait->id)->exists()) {
+                            $memo->baits()->attach($bait->id);
+                        }
+                    }
+                }
 
+                // --- 釣果（fish names）の保存 ---
+                // new_fish があれば作成
+                if ($request->filled('new_fish')) {
+                    $name = trim((string) $request->input('new_fish'));
+                    if ($name !== '') {
+                        FishName::firstOrCreate([
+                            'user_id' => Auth::id(),
+                            'name' => $name,
+                        ]);
+                    }
+                }
+                // フォームから渡された catches 配列の name を pivot に紐付ける
+                $catches = $request->input('catches', []);
+                if (!empty($catches) && is_array($catches)) {
+                    foreach ($catches as $row) {
+                        $fishName = trim((string) ($row['name'] ?? ''));
+                        if ($fishName === '') continue;
+                        $fish = FishName::firstOrCreate([
+                            'user_id' => Auth::id(),
+                            'name' => $fishName,
+                        ]);
+                        if (!$memo->fish_names()->where('fish_names.id', $fish->id)->exists()) {
+                            $memo->fish_names()->attach($fish->id);
+                        }
+                    }
+                }
 
                 // 新規タグの入力があれば、各データを保存。
                 TagService::storeNewTag($request->new_tag, $memo->id);
