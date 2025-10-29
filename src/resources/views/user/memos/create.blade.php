@@ -315,7 +315,7 @@
                            <x-input-error class="mt-2" :messages="$errors->get('new_fish')" />
                         </div>
                         {{-- 釣果合計 --}}
-                        <div id="catch-total" class="mt-3 p-1 lg:mt-0 w-32 border rounded self-center">
+                        <div id="catch-total" class="lg:mt-8 mt-3 p-1 w-32 border rounded self-center">
                            <div class="flex items-baseline justify-center gap-3">
                               <div class="text-sm text-gray-600">合計</div>
                               <div id="catch-total-number" class="text-2xl font-semibold">0</div>
@@ -453,114 +453,16 @@
          });
       });
 
-      // --- 釣果の行 追加/削除（最大5件） ---
-      const catchesContainer = document.getElementById('catches-container');
-      const addCatchRowBtn = document.getElementById('add-catch-row');
-      const MAX_CATCH_ROWS = 5;
-
-      function getCatchRows() {
-         return Array.from(catchesContainer?.querySelectorAll('.catch-row') || []);
-      }
-
-      function reindexCatchRows() {
-         const rows = getCatchRows();
-         rows.forEach((row, idx) => {
-            // name 属性を持つ要素すべてのインデックスを書き換え（select や input に対応）
-            row.querySelectorAll('[name^="catches["]').forEach(el => {
-               el.name = el.name.replace(/catches\[\d+\]/, `catches[${idx}]`);
-            });
-            // 1行目は削除ボタンを非表示、それ以外は表示
-            const delBtn = row.querySelector('.remove-catch-row');
-            if (delBtn) delBtn.classList.toggle('hidden', idx === 0);
-         });
-         // 追加ボタンの有効/無効
-         const disabled = rows.length >= MAX_CATCH_ROWS;
-         if (addCatchRowBtn) {
-            addCatchRowBtn.disabled = disabled;
-            addCatchRowBtn.classList.toggle('opacity-50', disabled);
-            addCatchRowBtn.classList.toggle('cursor-not-allowed', disabled);
-         }
-      }
-
-      function attachDeleteHandlers(scope) {
-         (scope || document).querySelectorAll('.remove-catch-row').forEach(btn => {
-            if (!btn._bound) {
-               btn.addEventListener('click', () => {
-                  const row = btn.closest('.catch-row');
-                  if (row && getCatchRows().length > 1) {
-                     row.remove();
-                     reindexCatchRows();
-                     computeTotalCatches();
-                  }
-               });
-               btn._bound = true;
-            }
-         });
-      }
-
-      function addCatchRow() {
-         const rows = getCatchRows();
-         if (rows.length >= MAX_CATCH_ROWS) return;
-         const base = rows[0];
-         if (!base) return;
-         const clone = base.cloneNode(true);
-         // 値をクリア（input と select に対応）
-         clone.querySelectorAll('input, select').forEach(el => {
-            if (el.tagName === 'SELECT') el.selectedIndex = 0;
-            else el.value = '';
-         });
-         // 削除ボタンを表示（1行目以外）
-         const delBtn = clone.querySelector('.remove-catch-row');
-         if (delBtn) delBtn.classList.remove('hidden');
-         catchesContainer.appendChild(clone);
-         attachDeleteHandlers(clone);
-         attachCountListeners(clone);
-         reindexCatchRows();
-         computeTotalCatches();
-      }
-
-      if (addCatchRowBtn && catchesContainer) {
-         addCatchRowBtn.addEventListener('click', addCatchRow);
-         attachDeleteHandlers(catchesContainer);
-         attachCountListeners(catchesContainer);
-         reindexCatchRows();
-         computeTotalCatches();
-      }
-
-      // 合計を計算して表示
-      function computeTotalCatches() {
-         const rows = getCatchRows();
-         let total = 0;
-         rows.forEach(row => {
-            const input = row.querySelector('input[name$="[count]"]');
-            if (!input) return;
-            const v = parseInt(input.value, 10);
-            if (!Number.isNaN(v)) total += v;
-         });
-         const totalNumberEl = document.getElementById('catch-total-number');
-         if (totalNumberEl) totalNumberEl.textContent = String(total);
-      }
-
-      // カウント入力のイベントを行単位に追加（委譲ではなく個別バインド）
-      function attachCountListeners(scope) {
-         (scope || document).querySelectorAll('input[name$="[count]"]').forEach(input => {
-            if (!input._countBound) {
-               input.addEventListener('input', () => {
-                  computeTotalCatches();
-               });
-               input._countBound = true;
-            }
-         });
-      }
-
-      // --- エサの行 追加/削除（最大5件） ---
+      // === エサ入力エリア（最大5件） =====================================
+      // 定数・要素参照
       const baitsContainer = document.getElementById('baits-container');
       const addBaitRowBtn = document.getElementById('add-bait-row');
       const MAX_BAIT_ROWS = 5;
 
+      // 行の取得
       const getBaitRows = () => Array.from(baitsContainer?.querySelectorAll('.bait-row') || []);
 
-      // 再インデックス＆UI更新
+      // 再インデックスとUI更新
       function updateBaitControls() {
          const rows = getBaitRows();
          rows.forEach((row, idx) => {
@@ -578,13 +480,14 @@
          }
       }
 
-      // イベント委譲で削除を処理（後から追加された要素も自動で扱える）
+      // 削除（イベント委譲）
       baitsContainer?.addEventListener('click', (e) => {
          const btn = e.target.closest?.('.remove-bait-row');
          if (!btn) return;
          const row = btn.closest('.bait-row');
          if (!row) return;
-         if (getBaitRows().length <= 1) return; // 最低1行を維持
+         // 最低1行を維持
+         if (getBaitRows().length <= 1) return;
          row.remove();
          updateBaitControls();
       });
@@ -600,12 +503,110 @@
             if (el.tagName === 'SELECT') el.selectedIndex = 0;
             else el.value = '';
          });
+         // 1行目以外は削除ボタンを表示
+         const del = clone.querySelector('.remove-bait-row');
+         if (del) del.classList.remove('hidden');
          baitsContainer.appendChild(clone);
          updateBaitControls();
       }
 
+      // 追加ボタン
       addBaitRowBtn?.addEventListener('click', addBaitRow);
       // 初期化
       updateBaitControls();
+
+      // === 釣果入力エリア（最大5件） =====================================
+      // 定数・要素参照
+      const catchesContainer = document.getElementById('catches-container');
+      const addCatchRowBtn = document.getElementById('add-catch-row');
+      const MAX_CATCH_ROWS = 5;
+
+      // 行の取得
+      const getCatchRows = () => Array.from(catchesContainer?.querySelectorAll('.catch-row') || []);
+
+      // 再インデックスとUI更新
+      function updateCatchControls() {
+         const rows = getCatchRows();
+         rows.forEach((row, idx) => {
+            row.querySelectorAll('select[name^="catches["], input[name^="catches["]').forEach(el => {
+               el.name = el.name.replace(/catches\[\d+\]/, `catches[${idx}]`);
+            });
+            const del = row.querySelector('.remove-catch-row');
+            if (del) del.classList.toggle('hidden', idx === 0);
+         });
+         const disabled = rows.length >= MAX_CATCH_ROWS;
+         if (addCatchRowBtn) {
+            addCatchRowBtn.disabled = disabled;
+            addCatchRowBtn.classList.toggle('opacity-50', disabled);
+            addCatchRowBtn.classList.toggle('cursor-not-allowed', disabled);
+         }
+      }
+
+      // 削除（イベント委譲）
+      catchesContainer?.addEventListener('click', (e) => {
+         const btn = e.target.closest?.('.remove-catch-row');
+         if (!btn) return;
+         const row = btn.closest('.catch-row');
+         if (!row) return;
+         // 最低1行を維持
+         if (getCatchRows().length <= 1) return;
+         row.remove();
+         updateCatchControls();
+         computeTotalCatches();
+      });
+
+      // 行の追加（最初の行をクローンして値をクリア）
+      function addCatchRow() {
+         const rows = getCatchRows();
+         if (rows.length >= MAX_CATCH_ROWS) return;
+         const base = rows[0];
+         if (!base) return;
+         const clone = base.cloneNode(true);
+         clone.querySelectorAll('select, input').forEach(el => {
+            if (el.tagName === 'SELECT') el.selectedIndex = 0;
+            else el.value = '';
+         });
+         // 1行目以外は削除ボタンを表示
+         const del = clone.querySelector('.remove-catch-row');
+         if (del) del.classList.remove('hidden');
+         catchesContainer.appendChild(clone);
+         updateCatchControls();
+         attachCountListeners(clone);
+         computeTotalCatches();
+      }
+
+      // 追加ボタン
+      addCatchRowBtn?.addEventListener('click', addCatchRow);
+
+      // 入力イベント（匹）
+      function attachCountListeners(scope) {
+         (scope || document).querySelectorAll('#catches-container input[name$="[count]"]').forEach(input => {
+            if (!input._countBound) {
+               input.addEventListener('input', computeTotalCatches);
+               input._countBound = true;
+            }
+         });
+      }
+
+      // 合計を計算して表示
+      function computeTotalCatches() {
+         const rows = getCatchRows();
+         let total = 0;
+         rows.forEach(row => {
+            const input = row.querySelector('input[name$="[count]"]');
+            if (!input) return;
+            const v = parseInt(input.value, 10);
+            if (!Number.isNaN(v)) total += v;
+         });
+         const totalNumberEl = document.getElementById('catch-total-number');
+         if (totalNumberEl) totalNumberEl.textContent = String(total);
+      }
+
+      // 初期化
+      if (catchesContainer) {
+         updateCatchControls();
+         attachCountListeners(catchesContainer);
+         computeTotalCatches();
+      }
    </script>
 </x-app-layout>
