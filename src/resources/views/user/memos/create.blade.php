@@ -12,14 +12,14 @@
                   <div class="md:flex-row md:flex-wrap md:gap-8 lg:gap-12 flex flex-col items-start gap-6">
                      <div class="sm:flex-row sm:gap-6 md:gap-8 flex flex-col items-start gap-4">
                         <div>
-                           <h2 class="mb-1 sub_heading">釣行日</h2>
+                           <h2 class="sub_heading mb-1">釣行日</h2>
                            <input class="sm:w-44 md:w-44 w-full rounded" type="date" name="fishing_date"
                               value="{{ old('fishing_date') }}" max="{{ now()->toDateString() }}" />
                            {{-- エラーメッセージ（釣行日） --}}
                            <x-input-error class="mt-2" :messages="$errors->get('fishing_date')" />
                         </div>
                         <div>
-                           <h2 class="mb-1 sub_heading">釣行時間</h2>
+                           <h2 class="sub_heading mb-1">釣行時間</h2>
                            <div class="flex items-center w-full">
                               <input class="w-28 rounded text-center" type="time" name="start_time"
                                  value="{{ old('start_time') }}" step="60" />
@@ -34,7 +34,7 @@
                      </div>
                      <div class="sm:flex-row sm:gap-6 md:gap-6 flex flex-col items-start gap-4">
                         <div>
-                           <h2 class="mb-1 sub_heading">スポット</h2>
+                           <h2 class="sub_heading mb-1">スポット</h2>
                            <select name="fishing_spot" class="sm:w-56 md:w-56 w-full rounded">
                               <option value="" @selected(old('fishing_spot', '') === '')>
                                  スポットを選択
@@ -62,7 +62,7 @@
 
                {{-- 気象状態 --}}
                <div class="mb-8">
-                  <h2 class="mb-1 sub_heading">気象状態</h2>
+                  <h2 class="sub_heading mb-1">気象状態</h2>
                   <div class="sm:flex-row sm:flex-wrap sm:gap-6 md:gap-8 lg:gap-12 flex flex-col items-start gap-6">
                      <div class="">
                         <label class="mb-1 block text-sm text-gray-700">天気</label>
@@ -119,7 +119,7 @@
 
                {{-- 川の状態 --}}
                <div class="mb-8">
-                  <h2 class="mb-1 sub_heading">川の状態</h2>
+                  <h2 class="sub_heading mb-1">川の状態</h2>
                   <div class="sm:flex-row sm:flex-wrap sm:gap-6 md:gap-8 lg:gap-12 flex flex-col items-start gap-6">
                      <div class="">
                         <label class="mb-1 block text-sm text-gray-700">川の流れ</label>
@@ -207,7 +207,7 @@
                <div class="mb-8">
                   <div class="md:flex-row md:gap-8 lg:gap-12 flex flex-col items-start gap-6">
                      <div class="">
-                        <h2 class="mb-1 sub_heading">エサ</h2>
+                        <h2 class="sub_heading mb-1">エサ</h2>
                         @php
                            // 初期表示行数（最低1、最大5）
                            $initialRows = max(1, min(count(old('baits', [])), 5));
@@ -254,7 +254,7 @@
                <div class="mb-8">
                   <div class="md:gap-8 md:flex-row md:flex-wrap lg:gap-12 flex flex-col items-start gap-6 ">
                      <div class="">
-                        <h2 class="mb-1 sub_heading">釣果</h2>
+                        <h2 class="sub_heading mb-1">釣果</h2>
                         @php
                            // 初期表示行数（最低1、最大5）
                            $initialRows = max(1, min(count(old('catches', [])), 5));
