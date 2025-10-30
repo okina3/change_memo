@@ -17,9 +17,9 @@
                   {{ $select_memo->title }}
                </p>
             </div>
-            {{-- 選択した共有メモの内容の表示 --}}
+            {{-- 選択した共有メモの備考の表示 --}}
             <div class="mb-5">
-               <h2 class="sub_heading mb-1">内容</h2>
+               <h2 class="sub_heading mb-1">備考</h2>
                <textarea class="w-full rounded" name="content" rows="7" disabled>{{ $select_memo->content }}</textarea>
             </div>
             {{-- 選択した共有メモに紐づいたタグの表示 --}}

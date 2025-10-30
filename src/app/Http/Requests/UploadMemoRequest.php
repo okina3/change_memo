@@ -34,7 +34,7 @@ class UploadMemoRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'content.string' => 'メモの内容が空です。また、文字列で指定してください。',
+            'content.string' => 'メモの備考が空です。また、文字列で指定してください。',
             'content.max' => '文字数は、1000文字以内にしてください。',
             'new_tag.max' => 'タグは、25文字以内で入力してください。',
             'new_tag.unique' => 'このタグは、すでに登録されています。',

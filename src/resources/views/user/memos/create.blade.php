@@ -17,6 +17,7 @@
                @include('user.memos.partials.create.baits')
                {{-- 釣果の入力 --}}
                @include('user.memos.partials.create.catches')
+
                {{-- メモの備考入力 --}}
                <div class="mb-5">
                   <h2 class="sub_heading mb-1">備考</h2>
@@ -24,6 +25,7 @@
                   {{-- エラーメッセージ（メモの備考） --}}
                   <x-input-error class="mt-2" :messages="$errors->get('content')" />
                </div>
+
                {{-- 既存タグの選択 --}}
                <div class="mb-10">
                   <h2 class="sub_heading mb-1">既存タグの選択</h2>
@@ -45,17 +47,20 @@
                   {{-- エラーメッセージ（新規タグ） --}}
                   <x-input-error class="mt-2" :messages="$errors->get('new_tag')" />
                </div>
+
                {{-- 画像の選択 --}}
                <div class="mb-10">
                   <h2 class="sub_heading">画像の選択</h2>
                   {{-- モーダルウィンドウ --}}
                   <x-user.list-select-image :allImages='$all_images' />
                </div>
+
                {{-- メモの保存ボタン --}}
                <div class="mb-5">
                   <button class="btn bg-blue-800 hover:bg-blue-700" type="submit">保存する</button>
                </div>
             </form>
+
             {{-- 戻るボタン --}}
             <div class="flex justify-end">
                <button class="btn bg-gray-800 hover:bg-gray-700" onclick="location.href='{{ route('user.index') }}'">

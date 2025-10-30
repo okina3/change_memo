@@ -39,7 +39,7 @@
                                 </div>
                                 {{-- メモのタイトル --}}
                                 <p class="sub_heading mb-1 truncate">{{ $shared_memo->title }}</p>
-                                {{-- メモの内容 --}}
+                                {{-- メモの備考 --}}
                                 <p class="truncate">{{ $shared_memo->content }}</p>
                             </div>
                             {{-- ボタンエリア --}}

@@ -11,7 +11,7 @@
                <p class="ml-1">さん のメモ</p>
             </div>
             {{-- コメント --}}
-            <p class="mb-5">※「内容」のみ編集可能。</p>
+            <p class="mb-5">※「備考」のみ編集可能。</p>
             {{-- 編集中の共有メモの表示 --}}
             <form action="{{ route('user.share-setting.update') }}" method="post">
                @csrf
@@ -21,11 +21,11 @@
                   <h2 class="sub_heading mb-1">タイトル</h2>
                   <p class="p-2 border border-gray-500 rounded bg-white">{{ $select_memo->title }}</p>
                </div>
-               {{-- 選択した共有メモの内容を表示 --}}
+               {{-- 選択した共有メモの備考を表示 --}}
                <div class="mb-5">
-                  <h2 class="sub_heading mb-1">内容</h2>
+                  <h2 class="sub_heading mb-1">備考</h2>
                   <textarea class="w-full rounded" name="content" rows="7" placeholder="ここにメモを入力">{{ $select_memo->content }}</textarea>
-                  {{-- エラーメッセージ （メモの内容） --}}
+                  {{-- エラーメッセージ （メモの備考） --}}
                   <x-input-error class="mt-2" :messages="$errors->get('content')" />
                </div>
                {{-- 選択した共有メモに紐づいたタグの表示 --}}

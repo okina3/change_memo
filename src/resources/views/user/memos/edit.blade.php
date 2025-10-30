@@ -22,13 +22,15 @@
                   {{-- エラーメッセージ（メモのタイトル） --}}
                   <x-input-error class="mt-2" :messages="$errors->get('title')" />
                </div>
-               {{-- 選択したメモの内容の表示 --}}
+
+               {{-- 選択したメモの備考の表示 --}}
                <div class="mb-5">
-                  <h2 class="sub_heading mb-1">内容</h2>
-                  <textarea class="w-full rounded" name="content" rows="7" placeholder="ここにメモを入力">{{ $select_memo->content }}</textarea>
-                  {{-- エラーメッセージ（メモの内容） --}}
+                  <h2 class="sub_heading mb-1">備考</h2>
+                  <textarea class="w-full rounded" name="content" rows="7" placeholder="ここに入力">{{ $select_memo->content }}</textarea>
+                  {{-- エラーメッセージ（メモの備考） --}}
                   <x-input-error class="mt-2" :messages="$errors->get('content')" />
                </div>
+
                {{-- 選択したメモに紐づいた既存タグを表示 --}}
                <div class="mb-10">
                   <h2 class="sub_heading mb-1">既存タグの選択</h2>
@@ -52,12 +54,14 @@
                   {{-- エラーメッセージ（新規タグ） --}}
                   <x-input-error class="mt-2" :messages="$errors->get('new_tag')" />
                </div>
+
                {{-- 選択したメモに紐づいた画像の表示 --}}
                <div class="mb-10">
                   <h2 class="sub_heading mb-1">画像の選択</h2>
                   {{-- モーダルウィンドウ --}}
                   <x-user.list-select-image :allImages='$all_images' :getMemoImagesId="$get_memo_images_id" />
                </div>
+
                {{-- 選択されているメモのidを取得 --}}
                <input type="hidden" name="memoId" value="{{ $select_memo->id }}">
                {{-- メモの更新ボタン --}}
@@ -65,6 +69,7 @@
                   <button class="btn bg-blue-800 hover:bg-blue-700" type="submit">更新する</button>
                </div>
             </form>
+
             {{-- 戻るボタン --}}
             <div class="mb-2 flex justify-end">
                <button class="btn bg-gray-800 hover:bg-gray-700" onclick="location.href='{{ route('user.index') }}'">

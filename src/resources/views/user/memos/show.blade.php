@@ -56,6 +56,7 @@
                   <h2 class="sub_heading mb-1">備考</h2>
                   <textarea class="w-full rounded" name="content" rows="7" disabled>{{ $select_memo->content }}</textarea>
                </div>
+
                {{-- 選択したメモのタグを表示 --}}
                <div class="mb-10">
                   <h2 class="sub_heading mb-1">タグ</h2>
@@ -68,12 +69,14 @@
                      @endforeach
                   </div>
                </div>
+
                {{-- 選択したメモの画像の表示 --}}
                <div class="mb-10">
                   <h2 class="sub_heading mb-1">登録画像</h2>
                   {{-- モーダルウィンドウ --}}
                   <x-user.big-select-image :getMemoImages='$get_memo_images' />
                </div>
+
                {{-- 戻るボタン --}}
                <div class="mb-2 flex justify-end">
                   <button onclick="location.href='{{ route('user.index') }}'" class="btn bg-gray-800 hover:bg-gray-700">
@@ -88,12 +91,12 @@
       'use strict'
       // 共有情報を見る為の、アコーディオンの為の記述
       document.addEventListener('DOMContentLoaded', function() {
-         // アコーディオンのボタンと、共有設定の内容を取得
+         // アコーディオンのボタンと、共有設定の備考を取得
          const INFORMATION = document.getElementById('shared-information');
          const BUTTON = document.getElementById('shared-button');
          // ボタンがクリックされたときの処理
          BUTTON.addEventListener('click', function() {
-            // 共有設定の内容の表示/非表示を切り替え
+            // 共有設定の備考の表示/非表示を切り替え
             INFORMATION.classList.toggle('active');
          });
       });
