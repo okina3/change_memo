@@ -59,10 +59,8 @@
    // 再インデックスとUI更新
    function updateBaitControls() {
       const rows = getBaitRows();
+      // 削除ボタンの表示制御
       rows.forEach((row, idx) => {
-         row.querySelectorAll('select[name^="baits["], input[name^="baits["]').forEach(el => {
-            el.name = el.name.replace(/baits\[\d+\]/, `baits[${idx}]`);
-         });
          const del = row.querySelector('.remove-bait-row');
          if (del) del.classList.toggle('hidden', idx === 0);
       });
