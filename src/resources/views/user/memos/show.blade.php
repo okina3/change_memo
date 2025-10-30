@@ -27,11 +27,11 @@
                         <h2 class="sub_heading mb-1">釣行時間</h2>
                         <div class="flex items-center gap-2">
                            <p class="p-2 border border-gray-500 rounded">
-                          {{ $select_memo->fishing_time_start ? \Carbon\Carbon::parse($select_memo->fishing_time_start)->format('H:i') : '' }}
+                              {{ $select_memo->fishing_time_start ? \Carbon\Carbon::parse($select_memo->fishing_time_start)->format('H:i') : '' }}
                            </p>
                            <span class="text-gray-600">〜</span>
                            <p class="p-2 border border-gray-500 rounded">
-                          {{ $select_memo->fishing_time_end ? \Carbon\Carbon::parse($select_memo->fishing_time_end)->format('H:i') : '' }}
+                              {{ $select_memo->fishing_time_end ? \Carbon\Carbon::parse($select_memo->fishing_time_end)->format('H:i') : '' }}
                            </p>
                         </div>
                      </div>
@@ -56,12 +56,14 @@
                {{-- 選択したメモのタグを表示 --}}
                <div class="mb-10">
                   <h2 class="sub_heading mb-1">タグ</h2>
-                  @foreach ($get_memo_tags_name as $tag_name)
-                     <div class="inline mr-3">
-                        <input class="mb-1 rounded" type="checkbox" checked disabled />
-                        {{ $tag_name }}
-                     </div>
-                  @endforeach
+                  <div class="flex flex-wrap gap-3">
+                     @foreach ($get_memo_tags_name as $tag_name)
+                        <div class="flex items-center gap-1">
+                           <input class="mb-1 rounded" type="checkbox" checked disabled />
+                           {{ $tag_name }}
+                        </div>
+                     @endforeach
+                  </div>
                </div>
                {{-- 選択したメモの画像の表示 --}}
                <div class="mb-10">
