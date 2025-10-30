@@ -8,15 +8,15 @@
             <form action="{{ route('user.store') }}" method="post">
                @csrf
                {{-- 釣行日・釣行時間・釣り場所 --}}
-               @include('user.memos.create.partials.fishing-info')
+               @include('user.memos.partials.create.fishing-info')
                {{-- 気象状態 --}}
-               @include('user.memos.create.partials.weather-state')
+               @include('user.memos.partials.create.weather-state')
                {{-- 川の状態 --}}
-               @include('user.memos.create.partials.river-state')
+               @include('user.memos.partials.create.river-state')
                {{-- エサの入力 --}}
-               @include('user.memos.create.partials.baits')
+               @include('user.memos.partials.create.baits')
                {{-- 釣果の入力 --}}
-               @include('user.memos.create.partials.catches')
+               @include('user.memos.partials.create.catches')
                {{-- メモの備考入力 --}}
                <div class="mb-5">
                   <h2 class="sub_heading mb-1">備考</h2>
