@@ -182,8 +182,10 @@ class MemoController extends Controller
 
                 // 新規タグの入力があれば、各データを保存。
                 TagService::storeNewTag($request->new_tag, $memo->id);
-                // 既存のタグと画像の選択があれば、メモに紐付けて中間テーブルに保存
-                MemoService::attachTagsAndImages($request, $memo->id);
+                // 既存のタグの選択があれば、メモに紐付けて中間テーブルに保存
+                MemoService::attachExistingTags($request, $memo->id);
+                // 既存の画像の選択があれば、メモに紐付けて中間テーブルに保存
+                MemoService::attachExistingImages($request, $memo->id);
             }, 10);
 
             return to_route('user.index')->with(['message' => 'メモを登録しました。', 'status' => 'info']);
