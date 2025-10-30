@@ -11,11 +11,12 @@
             <div id="baits-container" class="space-y-2">
                @for ($i = 0; $i < $initialRows; $i++)
                   <div class="flex items-center gap-3 bait-row">
-                     <select class="rounded w-60" name="baits[{{ $i }}]">
+                     <select class="rounded w-60" name="baits[]">
                         <option value="">選択してください</option>
                         @foreach ($all_baits as $bait)
-                           <option value="{{ $bait->name }}" @selected((old('baits', [])[$i] ?? '') === $bait->name)>
-                              {{ $bait->name }}</option>
+                           <option value="{{ $bait->id }}" @selected((old('baits', [])[$i] ?? '') == $bait->id)>
+                              {{ $bait->name }}
+                           </option>
                         @endforeach
                      </select>
                      <button type="button"
