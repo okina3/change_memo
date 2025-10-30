@@ -56,6 +56,23 @@ class MemoService
     }
 
     /**
+     * メモに紐づいた既存のエサを、中間テーブルに保存するメソッド
+     * @param $request
+     * @param int $memo_id
+     * @return void
+     */
+    public static function attachExistingBaits($request, int $memo_id): void
+    {
+        // 既存エサの選択があれば、メモに紐付けて中間テーブルに保存
+        if (!empty($request->baits)) {
+            foreach ($request->baits as $bait_number) {
+                Memo::findOrFail($memo_id)->baits()->attach($bait_number);
+            }
+        }
+    }
+
+
+    /**
      * メモに紐づいた既存のタグを、中間テーブルに保存するメソッド
      * @param $request
      * @param int $memo_id

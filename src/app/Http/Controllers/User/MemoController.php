@@ -125,33 +125,33 @@ class MemoController extends Controller
                     }
                 }
 
-                // --- エサ（baits）の保存 ---
-                // new_bait があれば作成
-                if ($request->filled('new_bait')) {
-                    $name = trim((string) $request->input('new_bait'));
-                    if ($name !== '') {
-                        Bait::firstOrCreate([
-                            'user_id' => Auth::id(),
-                            'name' => $name,
-                        ]);
-                    }
-                }
-                // 選択されたエサを pivot に紐付ける
-                $baits = $request->input('baits', []);
-                if (!empty($baits) && is_array($baits)) {
-                    foreach ($baits as $baitName) {
-                        $baitName = trim((string) $baitName);
-                        if ($baitName === '') continue;
-                        $bait = Bait::firstOrCreate([
-                            'user_id' => Auth::id(),
-                            'name' => $baitName,
-                        ]);
-                        // 重複防止のため sync ではなく attach の前に存在確認
-                        if (!$memo->baits()->where('baits.id', $bait->id)->exists()) {
-                            $memo->baits()->attach($bait->id);
-                        }
-                    }
-                }
+                // // --- エサ（baits）の保存 ---
+                // // new_bait があれば作成
+                // if ($request->filled('new_bait')) {
+                //     $name = trim((string) $request->input('new_bait'));
+                //     if ($name !== '') {
+                //         Bait::firstOrCreate([
+                //             'user_id' => Auth::id(),
+                //             'name' => $name,
+                //         ]);
+                //     }
+                // }
+                // // 選択されたエサを pivot に紐付ける
+                // $baits = $request->input('baits', []);
+                // if (!empty($baits) && is_array($baits)) {
+                //     foreach ($baits as $baitName) {
+                //         $baitName = trim((string) $baitName);
+                //         if ($baitName === '') continue;
+                //         $bait = Bait::firstOrCreate([
+                //             'user_id' => Auth::id(),
+                //             'name' => $baitName,
+                //         ]);
+                //         // 重複防止のため sync ではなく attach の前に存在確認
+                //         if (!$memo->baits()->where('baits.id', $bait->id)->exists()) {
+                //             $memo->baits()->attach($bait->id);
+                //         }
+                //     }
+                // }
 
                 // --- 釣果（fish names）の保存 ---
                 // new_fish があれば作成
@@ -182,6 +182,8 @@ class MemoController extends Controller
 
                 // 新規タグの入力があれば、各データを保存。
                 TagService::storeNewTag($request->new_tag, $memo->id);
+                // 既存のエサの選択があれば、メモに紐付けて中間テーブルに保存
+                MemoService::attachExistingBaits($request, $memo->id);
                 // 既存のタグの選択があれば、メモに紐付けて中間テーブルに保存
                 MemoService::attachExistingTags($request, $memo->id);
                 // 既存の画像の選択があれば、メモに紐付けて中間テーブルに保存
@@ -267,7 +269,7 @@ class MemoController extends Controller
                 // 新規タグの入力があれば、各データを保存。
                 TagService::storeNewTag($request->new_tag, $memo->id);
                 // 既存のタグと画像の選択があれば、メモに紐付けて中間テーブルに保存
-                MemoService::attachTagsAndImages($request, $memo->id);
+                // MemoService::attachTagsAndImages($request, $memo->id);
             }, 10);
 
             return to_route('user.index')->with(['message' => 'メモを更新しました。', 'status' => 'info']);
