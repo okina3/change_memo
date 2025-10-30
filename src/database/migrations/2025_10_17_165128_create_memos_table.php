@@ -18,6 +18,7 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->foreignId('spot_id')
+                ->nullable()
                 ->constrained('spots')
                 ->restrictOnDelete();
 
@@ -28,8 +29,8 @@ return new class extends Migration
 
             // 天候・気象
             $table->string('weather', 15)->nullable();
-            $table->decimal('air_temp', 3, 1)->nullable();
-            $table->decimal('max_wind', 3, 1)->nullable();
+            $table->integer('air_temp')->nullable();
+            $table->integer('max_wind')->nullable();
             $table->string('wind_dir', 2)->nullable();
 
             // 川の状態 
@@ -37,7 +38,7 @@ return new class extends Migration
             $table->string('turbidity', 20)->nullable();
             $table->string('debris', 20)->nullable();
             $table->decimal('water_level', 4, 1)->nullable();
-            $table->decimal('water_temp', 3, 1)->nullable();
+            $table->integer('water_temp')->nullable();
 
             $table->text('content');
             //ソフトデリート

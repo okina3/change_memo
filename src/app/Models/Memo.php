@@ -33,24 +33,15 @@ class Memo extends Model
         'content',
     ];
 
-    /**
-     * 型キャスト
-     * @var array
-     */
     protected $casts = [
         'fishing_date' => 'date',
-        'start_time' => 'string',
-        'end_time' => 'string',
-        'air_temp' => 'float',
-        'max_wind' => 'float',
-        'wind_dir' => 'string',
-        'river_flow' => 'integer',
-        'turbidity' => 'integer',
-        'debris' => 'integer',
+        'start_time' => 'datetime:H:i',
+        'end_time' => 'datetime:H:i',
+        'air_temp' => 'integer',
+        'max_wind' => 'integer',
         'water_level' => 'float',
-        'water_temp' => 'float',
+        'water_temp' => 'integer',
     ];
-
 
     /**
      * Baitモデルとの多対多のリレーションを定義。
