@@ -49,7 +49,7 @@
                <div class="mb-10">
                   <h2 class="sub_heading">画像の選択</h2>
                   {{-- モーダルウィンドウ --}}
-                  <x-common.list-select-image :allImages='$all_images' />
+                  <x-user.list-select-image :allImages='$all_images' />
                </div>
                {{-- メモの保存ボタン --}}
                <div class="mb-5">

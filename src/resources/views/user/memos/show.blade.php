@@ -6,7 +6,10 @@
          {{-- 選択したメモの詳細を表示するエリア --}}
          <div class="p-3">
             {{-- メモの共有設定を表示するエリア --}}
-            <x-common.memo-share-status :selectMemoId='$select_memo->id' :sharedUsers='$shared_users' />
+            @include('user.memos.partials.show.memo-share-status', [
+                'selectMemoId' => $select_memo->id,
+                'sharedUsers' => $shared_users,
+            ])
             {{-- メモの詳細を表示エリア --}}
             <div class="mb-3">
                {{-- 共有中のメモの目印 --}}
@@ -69,7 +72,7 @@
                <div class="mb-10">
                   <h2 class="sub_heading mb-1">登録画像</h2>
                   {{-- モーダルウィンドウ --}}
-                  <x-common.big-select-image :getMemoImages='$get_memo_images' />
+                  <x-user.big-select-image :getMemoImages='$get_memo_images' />
                </div>
                {{-- 戻るボタン --}}
                <div class="mb-2 flex justify-end">

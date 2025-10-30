@@ -38,7 +38,7 @@
             <div class="mb-10">
                <h2 class="sub_heading mb-1">画像</h2>
                {{-- モーダルウィンドウ --}}
-               <x-common.big-select-image :getMemoImages='$get_memo_images' />
+               <x-usr.big-select-image :getMemoImages='$get_memo_images' />
             </div>
             {{-- 戻るボタン --}}
             <div class="mb-2 flex justify-end">

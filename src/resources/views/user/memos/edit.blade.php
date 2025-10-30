@@ -56,7 +56,7 @@
                <div class="mb-10">
                   <h2 class="sub_heading mb-1">画像の選択</h2>
                   {{-- モーダルウィンドウ --}}
-                  <x-common.list-select-image :allImages='$all_images' :getMemoImagesId="$get_memo_images_id" />
+                  <x-user.list-select-image :allImages='$all_images' :getMemoImagesId="$get_memo_images_id" />
                </div>
                {{-- 選択されているメモのidを取得 --}}
                <input type="hidden" name="memoId" value="{{ $select_memo->id }}">

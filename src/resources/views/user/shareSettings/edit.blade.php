@@ -44,7 +44,7 @@
                <div class="mb-10">
                   <h2 class="sub_heading mb-1">画像</h2>
                   {{-- モーダルウィンドウ --}}
-                  <x-common.big-select-image :getMemoImages='$get_memo_images' />
+                  <x-user.big-select-image :getMemoImages='$get_memo_images' />
                </div>
                {{-- 選択されている共有メモのidを取得 --}}
                <input type="hidden" name="memoId" value="{{ $select_memo->id }}">
