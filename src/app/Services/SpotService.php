@@ -18,9 +18,8 @@ class SpotService
    {
       // 新規スポットの入力があった場合、スポットが重複していないか調べる
       $spot_exists = Spot::availableCheckDuplicateSpot($request_new_spot)->exists();
-      // 新規スポットがあり、重複していなければ、スポットを保存し、中間テーブルに保存
+      // 新規スポットがあり、重複していなければ、スポットを保存、紐付け。
       if (!empty($request_new_spot) && !$spot_exists) {
-         // スポットを保存
          $spot = Spot::create([
             'name' => $request_new_spot,
             'user_id' => Auth::id()

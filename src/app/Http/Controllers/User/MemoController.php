@@ -94,7 +94,6 @@ class MemoController extends Controller
                     'fishing_date' => $request->input('fishing_date'),
                     'start_time' => $request->input('start_time'),
                     'end_time' => $request->input('end_time'),
-                    'fishing_spot' => $request->input('fishing_spot'),
                     'weather' => $request->input('weather'),
                     'air_temp' => $request->input('air_temp'),
                     'max_wind' => $request->input('max_wind'),
@@ -111,7 +110,7 @@ class MemoController extends Controller
                 // 新規スポットの入力があれば、データを保存。
                 SpotService::storeNewSpot($request->input('new_spot'), $memo);
                 // 既存のスポットの選択があれば、メモに紐付けて保存
-                // MemoService::attachExistingSpot($request, $memo->id);
+                MemoService::attachExistingSpot($request, $memo->id);
 
                 // 新規エサの入力があれば、各データを保存。
                 BaitService::storeNewBait($request->new_bait, $memo->id);

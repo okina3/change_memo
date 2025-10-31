@@ -35,7 +35,7 @@
                   スポットを選択
                </option>
                @foreach ($all_spots as $spot)
-                  <option value="{{ $spot->name }}" @selected(old('fishing_spot') === $spot->name)>
+                  <option value="{{ $spot->id }}" @selected(old('fishing_spot') === $spot->id)>
                      {{ $spot->name }}
                   </option>
                @endforeach

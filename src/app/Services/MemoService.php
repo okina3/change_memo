@@ -55,22 +55,21 @@ class MemoService
         return $memos;
     }
 
-    // /**
-    //  * メモに紐づいた既存のスポットを、保存するメソッド
-    //  * @param $request
-    //  * @param int $memo_id
-    //  * @return void
-    //  */
-    // public static function attachExistingSpot($request, int $memo_id): void
-    // {
-
-    //     // 既存スポットの選択があれば、メモに紐付けて中間テーブルに保存
-    //     if (!empty($request->fishing_spot)) {
-    //         foreach ($request->fishing_spot as $bait_number) {
-    //             Memo::findOrFail($memo_id)->spot()->attach($bait_number);
-    //         }
-    //     }
-    // }
+    /**
+     * メモに紐づいた既存のスポットを、保存するメソッド
+     * @param $request
+     * @param int $memo_id
+     * @return void
+     */
+    public static function attachExistingSpot($request, int $memo_id): void
+    {
+        // 既存スポットの選択があれば、メモに紐付けて中間テーブルに保存
+        // if (!empty($request->fishing_spot)) {
+        //     foreach ($request->fishing_spot as $bait_number) {
+        //         Memo::findOrFail($memo_id)->spot()->attach($bait_number);
+        //     }
+        // }
+    }
 
     /**
      * メモに紐づいた既存のエサを、中間テーブルに保存するメソッド
