@@ -4,14 +4,15 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadMemoRequest;
+use App\Models\Bait;
+use App\Models\FishName;
 use App\Models\Image;
 use App\Models\Memo;
 use App\Models\MemoImage;
 use App\Models\MemoTag;
-use App\Models\Tag;
 use App\Models\Spot;
-use App\Models\Bait;
-use App\Models\FishName;
+use App\Models\Tag;
+use App\Services\BaitService;
 use App\Services\ImageService;
 use App\Services\MemoService;
 use App\Services\SessionService;
@@ -125,34 +126,6 @@ class MemoController extends Controller
                     }
                 }
 
-                // // --- エサ（baits）の保存 ---
-                // // new_bait があれば作成
-                // if ($request->filled('new_bait')) {
-                //     $name = trim((string) $request->input('new_bait'));
-                //     if ($name !== '') {
-                //         Bait::firstOrCreate([
-                //             'user_id' => Auth::id(),
-                //             'name' => $name,
-                //         ]);
-                //     }
-                // }
-                // // 選択されたエサを pivot に紐付ける
-                // $baits = $request->input('baits', []);
-                // if (!empty($baits) && is_array($baits)) {
-                //     foreach ($baits as $baitName) {
-                //         $baitName = trim((string) $baitName);
-                //         if ($baitName === '') continue;
-                //         $bait = Bait::firstOrCreate([
-                //             'user_id' => Auth::id(),
-                //             'name' => $baitName,
-                //         ]);
-                //         // 重複防止のため sync ではなく attach の前に存在確認
-                //         if (!$memo->baits()->where('baits.id', $bait->id)->exists()) {
-                //             $memo->baits()->attach($bait->id);
-                //         }
-                //     }
-                // }
-
                 // --- 釣果（fish names）の保存 ---
                 // new_fish があれば作成
                 if ($request->filled('new_fish')) {
@@ -180,12 +153,16 @@ class MemoController extends Controller
                     }
                 }
 
-                // 新規タグの入力があれば、各データを保存。
-                TagService::storeNewTag($request->new_tag, $memo->id);
+                // 新規エサの入力があれば、各データを保存。
+                BaitService::storeNewBait($request->new_bait, $memo->id);
                 // 既存のエサの選択があれば、メモに紐付けて中間テーブルに保存
                 MemoService::attachExistingBaits($request, $memo->id);
+
+                // 新規タグの入力があれば、各データを保存。
+                TagService::storeNewTag($request->new_tag, $memo->id);
                 // 既存のタグの選択があれば、メモに紐付けて中間テーブルに保存
                 MemoService::attachExistingTags($request, $memo->id);
+
                 // 既存の画像の選択があれば、メモに紐付けて中間テーブルに保存
                 MemoService::attachExistingImages($request, $memo->id);
             }, 10);

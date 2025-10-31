@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Auth;
 
 class Bait extends Model
 {
@@ -31,5 +33,17 @@ class Bait extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * エサが重複していないか調べる為のスコープ。
+     * @param Builder $query
+     * @param $request_new_bait
+     * @return void
+     */
+    public function scopeAvailableCheckDuplicateBait(Builder $query, $request_new_bait): void
+    {
+        $query->where('name', $request_new_bait)
+            ->where('user_id', Auth::id());
     }
 }
