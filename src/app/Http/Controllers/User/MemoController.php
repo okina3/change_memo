@@ -111,7 +111,7 @@ class MemoController extends Controller
                 // 新規スポットの入力があれば、データを保存。
                 SpotService::storeNewSpot($request->input('new_spot'), $memo);
                 // 既存のスポットの選択があれば、メモに紐付けて保存
-                // MemoService::attachExistingBaits($request, $memo->id);
+                // MemoService::attachExistingSpot($request, $memo->id);
 
                 // 新規エサの入力があれば、各データを保存。
                 BaitService::storeNewBait($request->new_bait, $memo->id);
