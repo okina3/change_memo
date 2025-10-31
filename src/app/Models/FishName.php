@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class FishName extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name',
         'user_id',
@@ -17,11 +18,14 @@ class FishName extends Model
 
     /**
      * Memoモデルとの多対多のリレーションを定義。
+     *
      * @return BelongsToMany
      */
     public function memos(): BelongsToMany
     {
-        return $this->belongsToMany(Memo::class, 'memo_fish_names');
+        return $this->belongsToMany(Memo::class, 'memo_fish_names')
+            ->withPivot(['count', 'length'])
+            ->withTimestamps();
     }
 
     /**

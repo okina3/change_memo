@@ -20,6 +20,13 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->unsignedInteger('count')
+                ->default(0)
+                ->comment('匹数');
+            $table->unsignedSmallInteger('length')
+                ->nullable()
+                ->comment('代表長さ(cm)');
+            $table->timestamps();
             $table->primary(['memo_id', 'fish_name_id']);
         });
     }
