@@ -17,6 +17,7 @@ use App\Services\ImageService;
 use App\Services\MemoService;
 use App\Services\SessionService;
 use App\Services\ShareSettingService;
+use App\Services\SpotService;
 use App\Services\TagService;
 use Closure;
 use Illuminate\Http\RedirectResponse;
@@ -107,51 +108,10 @@ class MemoController extends Controller
                     'user_id' => Auth::id(),
                 ]);
 
-                // 入力されたスポット名があれば Spot を作成（存在しなければ）してメモに紐付ける
-                if ($request->filled('new_spot')) {
-                    $locationName = trim((string) $request->input('new_spot'));
-                    if ($locationName !== '') {
-                        $spot = Spot::firstOrCreate([
-                            'user_id' => Auth::id(),
-                            'name' => $locationName,
-                        ]);
-                        // spot_id カラムがある場合は関連付けて保存する
-                        try {
-                            $memo->spot()->associate($spot);
-                            $memo->save();
-                        } catch (\Throwable $e) {
-                            // 万が一 spot_id が存在しないなどで失敗しても処理を継続
-                            Log::warning('Failed to associate spot to memo: ' . $e->getMessage());
-                        }
-                    }
-                }
-
-                // --- 釣果（fish names）の保存 ---
-                // new_fish があれば作成
-                if ($request->filled('new_fish')) {
-                    $name = trim((string) $request->input('new_fish'));
-                    if ($name !== '') {
-                        FishName::firstOrCreate([
-                            'user_id' => Auth::id(),
-                            'name' => $name,
-                        ]);
-                    }
-                }
-                // フォームから渡された catches 配列の name を pivot に紐付ける
-                $catches = $request->input('catches', []);
-                if (!empty($catches) && is_array($catches)) {
-                    foreach ($catches as $row) {
-                        $fishName = trim((string) ($row['name'] ?? ''));
-                        if ($fishName === '') continue;
-                        $fish = FishName::firstOrCreate([
-                            'user_id' => Auth::id(),
-                            'name' => $fishName,
-                        ]);
-                        if (!$memo->fish_names()->where('fish_names.id', $fish->id)->exists()) {
-                            $memo->fish_names()->attach($fish->id);
-                        }
-                    }
-                }
+                // 新規スポットの入力があれば、データを保存。
+                SpotService::storeNewSpot($request->input('new_spot'), $memo);
+                // 既存のスポットの選択があれば、メモに紐付けて保存
+                // MemoService::attachExistingBaits($request, $memo->id);
 
                 // 新規エサの入力があれば、各データを保存。
                 BaitService::storeNewBait($request->new_bait, $memo->id);

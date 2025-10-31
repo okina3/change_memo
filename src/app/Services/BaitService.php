@@ -20,12 +20,12 @@ class BaitService
       // 新規エサがあり、重複していなければ、エサを保存し、中間テーブルに保存
       if (!empty($request_new_bait) && !$bait_exists) {
          // エサを保存
-         $tag = Bait::create([
+         $bait = Bait::create([
             'name' => $request_new_bait,
             'user_id' => Auth::id()
          ]);
          // メモとエサの中間テーブルに値を保存
-         Bait::findOrFail($tag->id)->memos()->attach($memo_id);
+         Bait::findOrFail($bait->id)->memos()->attach($memo_id);
       }
    }
 }
