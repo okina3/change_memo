@@ -27,12 +27,12 @@
          </div>
       </div>
       <div class="sm:flex-row sm:gap-6 md:gap-6 flex flex-col items-start gap-4">
-         {{-- スポット --}}
+         {{-- 釣り場所 --}}
          <div>
-            <label class="mb-1 block text-sm text-gray-700">スポット</label>
+            <label class="mb-1 block text-sm text-gray-700">場所</label>
             <select name="fishing_spot" class="sm:w-56 md:w-56 w-full rounded">
                <option value="" @selected(old('fishing_spot', '') === '')>
-                  スポットを選択
+                  場所を選択
                </option>
                @foreach ($all_spots as $spot)
                   <option value="{{ $spot->id }}" @selected(old('fishing_spot') === $spot->id)>
@@ -40,17 +40,14 @@
                   </option>
                @endforeach
             </select>
-            {{-- エラーメッセージ（スポット） --}}
+            {{-- エラーメッセージ（場所） --}}
             <x-input-error class="mt-2" :messages="$errors->get('fishing_spot')" />
          </div>
-         {{-- 追加スポット --}}
-         <div>
-            {{-- <h2 class="mb-1 block text-sm text-gray-700">（スポット名の追加）</h2>
-            <input class="sm:w-56 md:w-56 w-full rounded" type="text" name="new_spot" value="{{ old('new_spot') }}"
-               placeholder="相模川上流"> --}}
-            {{-- エラーメッセージ（追加スポット） --}}
-            {{-- <x-input-error class="mt-2" :messages="$errors->get('new_spot')" /> --}}
-         </div>
+         {{-- 釣り場所登録作成ボタン --}}
+         <button class="btn-2 btn-bk sm:mt-6 bg-yellow-500 hover:bg-yellow-400"
+            onclick="location.href='{{ route('user.create') }}'">
+            場所の新規登録
+         </button>
       </div>
    </div>
 </div>

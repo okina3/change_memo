@@ -54,13 +54,11 @@
       </div>
       {{-- 魚名追加 --}}
       <div class="lg:flex gap-6">
-         {{-- <div class="">
-            <h2 class="mt-2 mb-1 text-sm text-gray-700">（魚名を追加）</h2>
-            <input class="rounded w-60" type="text" name="new_fish" value="{{ old('new_fish') }}"
-               placeholder="例: ヤマメ"> --}}
-            {{-- エラーメッセージ（魚名の追加） --}}
-            {{-- <x-input-error class="mt-2" :messages="$errors->get('new_fish')" />
-         </div> --}}
+         {{-- 魚名登録作成ボタン --}}
+         <button class="btn-2 btn-bk sm:mt-6 bg-yellow-500 hover:bg-yellow-400"
+            onclick="location.href='{{ route('user.create') }}'">
+            魚名の新規登録
+         </button>
          {{-- 釣果合計 --}}
          <div id="catch-total" class="lg:mt-8 mt-3 p-1 w-32 border rounded self-center">
             <div class="flex items-baseline justify-center gap-3">

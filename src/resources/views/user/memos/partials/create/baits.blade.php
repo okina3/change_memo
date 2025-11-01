@@ -35,14 +35,11 @@
             <x-input-error class="mt-2" :messages="$errors->get('baits.*')" />
          </div>
       </div>
-      {{-- 新規エサ入力 --}}
-      {{-- <div class="">
-         <h2 class="mt-2 mb-1 text-sm text-gray-700">（エサ名を追加）</h2>
-         <input class="w-60 rounded" type="text" name="new_bait" value="{{ old('new_bait') }}"
-            placeholder="例: アオイソメ"> --}}
-         {{-- エラーメッセージ（エサ追加） --}}
-         {{-- <x-input-error class="mt-2" :messages="$errors->get('new_bait')" />
-      </div> --}}
+      {{-- エサの登録作成ボタン --}}
+      <button class="btn-2 btn-bk sm:mt-6 bg-yellow-500 hover:bg-yellow-400"
+         onclick="location.href='{{ route('user.create') }}'">
+         エサの新規登録
+      </button>
    </div>
 </div>
 <script>
