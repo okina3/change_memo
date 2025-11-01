@@ -16,10 +16,52 @@ class Memo extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'title',
-        'content',
         'user_id',
+        'spot_id',
+        'fishing_date',
+        'start_time',
+        'end_time',
+        'weather',
+        'air_temp',
+        'max_wind',
+        'wind_dir',
+        'river_flow',
+        'turbidity',
+        'debris',
+        'water_level',
+        'water_temp',
+        'content',
     ];
+
+    protected $casts = [
+        'fishing_date' => 'date',
+        'start_time' => 'datetime:H:i',
+        'end_time' => 'datetime:H:i',
+        'air_temp' => 'integer',
+        'max_wind' => 'integer',
+        'water_level' => 'float',
+        'water_temp' => 'integer',
+    ];
+
+    /**
+     * Baitモデルとの多対多のリレーションを定義。
+     * @return BelongsToMany
+     */
+    public function baits(): BelongsToMany
+    {
+        return $this->belongsToMany(Bait::class, 'memo_baits');
+    }
+
+    /**
+     * FishNameモデルとの多対多のリレーションを定義。
+     * @return BelongsToMany
+     */
+    public function fish_names(): BelongsToMany
+    {
+        return $this->belongsToMany(FishName::class, 'memo_fish_names')
+            ->withPivot(['count', 'length'])
+            ->withTimestamps();
+    }
 
     /**
      * Tagモデルとの多対多のリレーションを定義。
@@ -37,6 +79,15 @@ class Memo extends Model
     public function images(): BelongsToMany
     {
         return $this->belongsToMany(Image::class, 'memo_images');
+    }
+
+    /**
+     * Spotモデルへのリレーションを返す（一対多）。
+     * @return BelongsTo
+     */
+    public function spot(): BelongsTo
+    {
+        return $this->belongsTo(Spot::class);
     }
 
     /**

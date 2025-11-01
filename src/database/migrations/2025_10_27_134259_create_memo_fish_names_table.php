@@ -11,18 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('share_settings', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('sharing_user_id')
-                ->constrained('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+        Schema::create('memo_fish_names', function (Blueprint $table) {
             $table->foreignId('memo_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->boolean('edit_access');
+            $table->foreignId('fish_name_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->unsignedInteger('count')
+                ->default(0)
+                ->comment('匹数');
+            $table->unsignedSmallInteger('length')
+                ->nullable()
+                ->comment('代表長さ(cm)');
             $table->timestamps();
+            $table->primary(['memo_id', 'fish_name_id']);
         });
     }
 
@@ -31,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('share_settings');
+        Schema::dropIfExists('memo_fish_names');
     }
 };

@@ -4,15 +4,20 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadMemoRequest;
+use App\Models\Bait;
+use App\Models\FishName;
 use App\Models\Image;
 use App\Models\Memo;
 use App\Models\MemoImage;
 use App\Models\MemoTag;
+use App\Models\Spot;
 use App\Models\Tag;
+use App\Services\BaitService;
 use App\Services\ImageService;
 use App\Services\MemoService;
 use App\Services\SessionService;
 use App\Services\ShareSettingService;
+use App\Services\SpotService;
 use App\Services\TagService;
 use Closure;
 use Illuminate\Http\RedirectResponse;
@@ -60,10 +65,16 @@ class MemoController extends Controller
         $all_tags = Tag::availableAllTags()->get();
         // 全画像を取得する
         $all_images = Image::availableAllImages()->get();
+        // 全スポットを取得する
+        $all_spots = Spot::where('user_id', Auth::id())->get();
+        // 全エサを取得する
+        $all_baits = Bait::where('user_id', Auth::id())->get();
+        // 全魚名を取得する
+        $all_fish_names = FishName::where('user_id', Auth::id())->get();
         // ブラウザバック対策（値を持たせる）
         SessionService::setBrowserBackSession();
 
-        return view('user.memos.create', compact('all_tags', 'all_images'));
+        return view('user.memos.create', compact('all_tags', 'all_images', 'all_spots', 'all_baits', 'all_fish_names'));
     }
 
     /**
@@ -80,14 +91,40 @@ class MemoController extends Controller
             DB::transaction(function () use ($request) {
                 // メモを保存
                 $memo = Memo::create([
-                    'title' => $request->input('title'),
+                    'fishing_date' => $request->input('fishing_date'),
+                    'start_time' => $request->input('start_time'),
+                    'end_time' => $request->input('end_time'),
+                    'spot_id'=> $request->input('fishing_spot'),
+                    'weather' => $request->input('weather'),
+                    'air_temp' => $request->input('air_temp'),
+                    'max_wind' => $request->input('max_wind'),
+                    'wind_dir' => $request->input('wind_dir'),
+                    'river_flow' => $request->input('river_flow'),
+                    'turbidity' => $request->input('turbidity'),
+                    'debris' => $request->input('debris'),
+                    'water_level' => $request->input('water_level'),
+                    'water_temp' => $request->input('water_temp'),
                     'content' => $request->input('content'),
                     'user_id' => Auth::id(),
                 ]);
+
+                // 新規スポットの入力があれば、データを保存。
+                SpotService::storeNewSpot($request->input('new_spot'), $memo);
+                // 既存のスポットの選択があれば、メモに紐付けて保存
+                MemoService::attachExistingSpot($request, $memo->id);
+
+                // 新規エサの入力があれば、各データを保存。
+                BaitService::storeNewBait($request->new_bait, $memo->id);
+                // 既存のエサの選択があれば、メモに紐付けて中間テーブルに保存
+                MemoService::attachExistingBaits($request, $memo->id);
+
                 // 新規タグの入力があれば、各データを保存。
                 TagService::storeNewTag($request->new_tag, $memo->id);
-                // 既存のタグと画像の選択があれば、メモに紐付けて中間テーブルに保存
-                MemoService::attachTagsAndImages($request, $memo->id);
+                // 既存のタグの選択があれば、メモに紐付けて中間テーブルに保存
+                MemoService::attachExistingTags($request, $memo->id);
+
+                // 既存の画像の選択があれば、メモに紐付けて中間テーブルに保存
+                MemoService::attachExistingImages($request, $memo->id);
             }, 10);
 
             return to_route('user.index')->with(['message' => 'メモを登録しました。', 'status' => 'info']);
@@ -169,7 +206,7 @@ class MemoController extends Controller
                 // 新規タグの入力があれば、各データを保存。
                 TagService::storeNewTag($request->new_tag, $memo->id);
                 // 既存のタグと画像の選択があれば、メモに紐付けて中間テーブルに保存
-                MemoService::attachTagsAndImages($request, $memo->id);
+                // MemoService::attachTagsAndImages($request, $memo->id);
             }, 10);
 
             return to_route('user.index')->with(['message' => 'メモを更新しました。', 'status' => 'info']);

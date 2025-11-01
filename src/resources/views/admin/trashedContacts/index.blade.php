@@ -9,7 +9,7 @@
                     <div class="heading">キーワードから検索</div>
                     <div class="hidden sm:block">・・・・・</div>
                     {{-- キーワードを入力 --}}
-                    <input class="py-2 w-60 border border-gray-500 rounded-lg" name="keyword"
+                    <input class="py-2 w-60 text-slate-900 border border-gray-500 rounded-lg" name="keyword"
                            placeholder="キーワードを入力">
                     {{-- 検索するボタン --}}
                     <button class="ml-2 btn btn-bk bg-yellow-500 hover:bg-yellow-400">検索する</button>

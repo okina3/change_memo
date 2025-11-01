@@ -62,7 +62,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Memoモデルとのリレーション（一対多）
+     * Memoモデルとの一対多のリレーションを定義。
      * @return HasMany
      */
     public function memos(): HasMany
@@ -103,23 +103,25 @@ class User extends Authenticatable
     }
 
     /**
-     * 検索したメールアドレスを表示するの為のスコープ。
-     * @param $query
-     * @param $keyword
+     * 検索したメールアドレスを表示する為のスコープ。
+     * @param Builder $query
+     * @param string|null $keyword
      * @return void
      */
-    public function scopeSearchKeyword($query, $keyword): void
+    public function scopeSearchKeyword(Builder $query, ?string $keyword): void
     {
-        // もしメールアドレスの検索があったら
-        if (!is_null($keyword)) {
-            // 全角スペースを半角に変換
-            $spaceConvert = mb_convert_kana($keyword, 's');
-            // 空白で区切る
-            $keywords = preg_split('/\s+/', $spaceConvert, -1, PREG_SPLIT_NO_EMPTY);
-            // 単語をループで回す
-            foreach ($keywords as $word) {
-                $query->where('users.email', 'like', '%' . $word . '%');
-            }
+        // もしメールアドレスの検索がなければ何もしない
+        if ($keyword === null || $keyword === '') {
+            return;
+        }
+
+        // 全角スペースを半角に変換
+        $spaceConvert = mb_convert_kana($keyword, 's');
+        // 空白で区切る
+        $keywords = preg_split('/\s+/', $spaceConvert, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        // 単語をループで回す（AND検索）
+        foreach ($keywords as $word) {
+            $query->where('users.email', 'like', '%' . $word . '%');
         }
     }
 }

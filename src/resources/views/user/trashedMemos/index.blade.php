@@ -13,7 +13,7 @@
                         <div class="md:w-[70%] mr-5">
                             {{-- メモのタイトル --}}
                             <p class="sub_heading mb-1 truncate">{{ $trashed_memo->title }}</p>
-                            {{-- メモの内容 --}}
+                            {{-- メモの備考 --}}
                             <p class="truncate">{{ $trashed_memo->content }}</p>
                         </div>
                         {{-- ボタンエリア --}}
