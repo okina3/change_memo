@@ -5,7 +5,7 @@
       {{-- 天気 --}}
       <div class="">
          <label class="mb-1 block text-sm text-gray-700">天気</label>
-         <select name="weather" class="lg:w-60 w-56 rounded">
+         <select name="weather" class="w-28 rounded">
             <option value="" @selected(old('weather', '') === '')>未選択</option>
             <option value="sunny" @selected(old('weather') === 'sunny')>晴れ</option>
             <option value="cloudy" @selected(old('weather') === 'cloudy')>曇り</option>
@@ -40,7 +40,7 @@
       {{-- 風向 --}}
       <div class="">
          <label class="mb-1 block text-sm text-gray-700">風向</label>
-         <select name="wind_dir" class="lg:w-40 w-36 rounded">
+         <select name="wind_dir" class="w-28 rounded">
             <option value="" @selected(old('wind_dir', '') === '')>未選択</option>
             <option value="N" @selected(old('wind_dir') === 'N')>北</option>
             <option value="NE" @selected(old('wind_dir') === 'NE')>北東</option>

@@ -1,5 +1,5 @@
 <div class="mb-8">
-   <div class="md:gap-8 md:flex-row md:flex-wrap lg:gap-12 flex flex-col items-start gap-6">
+   <div class="md:gap-8 md:flex-row md:flex-wrap flex flex-col items-start gap-6">
       {{-- 釣果の入力 --}}
       <div class="">
          <h2 class="sub_heading mb-1">釣果</h2>

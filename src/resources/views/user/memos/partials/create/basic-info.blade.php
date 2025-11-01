@@ -26,7 +26,7 @@
             <x-input-error class="mt-2" :messages="$errors->get('end_time')" />
          </div>
       </div>
-      <div class="sm:flex-row sm:gap-6 md:gap-6 flex flex-col items-start gap-4">
+      <div class="sm:flex-row flex flex-col items-start gap-8">
          {{-- 釣り場所 --}}
          <div>
             <label class="mb-1 block text-sm text-gray-700">場所</label>

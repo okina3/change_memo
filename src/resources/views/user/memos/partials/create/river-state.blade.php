@@ -5,7 +5,7 @@
       {{-- 川の流れ --}}
       <div class="">
          <label class="mb-1 block text-sm text-gray-700">川の流れ</label>
-         <select name="river_flow" class="w-44 rounded">
+         <select name="river_flow" class="w-32 rounded">
             <option value="" @selected(old('river_flow', '') === '')>
                未選択
             </option>
@@ -22,7 +22,7 @@
       {{-- 濁り --}}
       <div class="">
          <label class="mb-1 block text-sm text-gray-700">濁り</label>
-         <select name="turbidity" class="w-44 rounded">
+         <select name="turbidity" class="w-32 rounded">
             <option value="" @selected(old('turbidity', '') === '')>
                未選択
             </option>
@@ -45,7 +45,7 @@
       {{-- 水中のゴミ --}}
       <div class="">
          <label class="mb-1 block text-sm text-gray-700">水中のゴミ</label>
-         <select name="debris" class="w-44 rounded">
+         <select name="debris" class="w-32 rounded">
             <option value="" @selected(old('debris', '') === '')>
                未選択
             </option>
