@@ -94,6 +94,7 @@ class MemoController extends Controller
                     'fishing_date' => $request->input('fishing_date'),
                     'start_time' => $request->input('start_time'),
                     'end_time' => $request->input('end_time'),
+                    'spot_id'=> $request->input('fishing_spot'),
                     'weather' => $request->input('weather'),
                     'air_temp' => $request->input('air_temp'),
                     'max_wind' => $request->input('max_wind'),

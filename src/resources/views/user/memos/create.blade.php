@@ -8,7 +8,7 @@
             <form action="{{ route('user.store') }}" method="post">
                @csrf
                {{-- 釣行日・釣行時間・釣り場所 --}}
-               @include('user.memos.partials.create.fishing-info')
+               @include('user.memos.partials.create.basic-info')
                {{-- 気象状態 --}}
                @include('user.memos.partials.create.weather-state')
                {{-- 川の状態 --}}
