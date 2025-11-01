@@ -30,9 +30,9 @@
          {{-- 釣り場所 --}}
          <div>
             <label class="mb-1 block text-sm text-gray-700">場所</label>
-            <select name="fishing_spot" class="sm:w-56 md:w-56 w-full rounded">
+            <select name="fishing_spot" class="w-60 rounded">
                <option value="" @selected(old('fishing_spot', '') === '')>
-                  場所を選択
+                  場所を選択してください
                </option>
                @foreach ($all_spots as $spot)
                   <option value="{{ $spot->id }}" @selected(old('fishing_spot') === $spot->id)>

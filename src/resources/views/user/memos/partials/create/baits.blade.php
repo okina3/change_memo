@@ -12,7 +12,7 @@
                @for ($i = 0; $i < $initialRows; $i++)
                   <div class="flex items-center gap-3 bait-row">
                      <select class="rounded w-60" name="baits[]">
-                        <option value="">選択してください</option>
+                        <option value="">エサの選択してください</option>
                         @foreach ($all_baits as $bait)
                            <option value="{{ $bait->id }}" @selected((old('baits', [])[$i] ?? '') == $bait->id)>
                               {{ $bait->name }}
@@ -36,7 +36,7 @@
          </div>
       </div>
       {{-- エサの登録作成ボタン --}}
-      <button class="btn-2 btn-bk sm:mt-6 bg-yellow-500 hover:bg-yellow-400"
+      <button class="btn-2 btn-bk md:mt-8 bg-yellow-500 hover:bg-yellow-400"
          onclick="location.href='{{ route('user.create') }}'">
          エサの新規登録
       </button>

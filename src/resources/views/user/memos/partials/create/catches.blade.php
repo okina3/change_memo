@@ -16,8 +16,8 @@
                   <div class="flex flex-wrap items-center gap-3 catch-row">
                      {{-- 魚種の選択 --}}
                      <div class="md:w-auto w-full">
-                        <select class="md:w-60 w-full rounded" name="fish_entries[{{ $i }}][fish_name_id]">
-                           <option value="">魚種を選択</option>
+                        <select class="w-60 rounded" name="fish_entries[{{ $i }}][fish_name_id]">
+                           <option value="">魚種を選択してください</option>
                            @foreach ($all_fish_names as $fish)
                               <option value="{{ $fish->id }}" @selected(($entry['fish_name_id'] ?? '') == $fish->id)>{{ $fish->name }}
                               </option>
@@ -55,7 +55,7 @@
       {{-- 魚名追加 --}}
       <div class="lg:flex gap-6">
          {{-- 魚名登録作成ボタン --}}
-         <button class="btn-2 btn-bk sm:mt-6 bg-yellow-500 hover:bg-yellow-400"
+         <button class="btn-2 btn-bk md:mt-8 bg-yellow-500 hover:bg-yellow-400"
             onclick="location.href='{{ route('user.create') }}'">
             魚名の新規登録
          </button>
