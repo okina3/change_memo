@@ -7,6 +7,7 @@ use App\Http\Controllers\User\MemoController;
 use App\Http\Controllers\User\ShareSettingController;
 use App\Http\Controllers\User\TagController;
 use App\Http\Controllers\User\TrashedMemoController;
+use App\Http\Controllers\User\SpotController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -36,6 +37,13 @@ Route::prefix('/')->as('user.')->group(function () {
             Route::patch('update', 'update')->name('update');
             Route::delete('destroy', 'destroy')->name('destroy');
         });
+
+        // 釣り場所管理画面
+        Route::controller(SpotController::class)->prefix('spot')->group(function () {
+            Route::get('create', 'create')->name('spot.create');
+        });
+
+
 
         //タグ管理画面
         Route::controller(TagController::class)->prefix('tag')->group(function () {
