@@ -43,11 +43,14 @@
             {{-- エラーメッセージ（場所） --}}
             <x-input-error class="mt-2" :messages="$errors->get('fishing_spot')" />
          </div>
-         {{-- 釣り場所登録作成ボタン --}}
-         <button class="btn-2 btn-bk sm:mt-6 bg-yellow-500 hover:bg-yellow-400"
-            onclick="location.href='{{ route('user.create') }}'">
-            場所の新規登録
-         </button>
+         {{-- 場所の追加 --}}
+         <div>
+            <h2 class="mb-1 block text-sm text-gray-700">（場所の追加）</h2>
+            <input class="sm:w-56 md:w-56 w-full rounded" type="text" name="new_spot" value="{{ old('new_spot') }}"
+               placeholder="相模川上流">
+            {{-- エラーメッセージ（場所の追加） --}}
+            <x-input-error class="mt-2" :messages="$errors->get('new_spot')" />
+         </div>
       </div>
    </div>
 </div>
