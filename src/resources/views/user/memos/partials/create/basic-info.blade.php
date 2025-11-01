@@ -31,11 +31,11 @@
          <div>
             <label class="mb-1 block text-sm text-gray-700">場所</label>
             <select name="fishing_spot" class="w-60 rounded">
-               <option value="" @selected(old('fishing_spot', '') === '')>
+               <option value="" @selected(old('fishing_spot', '') == '')>
                   場所を選択してください
                </option>
                @foreach ($all_spots as $spot)
-                  <option value="{{ $spot->id }}" @selected(old('fishing_spot') === $spot->id)>
+                  <option value="{{ $spot->id }}" @selected(old('fishing_spot') == $spot->id)>
                      {{ $spot->name }}
                   </option>
                @endforeach
@@ -43,12 +43,12 @@
             {{-- エラーメッセージ（場所） --}}
             <x-input-error class="mt-2" :messages="$errors->get('fishing_spot')" />
          </div>
-         {{-- 場所の追加 --}}
+         {{-- 新規釣り場の入力 --}}
          <div>
-            <h2 class="mb-1 block text-sm text-gray-700">（場所の追加）</h2>
+            <h2 class="mb-1 block text-sm text-gray-700">（新規釣り場の入力）</h2>
             <input class="sm:w-56 md:w-56 w-full rounded" type="text" name="new_spot" value="{{ old('new_spot') }}"
                placeholder="相模川上流">
-            {{-- エラーメッセージ（場所の追加） --}}
+            {{-- エラーメッセージ（新規釣り場の入力） --}}
             <x-input-error class="mt-2" :messages="$errors->get('new_spot')" />
          </div>
       </div>

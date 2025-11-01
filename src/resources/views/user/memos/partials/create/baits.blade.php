@@ -35,12 +35,12 @@
             <x-input-error class="mt-2" :messages="$errors->get('baits.*')" />
          </div>
       </div>
-      {{-- エサの追加 --}}
+      {{-- 新規エサを入力 --}}
       <div class="">
-         <h2 class="mt-2 mb-1 text-sm text-gray-700">（エサ名を追加）</h2>
+         <h2 class="mt-2 mb-1 text-sm text-gray-700">（新規エサを入力）</h2>
          <input class="w-60 rounded" type="text" name="new_bait" value="{{ old('new_bait') }}"
             placeholder="例: アオイソメ">
-         {{-- エラーメッセージ（エサ追加） --}}
+         {{-- エラーメッセージ（新規エサを入力） --}}
          <x-input-error class="mt-2" :messages="$errors->get('new_bait')" />
       </div>
    </div>

@@ -52,13 +52,13 @@
             </button>
          </div>
       </div>
-      {{-- 魚名追加 --}}
+      {{-- 新規魚名を入力 --}}
       <div class="lg:flex gap-6">
          <div class="">
-            <h2 class="mt-2 mb-1 text-sm text-gray-700">（魚名を追加）</h2>
+            <h2 class="mt-2 mb-1 text-sm text-gray-700">（新規魚名を入力）</h2>
             <input class="rounded w-60" type="text" name="new_fish" value="{{ old('new_fish') }}"
                placeholder="例: ヤマメ">
-            {{-- エラーメッセージ（魚名の追加） --}}
+            {{-- エラーメッセージ（新規魚名を入力） --}}
             <x-input-error class="mt-2" :messages="$errors->get('new_fish')" />
          </div>
          {{-- 釣果合計 --}}
