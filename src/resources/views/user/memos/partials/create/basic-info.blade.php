@@ -49,8 +49,9 @@
             <div class="flex gap-2 items-center">
                <input id="new_spot_input" class="sm:w-56 md:w-56 w-full rounded" type="text" name="new_spot"
                   value="{{ old('new_spot') }}" placeholder="相模川上流">
-               <button type="button" id="add_spot_btn"
-                  class="px-3 py-1 rounded border border-gray-300 text-sm">追加</button>
+               <button type="button" id="add_spot_btn" class="px-3 py-1 rounded border border-gray-300 text-sm">
+                  追加
+               </button>
             </div>
             {{-- エラーメッセージ（新規釣り場の入力） --}}
             <x-input-error class="mt-2" :messages="$errors->get('new_spot')" />
