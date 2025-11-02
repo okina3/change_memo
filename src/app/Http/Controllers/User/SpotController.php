@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreSpotRequest;
 use App\Models\Spot;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,10 +16,10 @@ class SpotController extends Controller
 {
     /**
      * 釣り場所を保存するメソッド。
-     * @param Request $request
+     * @param StoreSpotRequest $request
      * @return JsonResponse
      */
-    public function store(Request $request): JsonResponse
+    public function store(StoreSpotRequest $request): JsonResponse
     {
         try {
             DB::transaction(function () use ($request, &$spot) {
