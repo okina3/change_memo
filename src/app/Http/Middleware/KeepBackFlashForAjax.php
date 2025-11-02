@@ -12,9 +12,10 @@ class KeepBackFlashForAjax
      * AJAX/JSON リクエストに対して、セッションの flash 値 'back_button_clicked' を
      * 次のリクエストまで保持するミドルウェア。
      *
-     * 目的：フォーム表示後にクライアント側で発生する中間の AJAX 要求によって
-     * flash が消費されてしまい、後続の通常フォーム送信時にブラウザバック用の
-     * トークンが無くなる問題を防ぐこと。
+     * 目的：
+     * フォーム表示後にクライアント側で発生する中間の AJAX 要求によって、
+     * flash が消費されてしまい、後続の通常フォーム送信時に、
+     * ブラウザバック用のトークンが無くなる問題を防ぐ。
      */
     public function handle(Request $request, Closure $next)
     {
@@ -32,6 +33,7 @@ class KeepBackFlashForAjax
                 Log::warning('KeepBackFlashForAjax failed: ' . $e->getMessage());
             }
         }
+
         return $response;
     }
 }
