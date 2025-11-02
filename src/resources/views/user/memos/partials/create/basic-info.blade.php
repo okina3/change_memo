@@ -30,7 +30,7 @@
          {{-- 釣り場所 --}}
          <div>
             <label class="mb-1 block text-sm text-gray-700">場所</label>
-            <select name="fishing_spot" class="w-60 rounded">
+            <select name="fishing_spot" id="fishing_spot_select" class="w-60 rounded">
                <option value="" @selected(old('fishing_spot', '') == '')>
                   場所を選択してください
                </option>
@@ -46,11 +46,82 @@
          {{-- 新規釣り場の入力 --}}
          <div>
             <h2 class="mb-1 block text-sm text-gray-700">（新規釣り場の入力）</h2>
-            <input class="sm:w-56 md:w-56 w-full rounded" type="text" name="new_spot" value="{{ old('new_spot') }}"
-               placeholder="相模川上流">
+            <div class="flex gap-2 items-center">
+               <input id="new_spot_input" class="sm:w-56 md:w-56 w-full rounded" type="text" name="new_spot"
+                  value="{{ old('new_spot') }}" placeholder="相模川上流">
+               <button type="button" id="add_spot_btn"
+                  class="px-3 py-1 rounded border border-gray-300 text-sm">追加</button>
+            </div>
             {{-- エラーメッセージ（新規釣り場の入力） --}}
             <x-input-error class="mt-2" :messages="$errors->get('new_spot')" />
          </div>
       </div>
    </div>
 </div>
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+      const addBtn = document.getElementById('add_spot_btn');
+      const input = document.getElementById('new_spot_input');
+      const select = document.getElementById('fishing_spot_select');
+
+      if (!addBtn || !input || !select) return;
+
+      const getCsrfToken = () => {
+         const meta = document.querySelector('meta[name="csrf-token"]');
+         if (meta) return meta.getAttribute('content');
+         const tokenInput = document.querySelector('input[name="_token"]');
+         return tokenInput ? tokenInput.value : '';
+      };
+
+      const csrfToken = getCsrfToken();
+
+      addBtn.addEventListener('click', async () => {
+         const name = input.value.trim();
+         if (!name) {
+            alert('スポット名を入力してください');
+            return;
+         }
+
+         addBtn.disabled = true;
+         const originalText = addBtn.textContent;
+         addBtn.textContent = '追加中...';
+
+         try {
+            const res = await fetch("{{ route('user.spot.store') }}", {
+               method: 'POST',
+               headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': csrfToken,
+                  'Accept': 'application/json',
+               },
+               body: JSON.stringify({
+                  name
+               })
+            });
+
+            if (res.status === 201) {
+               const data = await res.json();
+               const opt = document.createElement('option');
+               opt.value = data.id;
+               opt.textContent = data.name;
+               opt.selected = true;
+               select.appendChild(opt);
+               select.dispatchEvent(new Event('change'));
+               input.value = '';
+            } else if (res.status === 422) {
+               const err = await res.json();
+               const messages = Object.values(err.errors || {}).flat().join('\n');
+               alert(messages || '入力エラーが発生しました');
+            } else {
+               alert('スポットの追加に失敗しました。時間をおいて再試行してください。');
+            }
+         } catch (e) {
+            console.error(e);
+            alert('通信エラーが発生しました');
+         } finally {
+            addBtn.disabled = false;
+            addBtn.textContent = originalText;
+         }
+      });
+   });
+</script>

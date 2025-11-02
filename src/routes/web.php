@@ -40,7 +40,7 @@ Route::prefix('/')->as('user.')->group(function () {
 
         // 釣り場所管理画面
         Route::controller(SpotController::class)->prefix('spot')->group(function () {
-            Route::get('create', 'create')->name('spot.create');
+            Route::post('/store', 'store')->name('spot.store');
         });
 
 
