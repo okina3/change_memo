@@ -60,69 +60,98 @@
    </div>
 </div>
 <script>
-   document.addEventListener('DOMContentLoaded', function() {
-      const addBtn = document.getElementById('add_spot_btn');
-      const input = document.getElementById('new_spot_input');
-      const select = document.getElementById('fishing_spot_select');
+document.addEventListener('DOMContentLoaded', () => {
+   // 要素取得
+   const addBtn = document.getElementById('add_spot_btn');
+   const input = document.getElementById('new_spot_input');
+   const select = document.getElementById('fishing_spot_select');
+   if (!addBtn || !input || !select) return;
 
-      if (!addBtn || !input || !select) return;
+   // CSRF トークン取得（meta タグ優先、その後 _token フィールドを参照）
+   const getCsrfToken = () => {
+      const meta = document.querySelector('meta[name="csrf-token"]');
+      if (meta) return meta.getAttribute('content');
+      const tokenInput = document.querySelector('input[name="_token"]');
+      return tokenInput ? tokenInput.value : '';
+   };
 
-      const getCsrfToken = () => {
-         const meta = document.querySelector('meta[name="csrf-token"]');
-         if (meta) return meta.getAttribute('content');
-         const tokenInput = document.querySelector('input[name="_token"]');
-         return tokenInput ? tokenInput.value : '';
+   // シンプルなアラート表示関数（将来的にモーダル等に置き換えやすくするため）
+   const showAlert = (message) => alert(message);
+
+   // 422 などのバリデーションエラーからメッセージを取り出す
+   const extractValidationMessage = async (res) => {
+      const data = await res.json().catch(() => ({}));
+      return Object.values(data.errors || {}).flat().join('\n') || data.message || null;
+   };
+
+   // スポット追加の実行
+   const addSpot = async (name) => {
+      const url = "{{ route('user.spot.store') }}";
+      const headers = {
+         'Content-Type': 'application/json',
+         'X-CSRF-TOKEN': getCsrfToken(),
+         'Accept': 'application/json',
       };
 
-      const csrfToken = getCsrfToken();
+      // ボタン無効化と表示を変更
+      addBtn.disabled = true;
+      const originalText = addBtn.textContent;
+      addBtn.textContent = '追加中...';
 
-      addBtn.addEventListener('click', async () => {
-         const name = input.value.trim();
-         if (!name) {
-            alert('スポット名を入力してください');
+      try {
+         const res = await fetch(url, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ name }),
+         });
+
+         if (res.status === 201) {
+            // 成功: セレクトに追加して選択状態にする
+            const data = await res.json();
+            const opt = document.createElement('option');
+            opt.value = data.id;
+            opt.textContent = data.name;
+            opt.selected = true;
+            select.appendChild(opt);
+            select.dispatchEvent(new Event('change'));
+            input.value = '';
             return;
          }
 
-         addBtn.disabled = true;
-         const originalText = addBtn.textContent;
-         addBtn.textContent = '追加中...';
-
-         try {
-            const res = await fetch("{{ route('user.spot.store') }}", {
-               method: 'POST',
-               headers: {
-                  'Content-Type': 'application/json',
-                  'X-CSRF-TOKEN': csrfToken,
-                  'Accept': 'application/json',
-               },
-               body: JSON.stringify({
-                  name
-               })
-            });
-
-            if (res.status === 201) {
-               const data = await res.json();
-               const opt = document.createElement('option');
-               opt.value = data.id;
-               opt.textContent = data.name;
-               opt.selected = true;
-               select.appendChild(opt);
-               select.dispatchEvent(new Event('change'));
-               input.value = '';
-            } else if (res.status === 422) {
-               const err = await res.json();
-               const messages = Object.values(err.errors || {}).flat().join('\n');
-               alert(messages || '入力エラーが発生しました');
-            } else {
-               alert('スポットの追加に失敗しました。時間をおいて再試行してください。');
-            }
-         } catch (e) {
-            console.error(e);
-            alert('通信エラーが発生しました');
-         } finally {
-            addBtn.disabled = false;
-            addBtn.textContent = originalText;
+         if (res.status === 422) {
+            // バリデーションエラー
+            const msg = await extractValidationMessage(res);
+            showAlert(msg || '入力エラーが発生しました');
+            return;
          }
-      });
+
+         if (res.status === 409) {
+            // 競合（重複登録など）
+            const data = await res.json().catch(() => ({}));
+            showAlert(data.message || '既に登録されています');
+            return;
+         }
+
+         // それ以外のエラー
+         showAlert('スポットの追加に失敗しました。時間をおいて再試行してください。');
+
+      } catch (e) {
+         console.error(e);
+         showAlert('通信エラーが発生しました');
+      } finally {
+         addBtn.disabled = false;
+         addBtn.textContent = originalText;
+      }
+   };
+
+   // クリックハンドラ
+   addBtn.addEventListener('click', () => {
+      const name = input.value.trim();
+      if (!name) {
+         showAlert('スポット名を入力してください');
+         return;
+      }
+      addSpot(name);
    });
+});
 </script>
