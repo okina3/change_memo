@@ -22,9 +22,9 @@ class SpotController extends Controller
     public function store(StoreSpotRequest $request): JsonResponse
     {
         try {
-            DB::transaction(function () use ($request, &$spot) {
-                $spot = Spot::create([
-                    'name' => $request->name,
+            $spot = DB::transaction(function () use ($request) {
+                return Spot::create([
+                    'name' => $request->input('new_spot'),
                     'user_id' => Auth::id(),
                 ]);
             }, 10);

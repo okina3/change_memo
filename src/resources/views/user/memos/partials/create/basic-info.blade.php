@@ -53,6 +53,8 @@
                   追加
                </button>
             </div>
+            {{-- エラーメッセージ（新規釣り場の入力） --}}
+            <x-input-error class="mt-2" :messages="$errors->get('new_spot')" />
             {{-- AJAX 用メッセージ表示領域 --}}
             <div id="spot_message" class="mt-2 text-sm" aria-live="polite"></div>
          </div>
@@ -113,7 +115,7 @@
                method: 'POST',
                headers,
                body: JSON.stringify({
-                  name
+                  new_spot: name
                }),
             });
 
@@ -132,14 +134,24 @@
                return;
             }
 
-            // 失敗: 重複エラーメッセージ
+            // 失敗: 422エラーメッセージを表示（StoreSpotRequest.php優先）
             if (res.status === 422) {
-               showMessage('この場所はすでに登録されています', 'error');
+               const data = await res.json().catch(() => ({}));
+               const serverMsg = data?.errors?.new_spot?.[0] ?? data?.errors?.name?.[0] ?? data?.message ??
+                  '入力に誤りがあります';
+               showMessage(serverMsg, 'error');
                return;
             }
 
-            // 失敗: それ以外のエラーメッセージ
-            showMessage('新規釣り場の追加に失敗しました。時間をおいて再試行してください。', 'error');
+            // 失敗: それ以外のエラーメッセージを表示（StoreSpotRequest.php優先）
+            try {
+               const otherData = await res.json().catch(() => ({}));
+               const otherMsg = otherData?.errors?.new_spot?.[0] ?? otherData?.errors?.name?.[0] ??
+                  otherData?.message;
+               showMessage(otherMsg ?? '新規釣り場の追加に失敗しました。時間をおいて再試行してください。', 'error');
+            } catch (err) {
+               showMessage('新規釣り場の追加に失敗しました。時間をおいて再試行してください。', 'error');
+            }
 
          } catch (e) {
             console.error(e);
@@ -150,14 +162,10 @@
          }
       };
 
-      // クリックハンドラ（空文字の送信のエラーメッセージ）
+      // クリックハンドラ（空文字の送信のエラーメッセージを表示）（StoreSpotRequest.php優先）
       addBtn.addEventListener('click', () => {
          clearMessage();
          const name = input.value.trim();
-         if (!name) {
-            showMessage('新規釣り場を入力してください', 'error');
-            return;
-         }
          addSpot(name);
       });
    });
