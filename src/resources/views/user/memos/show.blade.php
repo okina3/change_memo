@@ -25,6 +25,8 @@
                @include('user.memos.partials.show.weather-state')
                {{-- 川の状態 --}}
                @include('user.memos.partials.show.river-state')
+                              {{-- エサの入力 --}}
+               @include('user.memos.partials.show.baits')
 
                {{-- 選択したメモの備考を表示 --}}
                <div class="mb-5">
