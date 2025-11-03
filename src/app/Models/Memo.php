@@ -44,6 +44,15 @@ class Memo extends Model
     ];
 
     /**
+     * Spotモデルへのリレーションを返す（一対多）。
+     * @return BelongsTo
+     */
+    public function spot(): BelongsTo
+    {
+        return $this->belongsTo(Spot::class);
+    }
+
+    /**
      * Baitモデルとの多対多のリレーションを定義。
      * @return BelongsToMany
      */
@@ -79,15 +88,6 @@ class Memo extends Model
     public function images(): BelongsToMany
     {
         return $this->belongsToMany(Image::class, 'memo_images');
-    }
-
-    /**
-     * Spotモデルへのリレーションを返す（一対多）。
-     * @return BelongsTo
-     */
-    public function spot(): BelongsTo
-    {
-        return $this->belongsTo(Spot::class);
     }
 
     /**

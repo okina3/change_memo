@@ -18,37 +18,9 @@
                      <p class="mark">{{ $select_memo->status }}</p>
                   </div>
                @endif
-               <div class="mb-8">
-                  <div class="flex flex-wrap items-start gap-20">
-                     <div class="">
-                        <h2 class="sub_heading mb-1">釣行日</h2>
-                        <p class="p-2 border border-gray-500 rounded">
-                           {{ optional($select_memo->fishing_date)->format('Y-m-d') }}
-                        </p>
-                     </div>
-                     <div class="">
-                        <h2 class="sub_heading mb-1">釣行時間</h2>
-                        <div class="flex items-center gap-2">
-                           <p class="p-2 border border-gray-500 rounded">
-                              {{ optional($select_memo->start_time)->format('H:i') }}
-                           </p>
-                           <span class="text-gray-600">〜</span>
-                           <p class="p-2 border border-gray-500 rounded">
-                              {{ optional($select_memo->end_time)->format('H:i') }}
-                           </p>
-                        </div>
-                     </div>
-                     <div class="">
-                        <h2 class="sub_heading mb-1">釣り場所</h2>
-                        <p class="p-2 border border-gray-500 rounded">
-                           {{ $select_memo->fishing_spot }}
-                        </p>
-                     </div>
-                  </div>
-               </div>
 
-
-
+               {{-- 釣行日・釣行時間・釣り場所 --}}
+               @include('user.memos.partials.show.basic-info')
 
 
                {{-- 選択したメモの備考を表示 --}}
