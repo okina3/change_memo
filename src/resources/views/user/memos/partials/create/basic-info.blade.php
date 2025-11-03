@@ -54,7 +54,7 @@
                </button>
             </div>
             {{-- エラーメッセージ（新規釣り場の入力） --}}
-            <x-input-error class="mt-2" :messages="$errors->get('new_spot')" />
+            <x-input-error class="mt-2" :messages="$errors->get('name')" />
             {{-- AJAX 用メッセージ表示領域 --}}
             <div id="spot_message" class="mt-2 text-sm" aria-live="polite"></div>
          </div>
@@ -115,7 +115,7 @@
                method: 'POST',
                headers,
                body: JSON.stringify({
-                  new_spot: name
+                  name: name
                }),
             });
 
@@ -129,28 +129,29 @@
                select.appendChild(opt);
                select.dispatchEvent(new Event('change'));
                input.value = '';
-               showMessage('新規釣り場を追加しました', 'success');
+               showMessage('追加しました', 'success');
                setTimeout(clearMessage, 3000);
                return;
             }
 
-            // 失敗: 422エラーメッセージを表示（StoreSpotRequest.php優先）
+            // 失敗: 422エラーメッセージを表示
             if (res.status === 422) {
                const data = await res.json().catch(() => ({}));
-               const serverMsg = data?.errors?.new_spot?.[0] ?? data?.errors?.name?.[0] ?? data?.message ??
-                  '入力に誤りがあります';
-               showMessage(serverMsg, 'error');
+               const serverMsg = data?.errors?.name?.[0] ?? data?.errors?.new_spot?.[0] ?? data?.message;
+               // サーバーメッセージがあれば優先、なければAJAX用の汎用メッセージを表示
+               showMessage(serverMsg ?? '入力に誤りがあります', 'error');
                return;
             }
 
-            // 失敗: それ以外のエラーメッセージを表示（StoreSpotRequest.php優先）
+            // 失敗: それ以外のエラーメッセージを表示
             try {
                const otherData = await res.json().catch(() => ({}));
-               const otherMsg = otherData?.errors?.new_spot?.[0] ?? otherData?.errors?.name?.[0] ??
+               const otherMsg = otherData?.errors?.name?.[0] ?? otherData?.errors?.new_spot?.[0] ??
                   otherData?.message;
-               showMessage(otherMsg ?? '新規釣り場の追加に失敗しました。時間をおいて再試行してください。', 'error');
+               // サーバーメッセージがあれば優先、なければAJAX用の汎用メッセージを表示
+               showMessage(otherMsg ?? '追加に失敗しました。時間をおいて再試行してください。', 'error');
             } catch (err) {
-               showMessage('新規釣り場の追加に失敗しました。時間をおいて再試行してください。', 'error');
+               showMessage('追加に失敗しました。時間をおいて再試行してください。', 'error');
             }
 
          } catch (e) {
@@ -162,7 +163,7 @@
          }
       };
 
-      // クリックハンドラ（空文字の送信のエラーメッセージを表示）（StoreSpotRequest.php優先）
+      // クリックハンドラ（メッセージをクリアし、入力値をトリムしてサーバーへ送信）
       addBtn.addEventListener('click', () => {
          clearMessage();
          const name = input.value.trim();

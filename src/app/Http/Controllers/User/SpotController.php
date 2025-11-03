@@ -24,7 +24,7 @@ class SpotController extends Controller
         try {
             $spot = DB::transaction(function () use ($request) {
                 return Spot::create([
-                    'name' => $request->input('new_spot'),
+                    'name' => $request->input('name'),
                     'user_id' => Auth::id(),
                 ]);
             }, 10);
