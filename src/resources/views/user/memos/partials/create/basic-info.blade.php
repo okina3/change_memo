@@ -94,14 +94,6 @@
          }
       };
 
-      // サーバからのエラーから表示用のメッセージ文字列を抽出して返す。
-      const extractValidationMessage = async (res) => {
-         const data = await res.json().catch(() => ({}));
-         const errors = Object.values(data.errors || {}).flat();
-         if (errors.length) return errors.join('\n');
-         return data.message || null;
-      };
-
       // スポット追加の実行
       const addSpot = async (name) => {
          const url = "{{ route('user.spot.store') }}";
@@ -140,10 +132,9 @@
                return;
             }
 
-            // 失敗: 重複エラーメッセージ（バリデーションから）
+            // 失敗: 重複エラーメッセージ
             if (res.status === 422) {
-               const msg = await extractValidationMessage(res);
-               showMessage(msg || '入力エラーが発生しました', 'error');
+               showMessage('この場所はすでに登録されています', 'error');
                return;
             }
 
