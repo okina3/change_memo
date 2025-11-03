@@ -21,7 +21,8 @@
 
                {{-- 釣行日・釣行時間・釣り場所 --}}
                @include('user.memos.partials.show.basic-info')
-
+               {{-- 気象状態 --}}
+               @include('user.memos.partials.show.weather-state')
 
                {{-- 選択したメモの備考を表示 --}}
                <div class="mb-5">
