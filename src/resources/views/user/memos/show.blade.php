@@ -23,6 +23,8 @@
                @include('user.memos.partials.show.basic-info')
                {{-- 気象状態 --}}
                @include('user.memos.partials.show.weather-state')
+               {{-- 川の状態 --}}
+               @include('user.memos.partials.show.river-state')
 
                {{-- 選択したメモの備考を表示 --}}
                <div class="mb-5">
