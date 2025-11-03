@@ -53,105 +53,121 @@
                   追加
                </button>
             </div>
-            {{-- エラーメッセージ（新規釣り場の入力） --}}
-            <x-input-error class="mt-2" :messages="$errors->get('new_spot')" />
+            {{-- AJAX 用メッセージ表示領域 --}}
+            <div id="spot_message" class="mt-2 text-sm" aria-live="polite"></div>
          </div>
       </div>
    </div>
 </div>
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-   // 要素取得
-   const addBtn = document.getElementById('add_spot_btn');
-   const input = document.getElementById('new_spot_input');
-   const select = document.getElementById('fishing_spot_select');
-   if (!addBtn || !input || !select) return;
+   document.addEventListener('DOMContentLoaded', () => {
+      const addBtn = document.getElementById('add_spot_btn');
+      const input = document.getElementById('new_spot_input');
+      const select = document.getElementById('fishing_spot_select');
+      if (!addBtn || !input || !select) return;
 
-   // CSRF トークン取得（meta タグ優先、その後 _token フィールドを参照）
-   const getCsrfToken = () => {
-      const meta = document.querySelector('meta[name="csrf-token"]');
-      if (meta) return meta.getAttribute('content');
-      const tokenInput = document.querySelector('input[name="_token"]');
-      return tokenInput ? tokenInput.value : '';
-   };
-
-   // シンプルなアラート表示関数（将来的にモーダル等に置き換えやすくするため）
-   const showAlert = (message) => alert(message);
-
-   // 422 などのバリデーションエラーからメッセージを取り出す
-   const extractValidationMessage = async (res) => {
-      const data = await res.json().catch(() => ({}));
-      return Object.values(data.errors || {}).flat().join('\n') || data.message || null;
-   };
-
-   // スポット追加の実行
-   const addSpot = async (name) => {
-      const url = "{{ route('user.spot.store') }}";
-      const headers = {
-         'Content-Type': 'application/json',
-         'X-CSRF-TOKEN': getCsrfToken(),
-         'Accept': 'application/json',
+      // CSRF トークン取得（meta タグ優先、その後 _token フィールドを参照）
+      const getCsrfToken = () => {
+         const meta = document.querySelector('meta[name="csrf-token"]');
+         if (meta) return meta.getAttribute('content');
+         const tokenInput = document.querySelector('input[name="_token"]');
+         return tokenInput ? tokenInput.value : '';
       };
 
-      // ボタン無効化と表示を変更
-      addBtn.disabled = true;
-      const originalText = addBtn.textContent;
-      addBtn.textContent = '追加中...';
+      // メッセージ表示（フォーム内の表示領域に入れる）
+      const messageEl = document.getElementById('spot_message');
+      const clearMessage = () => {
+         if (!messageEl) return;
+         messageEl.textContent = '';
+         messageEl.classList.remove('text-red-600', 'text-green-600');
+      };
 
-      try {
-         const res = await fetch(url, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify({ name }),
-         });
+      // メッセージの表示色を決定する。（エラーは赤、成功は緑で表示）
+      const showMessage = (message, type = 'error') => {
+         if (!messageEl) return;
+         messageEl.textContent = message || '';
+         messageEl.classList.remove('text-red-600', 'text-green-600');
+         if (type === 'error') {
+            messageEl.classList.add('text-red-600');
+         } else if (type === 'success') {
+            messageEl.classList.add('text-green-600');
+         }
+      };
 
-         if (res.status === 201) {
+      // サーバからのエラーから表示用のメッセージ文字列を抽出して返す。
+      const extractValidationMessage = async (res) => {
+         const data = await res.json().catch(() => ({}));
+         const errors = Object.values(data.errors || {}).flat();
+         if (errors.length) return errors.join('\n');
+         return data.message || null;
+      };
+
+      // スポット追加の実行
+      const addSpot = async (name) => {
+         const url = "{{ route('user.spot.store') }}";
+         const headers = {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': getCsrfToken(),
+            'Accept': 'application/json',
+         };
+
+         // ボタン無効化と表示を変更
+         addBtn.disabled = true;
+         const originalText = addBtn.textContent;
+         addBtn.textContent = '追加中...';
+
+         try {
+            const res = await fetch(url, {
+               method: 'POST',
+               headers,
+               body: JSON.stringify({
+                  name
+               }),
+            });
+
             // 成功: セレクトに追加して選択状態にする
-            const data = await res.json();
-            const opt = document.createElement('option');
-            opt.value = data.id;
-            opt.textContent = data.name;
-            opt.selected = true;
-            select.appendChild(opt);
-            select.dispatchEvent(new Event('change'));
-            input.value = '';
+            if (res.status === 201) {
+               const data = await res.json();
+               const opt = document.createElement('option');
+               opt.value = data.id;
+               opt.textContent = data.name;
+               opt.selected = true;
+               select.appendChild(opt);
+               select.dispatchEvent(new Event('change'));
+               input.value = '';
+               showMessage('新規釣り場を追加しました', 'success');
+               setTimeout(clearMessage, 3000);
+               return;
+            }
+
+            // 失敗: 重複エラーメッセージ（バリデーションから）
+            if (res.status === 422) {
+               const msg = await extractValidationMessage(res);
+               showMessage(msg || '入力エラーが発生しました', 'error');
+               return;
+            }
+
+            // 失敗: それ以外のエラーメッセージ
+            showMessage('新規釣り場の追加に失敗しました。時間をおいて再試行してください。', 'error');
+
+         } catch (e) {
+            console.error(e);
+            showMessage('通信エラーが発生しました', 'error');
+         } finally {
+            addBtn.disabled = false;
+            addBtn.textContent = originalText;
+         }
+      };
+
+      // クリックハンドラ（空文字の送信のエラーメッセージ）
+      addBtn.addEventListener('click', () => {
+         clearMessage();
+         const name = input.value.trim();
+         if (!name) {
+            showMessage('新規釣り場を入力してください', 'error');
             return;
          }
-
-         if (res.status === 422) {
-            // バリデーションエラー
-            const msg = await extractValidationMessage(res);
-            showAlert(msg || '入力エラーが発生しました');
-            return;
-         }
-
-         if (res.status === 409) {
-            // 競合（重複登録など）
-            const data = await res.json().catch(() => ({}));
-            showAlert(data.message || '既に登録されています');
-            return;
-         }
-
-         // それ以外のエラー
-         showAlert('スポットの追加に失敗しました。時間をおいて再試行してください。');
-
-      } catch (e) {
-         console.error(e);
-         showAlert('通信エラーが発生しました');
-      } finally {
-         addBtn.disabled = false;
-         addBtn.textContent = originalText;
-      }
-   };
-
-   // クリックハンドラ
-   addBtn.addEventListener('click', () => {
-      const name = input.value.trim();
-      if (!name) {
-         showAlert('スポット名を入力してください');
-         return;
-      }
-      addSpot(name);
+         addSpot(name);
+      });
    });
-});
 </script>
