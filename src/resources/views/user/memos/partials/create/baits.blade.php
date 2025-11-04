@@ -118,15 +118,21 @@
             // 成功: セレクトに追加して選択状態にする
             if (res.status === 201) {
                const data = await res.json();
-               const opt = document.createElement('option');
-               opt.value = data.id;
-               opt.textContent = data.name;
-               opt.selected = true;
-               // すべての bait select に追加して選択状態にする
-               const allSelects = baitsContainer.querySelectorAll('select');
-               allSelects.forEach(s => s.appendChild(opt.cloneNode(true)));
-               // 最初の select を変更イベント発火
-               select.dispatchEvent(new Event('change'));
+               // すべての bait select（name="baits[]"）を取得して、各々に新しい option を追加する
+               const allSelects = Array.from(document.querySelectorAll('select[name="baits[]"]'));
+               // 各 select に新しい option を追加
+               allSelects.forEach((s) => {
+                  const opt = document.createElement('option');
+                  opt.value = data.id;
+                  opt.textContent = data.name;
+                  s.appendChild(opt);
+               });
+               // 表示されているエサ選択エリアの一番下（最後の select）を選択状態にする
+               const last = allSelects[allSelects.length - 1];
+               if (last) {
+                  last.value = data.id;
+                  last.dispatchEvent(new Event('change'));
+               }
                input.value = '';
                showMessage('追加しました', 'success');
                setTimeout(clearMessage, 3000);
@@ -136,7 +142,7 @@
             // 失敗: 422エラーメッセージを表示
             if (res.status === 422) {
                const data = await res.json().catch(() => ({}));
-               const serverMsg = data?.errors?.new_spot?.[0] ?? data?.message;
+               const serverMsg = data?.errors?.new_bait?.[0] ?? data?.message;
                // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
                showMessage(serverMsg ?? '入力に誤りがあります', 'error');
                return;
