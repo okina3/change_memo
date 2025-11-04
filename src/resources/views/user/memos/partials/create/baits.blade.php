@@ -36,12 +36,19 @@
          </div>
       </div>
       {{-- 新規エサを入力 --}}
-      <div class="">
-         <h2 class="mt-2 mb-1 text-sm text-gray-700">（新規エサを入力）</h2>
-         <input class="w-60 rounded" type="text" name="new_bait" value="{{ old('new_bait') }}"
-            placeholder="例: アオイソメ">
+      <div>
+         <h2 class="mt-2 mb-1 block text-sm text-gray-700">（新規エサを入力）</h2>
+         <div class="flex gap-2 items-center">
+            <input id="new_spot_input" class="w-60 rounded" type="text" name="new_bait" value="{{ old('new_bait') }}"
+               placeholder="例: アオイソメ">
+            <button type="button" id="add_spot_btn" class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
+               追加
+            </button>
+         </div>
          {{-- エラーメッセージ（新規エサを入力） --}}
          <x-input-error class="mt-2" :messages="$errors->get('new_bait')" />
+         {{-- AJAX 用メッセージ表示領域 --}}
+         <div id="spot_message" class="mt-2 text-sm" aria-live="polite"></div>
       </div>
    </div>
 </div>
