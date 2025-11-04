@@ -6,6 +6,7 @@ use App\Http\Controllers\User\ImageController;
 use App\Http\Controllers\User\MemoController;
 use App\Http\Controllers\User\ShareSettingController;
 use App\Http\Controllers\User\SpotController;
+use App\Http\Controllers\User\BaitController;
 use App\Http\Controllers\User\TagController;
 use App\Http\Controllers\User\TrashedMemoController;
 use App\Http\Middleware\KeepBackFlashForAjax;
@@ -39,11 +40,18 @@ Route::prefix('/')->as('user.')->group(function () {
             Route::delete('destroy', 'destroy')->name('destroy');
         });
 
-        // 釣り場所管理画面
+        // 釣り場所の登録
         Route::controller(SpotController::class)->prefix('spot')
             ->middleware(['auth:users', KeepBackFlashForAjax::class])
             ->group(function () {
                 Route::post('/store', 'store')->name('spot.store');
+            });
+
+        // エサの登録
+        Route::controller(BaitController::class)->prefix('bait')
+            ->middleware(['auth:users', KeepBackFlashForAjax::class])
+            ->group(function () {
+                Route::post('/store', 'store')->name('bait.store');
             });
 
 

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UploadTagRequest extends FormRequest
 {
@@ -21,7 +22,13 @@ class UploadTagRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'new_tag' => 'string|max:25|unique:tags,name',
+            'new_tag' => [
+                'string',
+                'max:25',
+                Rule::unique('tags', 'name')->where(function ($query) {
+                    return $query->where('user_id', auth()->id());
+                }),
+            ],
         ];
     }
 

@@ -45,7 +45,7 @@
          </div>
          {{-- 新規釣り場の追加 --}}
          <div>
-            <h2 class="mb-1 block text-sm text-gray-700">（新規釣り場の追加）</h2>
+            <h2 class="mb-1 block text-sm text-gray-700">（新規釣り場を選択肢に追加）</h2>
             <div class="flex gap-2 items-center">
                <input id="new_spot_input" class="w-60 rounded" type="text" name="new_spot"
                   value="{{ old('new_spot') }}" placeholder="例:相模川上流">
