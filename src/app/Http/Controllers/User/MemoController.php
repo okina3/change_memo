@@ -17,7 +17,6 @@ use App\Services\ImageService;
 use App\Services\MemoService;
 use App\Services\SessionService;
 use App\Services\ShareSettingService;
-use App\Services\SpotService;
 use App\Services\TagService;
 use Closure;
 use Illuminate\Http\RedirectResponse;
@@ -107,11 +106,6 @@ class MemoController extends Controller
                     'content' => $request->input('content'),
                     'user_id' => Auth::id(),
                 ]);
-
-                // 新規スポットの入力があれば、データを保存。
-                SpotService::storeNewSpot($request->input('new_spot'), $memo);
-                // 既存のスポットの選択があれば、メモに紐付けて保存
-                MemoService::attachExistingSpot($request, $memo->id);
 
                 // 新規エサの入力があれば、各データを保存。
                 BaitService::storeNewBait($request->new_bait, $memo->id);

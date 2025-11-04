@@ -1,6 +1,6 @@
 <div class="mb-8">
    {{-- エサの入力 --}}
-   <div class="md:flex-row md:gap-8 lg:gap-12 flex flex-col items-start gap-6">
+   <div class="md:flex-row md:gap-8 flex flex-col items-start gap-6">
       <div class="">
          <h2 class="sub_heading mb-1">エサ</h2>
          @php
@@ -12,7 +12,7 @@
                @for ($i = 0; $i < $initialRows; $i++)
                   <div class="flex items-center gap-3 bait-row">
                      <select class="rounded w-60" name="baits[]">
-                        <option value="">選択してください</option>
+                        <option value="">エサの選択してください</option>
                         @foreach ($all_baits as $bait)
                            <option value="{{ $bait->id }}" @selected((old('baits', [])[$i] ?? '') == $bait->id)>
                               {{ $bait->name }}
@@ -35,18 +35,148 @@
             <x-input-error class="mt-2" :messages="$errors->get('baits.*')" />
          </div>
       </div>
-      {{-- 新規エサ入力 --}}
-      {{-- <div class="">
-         <h2 class="mt-2 mb-1 text-sm text-gray-700">（エサ名を追加）</h2>
-         <input class="w-60 rounded" type="text" name="new_bait" value="{{ old('new_bait') }}"
-            placeholder="例: アオイソメ"> --}}
-         {{-- エラーメッセージ（エサ追加） --}}
-         {{-- <x-input-error class="mt-2" :messages="$errors->get('new_bait')" />
-      </div> --}}
+      {{-- 新規エサの追加 --}}
+      <div>
+         <h2 class="mt-2 mb-1 block text-sm text-gray-700">（新規エサを選択肢に追加）</h2>
+         <div class="flex gap-2 items-center">
+            <input id="new_bait_input" class="w-60 rounded" type="text" name="new_bait" value="{{ old('new_bait') }}"
+               placeholder="例: アオイソメ">
+            <button type="button" id="add_bait_btn" class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
+               追加
+            </button>
+         </div>
+         {{-- エラーメッセージ（新規エサの追加） --}}
+         <x-input-error class="mt-2" :messages="$errors->get('new_bait')" />
+         {{-- AJAX 用メッセージ表示領域 --}}
+         <div id="bait_message" class="mt-2 text-sm" aria-live="polite"></div>
+      </div>
    </div>
 </div>
 <script>
    'use strict'
+   // === 新規エサの追加 =====================================
+   document.addEventListener('DOMContentLoaded', () => {
+      // 追加ボタン、新規エサ入力欄、エサ選択セレクト（最初のもの）要素の取得
+      const addBtn = document.getElementById('add_bait_btn');
+      const input = document.getElementById('new_bait_input');
+      // baits の select は複数ある可能性があるので、最初の select 要素をターゲットにする
+      const baitsContainer = document.getElementById('baits-container');
+      const select = baitsContainer ? baitsContainer.querySelector('select') : null;
+      if (!addBtn || !input || !select) return;
+
+      // CSRFトークン取得
+      const getCsrfToken = () => {
+         const meta = document.querySelector('meta[name="csrf-token"]');
+         if (meta) return meta.getAttribute('content');
+         const tokenInput = document.querySelector('input[name="_token"]');
+         return tokenInput ? tokenInput.value : '';
+      };
+
+      // メッセージ表示（フォーム内の表示領域に入れる）
+   const messageEl = document.getElementById('bait_message');
+      const clearMessage = () => {
+         if (!messageEl) return;
+         messageEl.textContent = '';
+         messageEl.classList.remove('text-red-600', 'text-green-600');
+      };
+
+      // メッセージの表示色を決定する。（エラーは赤、成功は緑で表示）
+      const showMessage = (message, type = 'error') => {
+         if (!messageEl) return;
+         messageEl.textContent = message || '';
+         messageEl.classList.remove('text-red-600', 'text-green-600');
+         if (type === 'error') {
+            messageEl.classList.add('text-red-600');
+         } else if (type === 'success') {
+            messageEl.classList.add('text-green-600');
+         }
+      };
+
+      // エサの追加の実行
+      const addBait = async (newBait) => {
+         const url = "{{ route('user.bait.store') }}";
+         const headers = {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': getCsrfToken(),
+            'Accept': 'application/json',
+         };
+
+         // ボタン無効化と表示を変更
+         addBtn.disabled = true;
+         const originalText = addBtn.textContent;
+         addBtn.textContent = '追加中...';
+
+         try {
+            const res = await fetch(url, {
+               method: 'POST',
+               headers,
+               body: JSON.stringify({
+                  new_bait: newBait
+               }),
+            });
+
+            // 成功: セレクトに追加して選択状態にする
+            if (res.status === 201) {
+               const data = await res.json();
+               const opt = document.createElement('option');
+               opt.value = data.id;
+               opt.textContent = data.name;
+               opt.selected = true;
+               // すべての bait select に追加して選択状態にする
+               const allSelects = baitsContainer.querySelectorAll('select');
+               allSelects.forEach(s => s.appendChild(opt.cloneNode(true)));
+               // 最初の select を変更イベント発火
+               select.dispatchEvent(new Event('change'));
+               input.value = '';
+               showMessage('追加しました', 'success');
+               setTimeout(clearMessage, 3000);
+               return;
+            }
+
+            // 失敗: 422エラーメッセージを表示
+            if (res.status === 422) {
+               const data = await res.json().catch(() => ({}));
+               const serverMsg = data?.errors?.new_spot?.[0] ?? data?.message;
+               // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
+               showMessage(serverMsg ?? '入力に誤りがあります', 'error');
+               return;
+            }
+
+            // 失敗: それ以外のエラーメッセージを表示
+            try {
+               const otherData = await res.json().catch(() => ({}));
+                  const otherMsg = otherData?.errors?.new_bait?.[0] ?? otherData?.message;
+               // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
+               showMessage(otherMsg ?? '追加に失敗しました。時間をおいて再試行してください。', 'error');
+            } catch (err) {
+               // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
+               showMessage('追加に失敗しました。時間をおいて再試行してください。', 'error');
+            }
+
+         } catch (e) {
+            console.error(e);
+            // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
+               showMessage('通信エラーが発生しました', 'error');
+         } finally {
+            addBtn.disabled = false;
+            addBtn.textContent = originalText;
+         }
+      };
+
+      // 追加ボタンにクリックイベントリスナーを追加
+      addBtn.addEventListener('click', () => {
+         // メッセージをクリアし、入力値をトリムしてサーバーへ送信
+         clearMessage();
+         const newBait = input.value.trim();
+         if (!newBait) {
+            showMessage('エサを入力してください。', 'error');
+            return;
+         }
+         addBait(newBait);
+      });
+   });
+
+
    // === エサ入力エリア（最大5件） =====================================
    // 定数・要素参照
    const baitsContainer = document.getElementById('baits-container');

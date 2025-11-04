@@ -1,5 +1,5 @@
 <div class="mb-8">
-   <div class="md:gap-8 md:flex-row md:flex-wrap lg:gap-12 flex flex-col items-start gap-6">
+   <div class="md:gap-8 md:flex-row md:flex-wrap flex flex-col items-start gap-6">
       {{-- 釣果の入力 --}}
       <div class="">
          <h2 class="sub_heading mb-1">釣果</h2>
@@ -16,8 +16,8 @@
                   <div class="flex flex-wrap items-center gap-3 catch-row">
                      {{-- 魚種の選択 --}}
                      <div class="md:w-auto w-full">
-                        <select class="md:w-60 w-full rounded" name="fish_entries[{{ $i }}][fish_name_id]">
-                           <option value="">魚種を選択</option>
+                        <select class="w-60 rounded" name="fish_entries[{{ $i }}][fish_name_id]">
+                           <option value="">魚種を選択してください</option>
                            @foreach ($all_fish_names as $fish)
                               <option value="{{ $fish->id }}" @selected(($entry['fish_name_id'] ?? '') == $fish->id)>{{ $fish->name }}
                               </option>
@@ -52,15 +52,15 @@
             </button>
          </div>
       </div>
-      {{-- 魚名追加 --}}
+      {{-- 新規魚名を入力 --}}
       <div class="lg:flex gap-6">
-         {{-- <div class="">
-            <h2 class="mt-2 mb-1 text-sm text-gray-700">（魚名を追加）</h2>
+         <div class="">
+            <h2 class="mt-2 mb-1 text-sm text-gray-700">（新規魚名を入力）</h2>
             <input class="rounded w-60" type="text" name="new_fish" value="{{ old('new_fish') }}"
-               placeholder="例: ヤマメ"> --}}
-            {{-- エラーメッセージ（魚名の追加） --}}
-            {{-- <x-input-error class="mt-2" :messages="$errors->get('new_fish')" />
-         </div> --}}
+               placeholder="例: ヤマメ">
+            {{-- エラーメッセージ（新規魚名を入力） --}}
+            <x-input-error class="mt-2" :messages="$errors->get('new_fish')" />
+         </div>
          {{-- 釣果合計 --}}
          <div id="catch-total" class="lg:mt-8 mt-3 p-1 w-32 border rounded self-center">
             <div class="flex items-baseline justify-center gap-3">

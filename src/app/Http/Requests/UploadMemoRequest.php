@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 
 class UploadMemoRequest extends FormRequest
 {
@@ -21,9 +23,15 @@ class UploadMemoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'content' => 'string|max:1000',
-            'new_tag' => 'nullable|max:25|unique:tags,name',
-            'new_spot' => 'nullable|string|max:100',
+            'content'      => 'string|max:1000',
+            'fishing_spot' => 'required|exists:spots,id',
+            'new_tag'      => [
+                'nullable',
+                'max:25',
+                Rule::unique('tags', 'name')->where(function ($query) {
+                    return $query->where('user_id', auth()->id());
+                }),
+            ],
         ];
     }
 
@@ -34,11 +42,12 @@ class UploadMemoRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'content.string' => 'メモの備考が空です。また、文字列で指定してください。',
-            'content.max' => '文字数は、1000文字以内にしてください。',
             'new_tag.max' => 'タグは、25文字以内で入力してください。',
             'new_tag.unique' => 'このタグは、すでに登録されています。',
-            'new_spot.max' => 'スポット名は、100文字以内で入力してください。',
+            'content.string' => 'メモの備考が空です。また、文字列で指定してください。',
+            'content.max' => '文字数は、1000文字以内にしてください。',
+            'fishing_spot.required' => '場所を選択してください。',
+            'fishing_spot.exists' => '選択された場所は存在しません。',
         ];
     }
 }

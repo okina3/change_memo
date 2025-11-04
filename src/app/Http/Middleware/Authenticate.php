@@ -7,7 +7,11 @@ use Illuminate\Auth\Middleware\Authenticate as Middleware;
 class Authenticate extends Middleware
 {
    /**
-    * Get the path the user should be redirected to when they are not authenticated.
+    * 未認証時のリダイレクト先を返すミドルウェア。
+    *
+    * 目的：
+    * URLが admin*（管理画面）なら管理者用ログインルート `admin.login` へ
+    * それ以外は一般ユーザー用ログインルート `login` へ
     */
    protected function redirectTo($request): ?string
    {
@@ -20,6 +24,7 @@ class Authenticate extends Middleware
          // 管理者用のログインページへリダイレクト
          return route('admin.login');
       }
+
       // ユーザー用のログインページへリダイレクト
       return route('login');
    }
