@@ -54,7 +54,8 @@
                </button>
             </div>
             {{-- エラーメッセージ（新規釣り場の入力） --}}
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            {{-- FormRequest は create 固有のフィールド `new_spot` を返すためこちらで受け取る --}}
+            <x-input-error class="mt-2" :messages="$errors->get('new_spot')" />
             {{-- AJAX 用メッセージ表示領域 --}}
             <div id="spot_message" class="mt-2 text-sm" aria-live="polite"></div>
          </div>
@@ -96,7 +97,7 @@
          }
       };
 
-      // スポット追加の実行
+      // 釣り場の追加の実行
       const addSpot = async (name) => {
          const url = "{{ route('user.spot.store') }}";
          const headers = {
@@ -137,7 +138,8 @@
             // 失敗: 422エラーメッセージを表示
             if (res.status === 422) {
                const data = await res.json().catch(() => ({}));
-               const serverMsg = data?.errors?.name?.[0] ?? data?.errors?.new_spot?.[0] ?? data?.message;
+               // create フローでは `new_spot` を優先して表示する（互換のため name も参照）
+               const serverMsg = data?.errors?.new_spot?.[0] ?? data?.errors?.name?.[0] ?? data?.message;
                // サーバーメッセージがあれば優先、なければAJAX用の汎用メッセージを表示
                showMessage(serverMsg ?? '入力に誤りがあります', 'error');
                return;
@@ -146,7 +148,7 @@
             // 失敗: それ以外のエラーメッセージを表示
             try {
                const otherData = await res.json().catch(() => ({}));
-               const otherMsg = otherData?.errors?.name?.[0] ?? otherData?.errors?.new_spot?.[0] ??
+               const otherMsg = otherData?.errors?.new_spot?.[0] ?? otherData?.errors?.name?.[0] ??
                   otherData?.message;
                // サーバーメッセージがあれば優先、なければAJAX用の汎用メッセージを表示
                showMessage(otherMsg ?? '追加に失敗しました。時間をおいて再試行してください。', 'error');
