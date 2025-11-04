@@ -54,7 +54,6 @@
                </button>
             </div>
             {{-- エラーメッセージ（新規釣り場の入力） --}}
-            {{-- FormRequest は create 固有のフィールド `new_spot` を返すためこちらで受け取る --}}
             <x-input-error class="mt-2" :messages="$errors->get('new_spot')" />
             {{-- AJAX 用メッセージ表示領域 --}}
             <div id="spot_message" class="mt-2 text-sm" aria-live="polite"></div>
@@ -64,12 +63,13 @@
 </div>
 <script>
    document.addEventListener('DOMContentLoaded', () => {
+      //追加ボタン、新規釣り場入力欄、釣り場セレクトボックス要素の取得
       const addBtn = document.getElementById('add_spot_btn');
       const input = document.getElementById('new_spot_input');
       const select = document.getElementById('fishing_spot_select');
       if (!addBtn || !input || !select) return;
 
-      // CSRF トークン取得（meta タグ優先、その後 _token フィールドを参照）
+      // CSRFトークン取得
       const getCsrfToken = () => {
          const meta = document.querySelector('meta[name="csrf-token"]');
          if (meta) return meta.getAttribute('content');
@@ -98,7 +98,7 @@
       };
 
       // 釣り場の追加の実行
-      const addSpot = async (name) => {
+      const addSpot = async (newSpot) => {
          const url = "{{ route('user.spot.store') }}";
          const headers = {
             'Content-Type': 'application/json',
@@ -116,7 +116,7 @@
                method: 'POST',
                headers,
                body: JSON.stringify({
-                  name: name
+                  new_spot: newSpot
                }),
             });
 
@@ -138,9 +138,8 @@
             // 失敗: 422エラーメッセージを表示
             if (res.status === 422) {
                const data = await res.json().catch(() => ({}));
-               // create フローでは `new_spot` を優先して表示する（互換のため name も参照）
-               const serverMsg = data?.errors?.new_spot?.[0] ?? data?.errors?.name?.[0] ?? data?.message;
-               // サーバーメッセージがあれば優先、なければAJAX用の汎用メッセージを表示
+               const serverMsg = data?.errors?.new_spot?.[0] ?? data?.message;
+               // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
                showMessage(serverMsg ?? '入力に誤りがあります', 'error');
                return;
             }
@@ -148,16 +147,17 @@
             // 失敗: それ以外のエラーメッセージを表示
             try {
                const otherData = await res.json().catch(() => ({}));
-               const otherMsg = otherData?.errors?.new_spot?.[0] ?? otherData?.errors?.name?.[0] ??
-                  otherData?.message;
-               // サーバーメッセージがあれば優先、なければAJAX用の汎用メッセージを表示
+               const otherMsg = otherData?.errors?.new_spot?.[0] ?? otherData?.message;
+               // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
                showMessage(otherMsg ?? '追加に失敗しました。時間をおいて再試行してください。', 'error');
             } catch (err) {
+               // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
                showMessage('追加に失敗しました。時間をおいて再試行してください。', 'error');
             }
 
          } catch (e) {
             console.error(e);
+            // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
             showMessage('通信エラーが発生しました', 'error');
          } finally {
             addBtn.disabled = false;
@@ -165,11 +165,12 @@
          }
       };
 
-      // クリックハンドラ（メッセージをクリアし、入力値をトリムしてサーバーへ送信）
+      // 追加ボタンにクリックイベントリスナーを追加
       addBtn.addEventListener('click', () => {
+         // メッセージをクリアし、入力値をトリムしてサーバーへ送信
          clearMessage();
-         const name = input.value.trim();
-         addSpot(name);
+         const newSpot = input.value.trim();
+         addSpot(newSpot);
       });
    });
 </script>
