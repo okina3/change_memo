@@ -70,7 +70,7 @@
             <div id="fish_message" class="mt-2 text-sm" aria-live="polite"></div>
          </div>
          {{-- 釣果合計 --}}
-         <div id="catch-total" class="lg:mt-8 mt-3 p-1 w-32 border rounded self-center">
+         <div id="catch-total" class="lg:mt-6 mt-3 p-1 w-28 border rounded self-center">
             <div class="flex items-baseline justify-center gap-3">
                <div class="text-sm text-gray-600">合計</div>
                <div id="catch-total-number" class="text-2xl font-semibold">0</div>

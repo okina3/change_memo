@@ -14,8 +14,7 @@
     ボタンのレイアウト（タイプ２）
     */
     .btn-2 {
-        /* padding: 0.25rem 0.75rem; */
-        padding: 0.4rem 0.75rem;
+        padding: 0.4rem 0.5rem;
         color: rgb(255 255 255);
         border-width: 2px;
         border-style: double;
