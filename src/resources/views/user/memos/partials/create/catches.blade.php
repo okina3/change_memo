@@ -52,14 +52,22 @@
             </button>
          </div>
       </div>
-      {{-- 新規魚名を入力 --}}
       <div class="lg:flex gap-6">
-         <div class="">
-            <h2 class="mt-2 mb-1 text-sm text-gray-700">（新規魚名を入力）</h2>
-            <input class="rounded w-60" type="text" name="new_fish" value="{{ old('new_fish') }}"
-               placeholder="例: ヤマメ">
-            {{-- エラーメッセージ（新規魚名を入力） --}}
+         {{-- 新規魚名の追加 --}}
+         <div>
+            <h2 class="mt-2 mb-1 block text-sm text-gray-700">（新規魚種を選択肢に追加）</h2>
+            <div class="flex gap-2 items-center">
+               <input id="new_fish_input" class="w-60 rounded" type="text" name="new_fish"
+                  value="{{ old('new_fish') }}" placeholder="例: ヤマメ">
+               <button type="button" id="add_fish_btn" data-url="{{ route('user.fish-name.store') }}"
+                  class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
+                  追加
+               </button>
+            </div>
+            {{-- エラーメッセージ（新規魚名の追加） --}}
             <x-input-error class="mt-2" :messages="$errors->get('new_fish')" />
+            {{-- AJAX 用メッセージ表示領域 --}}
+            <div id="fish_message" class="mt-2 text-sm" aria-live="polite"></div>
          </div>
          {{-- 釣果合計 --}}
          <div id="catch-total" class="lg:mt-8 mt-3 p-1 w-32 border rounded self-center">
@@ -80,6 +88,127 @@
 
 <script>
    'use strict'
+   // === 新規魚種の追加 =====================================
+   document.addEventListener('DOMContentLoaded', () => {
+      // 追加ボタン、新規魚名入力欄の要素取得
+      const addBtn = document.getElementById('add_fish_btn');
+      const input = document.getElementById('new_fish_input');
+      if (!addBtn || !input) return;
+
+      // CSRFトークン取得
+      const getCsrfToken = () => {
+         const meta = document.querySelector('meta[name="csrf-token"]');
+         if (meta) return meta.getAttribute('content');
+         const tokenInput = document.querySelector('input[name="_token"]');
+         return tokenInput ? tokenInput.value : '';
+      };
+
+      // メッセージ表示（フォーム内の表示領域に入れる）
+      const messageEl = document.getElementById('fish_message');
+      const clearMessage = () => {
+         if (!messageEl) return;
+         messageEl.textContent = '';
+         messageEl.classList.remove('text-red-600', 'text-green-600');
+      };
+
+      // メッセージの表示色を決定する。（エラーは赤、成功は緑で表示）
+      const showMessage = (message, type = 'error') => {
+         if (!messageEl) return;
+         messageEl.textContent = message || '';
+         messageEl.classList.remove('text-red-600', 'text-green-600');
+         if (type === 'error') {
+            messageEl.classList.add('text-red-600');
+         } else if (type === 'success') {
+            messageEl.classList.add('text-green-600');
+         }
+      };
+
+      // 魚種の追加の実行
+      const addFish = async (newFish) => {
+         // エンドポイントはボタンの data-url 属性から取得（存在しなければデフォルトパスを使用）
+         const url = addBtn.dataset.url || '/fish-name/store';
+         const headers = {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': getCsrfToken(),
+            'Accept': 'application/json',
+         };
+
+         // ボタン無効化と表示を変更
+         addBtn.disabled = true;
+         const originalText = addBtn.textContent;
+         addBtn.textContent = '追加中...';
+
+         try {
+            // サーバーへ新規魚名を送信する（フィールド名: new_fish）
+            const res = await fetch(url, {
+               method: 'POST',
+               headers,
+               body: JSON.stringify({
+                  new_fish: newFish
+               }),
+            });
+
+            // 成功: セレクトに追加（釣果エリアの fish_name select を更新）
+            if (res.status === 201) {
+               const data = await res.json();
+               // fish_name を選択するセレクト全てを取得（name 属性の末尾が [fish_name_id]）
+               const allSelects = Array.from(document.querySelectorAll('select[name$="[fish_name_id]"]'));
+               allSelects.forEach((s) => {
+                  const opt = document.createElement('option');
+                  opt.value = data.id;
+                  opt.textContent = data.name;
+                  s.appendChild(opt);
+               });
+               input.value = '';
+               showMessage('魚種の選択肢に追加しました', 'success');
+               setTimeout(clearMessage, 6000);
+               return;
+            }
+
+            // 失敗: 422エラーメッセージを表示
+            if (res.status === 422) {
+               const data = await res.json().catch(() => ({}));
+               const serverMsg = data?.errors?.new_fish?.[0] ?? data?.message;
+               // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
+               showMessage(serverMsg ?? '入力に誤りがあります', 'error');
+               return;
+            }
+
+            // 失敗: それ以外のエラーメッセージを表示
+            try {
+               const otherData = await res.json().catch(() => ({}));
+               const otherMsg = otherData?.errors?.new_fish?.[0] ?? otherData?.message;
+               // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
+               showMessage(otherMsg ?? '追加に失敗しました。時間をおいて再試行してください。', 'error');
+            } catch (err) {
+               // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
+               showMessage('追加に失敗しました。時間をおいて再試行してください。', 'error');
+            }
+
+         } catch (e) {
+            console.error(e);
+            // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
+            showMessage('通信エラーが発生しました', 'error');
+         } finally {
+            addBtn.disabled = false;
+            addBtn.textContent = originalText;
+         }
+      };
+
+      // 追加ボタンにクリックイベントリスナーを追加
+      addBtn.addEventListener('click', () => {
+         // メッセージをクリアし、入力値をトリムしてサーバーへ送信
+         clearMessage();
+         const newFish = input.value.trim();
+         if (!newFish) {
+            showMessage('魚種名を入力してください。', 'error');
+            return;
+         }
+         addFish(newFish);
+      });
+   });
+
+
    // === 釣果入力エリア（最大5件） =====================================
    // 定数・要素参照
    const catchesContainer = document.getElementById('catches-container');
