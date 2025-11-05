@@ -65,7 +65,7 @@
    'use strict'
    // === 新規釣り場の追加 =====================================
    document.addEventListener('DOMContentLoaded', () => {
-      //追加ボタン、新規釣り場入力欄、釣り場セレクトボックス要素の取得
+      //追加ボタン、新規釣り場入力欄、釣り場セレクトボックスの要素の取得
       const addBtn = document.getElementById('add_spot_btn');
       const input = document.getElementById('new_spot_input');
       const select = document.getElementById('fishing_spot_select');
@@ -114,6 +114,7 @@
          addBtn.textContent = '追加中...';
 
          try {
+            // サーバーへ新規釣り場を送信する
             const res = await fetch(url, {
                method: 'POST',
                headers,
@@ -122,18 +123,16 @@
                }),
             });
 
-            // 成功: セレクトに追加して選択状態にする
+            // 成功: セレクトに追加
             if (res.status === 201) {
                const data = await res.json();
                const opt = document.createElement('option');
                opt.value = data.id;
                opt.textContent = data.name;
-               opt.selected = true;
                select.appendChild(opt);
-               select.dispatchEvent(new Event('change'));
                input.value = '';
-               showMessage('追加しました', 'success');
-               setTimeout(clearMessage, 3000);
+               showMessage('場所の選択肢に追加しました', 'success');
+               setTimeout(clearMessage, 6000);
                return;
             }
 

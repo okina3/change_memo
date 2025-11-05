@@ -56,13 +56,11 @@
    'use strict'
    // === 新規エサの追加 =====================================
    document.addEventListener('DOMContentLoaded', () => {
-      // 追加ボタン、新規エサ入力欄、エサ選択セレクト（最初のもの）要素の取得
+      // 追加ボタン、新規エサ入力欄、エサセレクトボックスの要素の取得
       const addBtn = document.getElementById('add_bait_btn');
       const input = document.getElementById('new_bait_input');
-      // baits の select は複数ある可能性があるので、最初の select 要素をターゲットにする
       const baitsContainer = document.getElementById('baits-container');
-      const select = baitsContainer ? baitsContainer.querySelector('select') : null;
-      if (!addBtn || !input || !select) return;
+      if (!addBtn || !input || !baitsContainer) return;
 
       // CSRFトークン取得
       const getCsrfToken = () => {
@@ -73,7 +71,7 @@
       };
 
       // メッセージ表示（フォーム内の表示領域に入れる）
-   const messageEl = document.getElementById('bait_message');
+      const messageEl = document.getElementById('bait_message');
       const clearMessage = () => {
          if (!messageEl) return;
          messageEl.textContent = '';
@@ -107,6 +105,7 @@
          addBtn.textContent = '追加中...';
 
          try {
+            // サーバーへ新規エサを送信する
             const res = await fetch(url, {
                method: 'POST',
                headers,
@@ -115,10 +114,10 @@
                }),
             });
 
-            // 成功: セレクトに追加して選択状態にする
+            // 成功: セレクトに追加
             if (res.status === 201) {
                const data = await res.json();
-               // すべての bait select（name="baits[]"）を取得して、各々に新しい option を追加する
+               // すべてのエサを取得して、各々に新しい option を追加
                const allSelects = Array.from(document.querySelectorAll('select[name="baits[]"]'));
                // 各 select に新しい option を追加
                allSelects.forEach((s) => {
@@ -127,15 +126,9 @@
                   opt.textContent = data.name;
                   s.appendChild(opt);
                });
-               // 表示されているエサ選択エリアの一番下（最後の select）を選択状態にする
-               const last = allSelects[allSelects.length - 1];
-               if (last) {
-                  last.value = data.id;
-                  last.dispatchEvent(new Event('change'));
-               }
                input.value = '';
-               showMessage('追加しました', 'success');
-               setTimeout(clearMessage, 3000);
+               showMessage('エサの選択肢に追加しました', 'success');
+               setTimeout(clearMessage, 6000);
                return;
             }
 
@@ -151,7 +144,7 @@
             // 失敗: それ以外のエラーメッセージを表示
             try {
                const otherData = await res.json().catch(() => ({}));
-                  const otherMsg = otherData?.errors?.new_bait?.[0] ?? otherData?.message;
+               const otherMsg = otherData?.errors?.new_bait?.[0] ?? otherData?.message;
                // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
                showMessage(otherMsg ?? '追加に失敗しました。時間をおいて再試行してください。', 'error');
             } catch (err) {
@@ -162,7 +155,7 @@
          } catch (e) {
             console.error(e);
             // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
-               showMessage('通信エラーが発生しました', 'error');
+            showMessage('通信エラーが発生しました', 'error');
          } finally {
             addBtn.disabled = false;
             addBtn.textContent = originalText;
