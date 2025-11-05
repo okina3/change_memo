@@ -38,10 +38,10 @@
       {{-- 新規エサの追加 --}}
       <div>
          <h2 class="mt-2 mb-1 block text-sm text-gray-700">（新規エサを選択肢に追加）</h2>
-         <div class="flex gap-2 items-center">
+            <div class="flex gap-2 items-center">
             <input id="new_bait_input" class="w-60 rounded" type="text" name="new_bait" value="{{ old('new_bait') }}"
                placeholder="例: アオイソメ">
-            <button type="button" id="add_bait_btn" class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
+            <button type="button" id="add_bait_btn" data-url="{{ route('user.bait.store') }}" class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
                追加
             </button>
          </div>
@@ -92,7 +92,7 @@
 
       // エサの追加の実行
       const addBait = async (newBait) => {
-         const url = "{{ route('user.bait.store') }}";
+         const url = addBtn.dataset.url || "{{ route('user.bait.store') }}";
          const headers = {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': getCsrfToken(),
@@ -114,12 +114,10 @@
                }),
             });
 
-            // 成功: セレクトに追加
+            // 成功: 全てのエサ選択欄に新しい option を追加
             if (res.status === 201) {
                const data = await res.json();
-               // すべてのエサを取得して、各々に新しい option を追加
                const allSelects = Array.from(document.querySelectorAll('select[name="baits[]"]'));
-               // 各 select に新しい option を追加
                allSelects.forEach((s) => {
                   const opt = document.createElement('option');
                   opt.value = data.id;

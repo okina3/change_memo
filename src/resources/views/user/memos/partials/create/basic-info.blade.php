@@ -49,7 +49,8 @@
             <div class="flex gap-2 items-center">
                <input id="new_spot_input" class="w-60 rounded" type="text" name="new_spot"
                   value="{{ old('new_spot') }}" placeholder="例:相模川上流">
-               <button type="button" id="add_spot_btn" class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
+               <button type="button" id="add_spot_btn" data-url="{{ route('user.spot.store') }}"
+                  class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
                   追加
                </button>
             </div>
@@ -101,7 +102,7 @@
 
       // 釣り場の追加の実行
       const addSpot = async (newSpot) => {
-         const url = "{{ route('user.spot.store') }}";
+         const url = addBtn.dataset.url || "{{ route('user.spot.store') }}";
          const headers = {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': getCsrfToken(),
@@ -123,7 +124,7 @@
                }),
             });
 
-            // 成功: セレクトに追加
+            // 成功: 場所選択欄に新しい option を追加
             if (res.status === 201) {
                const data = await res.json();
                const opt = document.createElement('option');

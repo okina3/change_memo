@@ -125,8 +125,7 @@
 
       // 魚種の追加の実行
       const addFish = async (newFish) => {
-         // エンドポイントはボタンの data-url 属性から取得（存在しなければデフォルトパスを使用）
-         const url = addBtn.dataset.url || '/fish-name/store';
+         const url = addBtn.dataset.url || "{{ route('user.fish-name.store') }}";
          const headers = {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': getCsrfToken(),
@@ -139,7 +138,7 @@
          addBtn.textContent = '追加中...';
 
          try {
-            // サーバーへ新規魚名を送信する（フィールド名: new_fish）
+            // サーバーへ新規魚名を送信する
             const res = await fetch(url, {
                method: 'POST',
                headers,
@@ -148,10 +147,9 @@
                }),
             });
 
-            // 成功: セレクトに追加（釣果エリアの fish_name select を更新）
+            // 成功: 全ての魚種選択欄に新しい option を追加
             if (res.status === 201) {
                const data = await res.json();
-               // fish_name を選択するセレクト全てを取得（name 属性の末尾が [fish_name_id]）
                const allSelects = Array.from(document.querySelectorAll('select[name$="[fish_name_id]"]'));
                allSelects.forEach((s) => {
                   const opt = document.createElement('option');
