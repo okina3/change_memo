@@ -172,6 +172,10 @@
          // メッセージをクリアし、入力値をトリムしてサーバーへ送信
          clearMessage();
          const newSpot = input.value.trim();
+         if (!newSpot) {
+            showMessage('場所名を入力してください。', 'error');
+            return;
+         }
          addSpot(newSpot);
       });
    });

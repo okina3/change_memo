@@ -38,10 +38,11 @@
       {{-- 新規エサの追加 --}}
       <div>
          <h2 class="mt-2 mb-1 block text-sm text-gray-700">（新規エサを選択肢に追加）</h2>
-            <div class="flex gap-2 items-center">
+         <div class="flex gap-2 items-center">
             <input id="new_bait_input" class="w-60 rounded" type="text" name="new_bait" value="{{ old('new_bait') }}"
                placeholder="例: アオイソメ">
-            <button type="button" id="add_bait_btn" data-url="{{ route('user.bait.store') }}" class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
+            <button type="button" id="add_bait_btn" data-url="{{ route('user.bait.store') }}"
+               class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
                追加
             </button>
          </div>
