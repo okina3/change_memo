@@ -236,7 +236,6 @@
       if (getCatchRows().length <= 1) return;
       row.remove();
       updateCatchControls();
-      computeTotalCatches();
    });
 
    // 行の追加（最初の行をクローンして値をクリア）
@@ -255,41 +254,13 @@
       if (del) del.classList.remove('hidden');
       catchesContainer.appendChild(clone);
       updateCatchControls();
-      attachCountListeners(clone);
-      computeTotalCatches();
    }
 
    // 追加ボタン
    addCatchRowBtn?.addEventListener('click', addCatchRow);
 
-   // 入力イベント（匹）
-   function attachCountListeners(scope) {
-      (scope || document).querySelectorAll('#catches-container input[name$="[count]"]').forEach(input => {
-         if (!input._countBound) {
-            input.addEventListener('input', computeTotalCatches);
-            input._countBound = true;
-         }
-      });
-   }
-
-   // 合計を計算して表示
-   function computeTotalCatches() {
-      const rows = getCatchRows();
-      let total = 0;
-      rows.forEach(row => {
-         const input = row.querySelector('input[name$="[count]"]');
-         if (!input) return;
-         const v = parseInt(input.value, 10);
-         if (!Number.isNaN(v)) total += v;
-      });
-      const totalNumberEl = document.getElementById('catch-total-number');
-      if (totalNumberEl) totalNumberEl.textContent = String(total);
-   }
-
    // 初期化
    if (catchesContainer) {
       updateCatchControls();
-      attachCountListeners(catchesContainer);
-      computeTotalCatches();
    }
 </script>
