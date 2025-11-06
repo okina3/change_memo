@@ -1,5 +1,5 @@
 <div class="mb-8">
-   {{-- エサの入力 --}}
+   {{-- エサ --}}
    <div class="md:flex-row md:gap-8 flex flex-col items-start gap-6">
       <div class="">
          <h2 class="sub_heading mb-1">エサ</h2>

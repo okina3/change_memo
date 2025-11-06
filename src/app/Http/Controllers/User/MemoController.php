@@ -107,10 +107,11 @@ class MemoController extends Controller
                     'user_id' => Auth::id(),
                 ]);
 
-                // 新規エサの入力があれば、各データを保存。
-                BaitService::storeNewBait($request->new_bait, $memo->id);
-                // 既存のエサの選択があれば、メモに紐付けて中間テーブルに保存
+                // エサを、メモに紐付けて中間テーブルに保存
                 MemoService::attachExistingBaits($request, $memo->id);
+
+                // 魚名を、メモに紐付けて中間テーブルに保存
+                MemoService::attachExistingFishNames($request, $memo->id);
 
                 // 新規タグの入力があれば、各データを保存。
                 TagService::storeNewTag($request->new_tag, $memo->id);

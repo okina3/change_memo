@@ -14,10 +14,10 @@
                      $entry = old('fish_entries', [])[$i] ?? ['fish_name_id' => '', 'count' => '', 'length' => ''];
                   @endphp
                   <div class="lg:gap-6 flex flex-wrap items-center gap-3 catch-row">
-                     {{-- 魚種の選択 --}}
+                     {{-- 魚名の選択 --}}
                      <div class="md:w-auto w-full">
                         <select class="w-60 rounded" name="fish_entries[{{ $i }}][fish_name_id]">
-                           <option value="">魚種を選択してください</option>
+                           <option value="">魚名を選択してください</option>
                            @foreach ($all_fish_names as $fish)
                               <option value="{{ $fish->id }}" @selected(($entry['fish_name_id'] ?? '') == $fish->id)>{{ $fish->name }}
                               </option>
@@ -54,7 +54,7 @@
       </div>
       {{-- 魚名の追加 --}}
       <div>
-         <h2 class="mt-2 mb-1 block text-sm text-gray-700">（魚種を選択肢に追加）</h2>
+         <h2 class="mt-2 mb-1 block text-sm text-gray-700">（魚名を選択肢に追加）</h2>
          <div class="flex gap-2 items-center">
             <input id="new_fish_input" class="w-60 rounded" type="text" name="new_fish" value="{{ old('new_fish') }}"
                placeholder="例: ヤマメ">
@@ -78,7 +78,7 @@
 
 <script>
    'use strict'
-   // === 新規魚種の追加 =====================================
+   // === 新規魚名の追加 =====================================
    document.addEventListener('DOMContentLoaded', () => {
       // 追加ボタン、新規魚名入力欄の要素取得
       const addBtn = document.getElementById('add_fish_btn');
@@ -113,7 +113,7 @@
          }
       };
 
-      // 魚種の追加の実行
+      // 魚名の追加の実行
       const addFish = async (newFish) => {
          const url = addBtn.dataset.url || "{{ route('user.fish-name.store') }}";
          const headers = {
@@ -137,7 +137,7 @@
                }),
             });
 
-            // 成功: 全ての魚種選択欄に新しい option を追加
+            // 成功: 全ての魚名選択欄に新しい option を追加
             if (res.status === 201) {
                const data = await res.json();
                const allSelects = Array.from(document.querySelectorAll('select[name$="[fish_name_id]"]'));
@@ -148,7 +148,7 @@
                   s.appendChild(opt);
                });
                input.value = '';
-               showMessage('魚種の選択肢に追加しました', 'success');
+               showMessage('魚名の選択肢に追加しました', 'success');
                setTimeout(clearMessage, 6000);
                return;
             }
@@ -189,7 +189,7 @@
          clearMessage();
          const newFish = input.value.trim();
          if (!newFish) {
-            showMessage('魚種名を入力してください。', 'error');
+            showMessage('魚名を入力してください。', 'error');
             return;
          }
          addFish(newFish);

@@ -25,7 +25,7 @@ return new class extends Migration
                 ->comment('匹数');
             $table->unsignedSmallInteger('length')
                 ->nullable()
-                ->comment('代表長さ(cm)');
+                ->comment('cm');
             $table->timestamps();
             $table->primary(['memo_id', 'fish_name_id']);
         });
