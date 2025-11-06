@@ -72,37 +72,42 @@ class MemoService
     }
 
     /**
-     * メモに紐づいた魚名を、中間テーブルに保存するメソッド
+     * メモに紐づいた釣果データを、中間テーブルに保存するメソッド
      * @param $request
      * @param int $memo_id
      * @return void
      */
     public static function attachExistingFishNames($request, int $memo_id): void
     {
-        // 釣果のデータ配列を取得。
-        $entries = $request->input('fishing_results', []);
-        if (empty($entries) || !is_array($entries)) {
+        // FormRequest で以下をバリデート済みであることを前提とする:
+        // - fishing_results は配列
+        // - fishing_results.*.fish_name は必須かつ存在する fish_names.id
+        // - fishing_results.*.count, fishing_results.*.length は nullable|integer など
+        $fishing_results = $request->input('fishing_results', []);
+        if (!is_array($fishing_results) || count($fishing_results) === 0) {
             return;
         }
 
-        $memo = Memo::findOrFail($memo_id);
+        // ピボット属性付きで中間テーブルに保存するための配列を作成
         $attachData = [];
-        foreach ($entries as $entry) {
-            // 選択された魚名のid
-            $fishNameId = $entry['fish_name'] ?? null;
-            if (empty($fishNameId)) {
+        foreach ($fishing_results as $fishing_result) {
+            // fish_name は FormRequest で保証される想定のため直接キャスト
+            $fishNameId = (int) ($fishing_result['fish_name'] ?? 0);
+            if ($fishNameId <= 0) {
+                // 念のため無効値はスキップ
                 continue;
             }
-            // 匹数
-            $count = isset($entry['count']) && $entry['count'] !== '' ? (int) $entry['count'] : 0;
-            // 魚の長さ(cm)
-            $length = isset($entry['length']) && $entry['length'] !== '' ? (int) $entry['length'] : 0;
-            // syncWithoutDetaching を使って既存の関係は残しつつ、ピボットデータを追加/更新する
+            // count/length は nullable の可能性があるため、整数にキャスト（バリデーションで保証）
+            $count = isset($fishing_result['count']) ? (int) $fishing_result['count'] : 0;
+            $length = isset($fishing_result['length']) ? (int) $fishing_result['length'] : 0;
+
             $attachData[$fishNameId] = ['count' => $count, 'length' => $length];
         }
 
+        // 釣果のデータを、メモに紐付けて中間テーブルに保存
         if (!empty($attachData)) {
-            $memo->fish_names()->syncWithoutDetaching($attachData);
+            $memo = Memo::findOrFail($memo_id);
+            $memo->fish_names()->attach($attachData);
         }
     }
 

@@ -110,14 +110,13 @@ class MemoController extends Controller
                 // エサを、メモに紐付けて中間テーブルに保存
                 MemoService::attachExistingBaits($request, $memo->id);
 
-                // 魚名を、メモに紐付けて中間テーブルに保存
+                // 釣果データを、メモに紐付けて中間テーブルに保存
                 MemoService::attachExistingFishNames($request, $memo->id);
 
                 // 新規タグの入力があれば、各データを保存。
                 TagService::storeNewTag($request->new_tag, $memo->id);
                 // 既存のタグの選択があれば、メモに紐付けて中間テーブルに保存
                 MemoService::attachExistingTags($request, $memo->id);
-
                 // 既存の画像の選択があれば、メモに紐付けて中間テーブルに保存
                 MemoService::attachExistingImages($request, $memo->id);
             }, 10);
