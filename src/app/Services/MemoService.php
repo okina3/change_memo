@@ -79,10 +79,7 @@ class MemoService
      */
     public static function attachExistingFishNames($request, int $memo_id): void
     {
-        // FormRequest で以下をバリデート済みであることを前提とする:
-        // - fishing_results は配列
-        // - fishing_results.*.fish_name は必須かつ存在する fish_names.id
-        // - fishing_results.*.count, fishing_results.*.length は nullable|integer など
+        // 釣果入力があれば処理を進める
         $fishing_results = $request->input('fishing_results', []);
         if (!is_array($fishing_results) || count($fishing_results) === 0) {
             return;
@@ -91,16 +88,13 @@ class MemoService
         // ピボット属性付きで中間テーブルに保存するための配列を作成
         $attachData = [];
         foreach ($fishing_results as $fishing_result) {
-            // fish_name は FormRequest で保証される想定のため直接キャスト
             $fishNameId = (int) ($fishing_result['fish_name'] ?? 0);
             if ($fishNameId <= 0) {
-                // 念のため無効値はスキップ
+                // 無効値はスキップ
                 continue;
             }
-            // count/length は nullable の可能性があるため、整数にキャスト（バリデーションで保証）
             $count = isset($fishing_result['count']) ? (int) $fishing_result['count'] : 0;
             $length = isset($fishing_result['length']) ? (int) $fishing_result['length'] : 0;
-
             $attachData[$fishNameId] = ['count' => $count, 'length' => $length];
         }
 
