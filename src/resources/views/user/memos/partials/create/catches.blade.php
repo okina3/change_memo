@@ -5,21 +5,21 @@
          <h2 class="sub_heading mb-1">釣果</h2>
          @php
             // 初期表示行数（最低1、最大5）
-            $initialRows = max(1, min(count(old('fish_entries', [])), 5));
+            $initialRows = max(1, min(count(old('fishing_results', [])), 5));
          @endphp
          <div class="flex items-start">
             <div id="catches-container" class="space-y-2 flex-1">
                @for ($i = 0; $i < $initialRows; $i++)
                   @php
-                     $entry = old('fish_entries', [])[$i] ?? ['fish_name_id' => '', 'count' => '', 'length' => ''];
+                     $entry = old('fishing_results', [])[$i] ?? ['fish_name' => '', 'count' => '', 'length' => ''];
                   @endphp
                   <div class="lg:gap-6 flex flex-wrap items-center gap-3 catch-row">
                      {{-- 魚名の選択 --}}
                      <div class="md:w-auto w-full">
-                        <select class="w-60 rounded" name="fish_entries[{{ $i }}][fish_name_id]">
+                        <select class="w-60 rounded" name="fishing_results[{{ $i }}][fish_name]">
                            <option value="">魚名を選択してください</option>
                            @foreach ($all_fish_names as $fish)
-                              <option value="{{ $fish->id }}" @selected(($entry['fish_name_id'] ?? '') == $fish->id)>{{ $fish->name }}
+                              <option value="{{ $fish->id }}" @selected(($entry['fish_name'] ?? '') == $fish->id)>{{ $fish->name }}
                               </option>
                            @endforeach
                         </select>
@@ -27,14 +27,14 @@
                      {{-- 釣果（匹） --}}
                      <div class="flex items-center gap-2">
                         <input class="md:w-24 w-20 rounded text-right" type="number"
-                           name="fish_entries[{{ $i }}][count]" value="{{ $entry['count'] ?? '' }}"
+                           name="fishing_results[{{ $i }}][count]" value="{{ $entry['count'] ?? '' }}"
                            placeholder="0" inputmode="numeric" min="0" step="1" />
                         <span class="text-gray-600">匹</span>
                      </div>
                      {{-- サイズ（cm） --}}
                      <div class="flex items-center gap-2">
                         <input class="md:w-24 w-20 rounded text-right" type="number"
-                           name="fish_entries[{{ $i }}][length]" value="{{ $entry['length'] ?? '' }}"
+                           name="fishing_results[{{ $i }}][length]" value="{{ $entry['length'] ?? '' }}"
                            placeholder="0" inputmode="numeric" min="0" step="1" />
                         <span class="text-gray-600">cm</span>
                      </div>
@@ -56,7 +56,7 @@
       <div>
          <h2 class="mt-2 mb-1 block text-sm text-gray-700">（魚名を選択肢に追加）</h2>
          <div class="flex gap-2 items-center">
-            <input id="new_fish_input" class="w-60 rounded" type="text" name="new_fish" value="{{ old('new_fish') }}"
+            <input id="new_fish_input" class="w-60 rounded" type="text" name="new_fish_name" value="{{ old('new_fish_name') }}"
                placeholder="例: ヤマメ">
             <button type="button" id="add_fish_btn" data-url="{{ route('user.fish-name.store') }}"
                class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
@@ -64,16 +64,16 @@
             </button>
          </div>
          {{-- エラーメッセージ（魚名の追加） --}}
-         <x-input-error class="mt-2" :messages="$errors->get('new_fish')" />
+         <x-input-error class="mt-2" :messages="$errors->get('new_fish_name')" />
          {{-- AJAX 用メッセージ表示領域 --}}
          <div id="fish_message" class="mt-2 text-sm" aria-live="polite"></div>
       </div>
    </div>
 
    {{-- エラーメッセージ（釣果の内訳） --}}
-   <x-input-error class="mt-2" :messages="$errors->get('fish_entries.*.fish_name_id')" />
-   <x-input-error class="mt-2" :messages="$errors->get('fish_entries.*.count')" />
-   <x-input-error class="mt-2" :messages="$errors->get('fish_entries.*.length')" />
+   <x-input-error class="mt-2" :messages="$errors->get('fishing_results.*.fish_name')" />
+   <x-input-error class="mt-2" :messages="$errors->get('fishing_results.*.count')" />
+   <x-input-error class="mt-2" :messages="$errors->get('fishing_results.*.length')" />
 </div>
 
 <script>
@@ -133,14 +133,14 @@
                method: 'POST',
                headers,
                body: JSON.stringify({
-                  new_fish: newFish
+                  new_fish_name: newFish
                }),
             });
 
             // 成功: 全ての魚名選択欄に新しい option を追加
             if (res.status === 201) {
                const data = await res.json();
-               const allSelects = Array.from(document.querySelectorAll('select[name$="[fish_name_id]"]'));
+               const allSelects = Array.from(document.querySelectorAll('select[name$="[fish_name]"]'));
                allSelects.forEach((s) => {
                   const opt = document.createElement('option');
                   opt.value = data.id;
@@ -156,7 +156,7 @@
             // 失敗: 422エラーメッセージを表示
             if (res.status === 422) {
                const data = await res.json().catch(() => ({}));
-               const serverMsg = data?.errors?.new_fish?.[0] ?? data?.message;
+               const serverMsg = data?.errors?.new_fish_name?.[0] ?? data?.message;
                // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
                showMessage(serverMsg ?? '入力に誤りがあります', 'error');
                return;
@@ -165,7 +165,7 @@
             // 失敗: それ以外のエラーメッセージを表示
             try {
                const otherData = await res.json().catch(() => ({}));
-               const otherMsg = otherData?.errors?.new_fish?.[0] ?? otherData?.message;
+               const otherMsg = otherData?.errors?.new_fish_name?.[0] ?? otherData?.message;
                // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
                showMessage(otherMsg ?? '追加に失敗しました。時間をおいて再試行してください。', 'error');
             } catch (err) {
@@ -212,8 +212,8 @@
          // 各行内の select/input の name を必要なら更新
          row.querySelectorAll('select, input').forEach(el => {
             const name = el.getAttribute('name') || '';
-            if (name.startsWith('fish_entries[')) {
-               const newName = name.replace(/^fish_entries\[\d+\]/, `fish_entries[${idx}]`);
+            if (name.startsWith('fishing_results[')) {
+               const newName = name.replace(/^fishing_results\[\d+\]/, `fishing_results[${idx}]`);
                el.setAttribute('name', newName);
             }
          });

@@ -8,7 +8,7 @@
                {{-- 魚名 --}}
                <div class="md:w-auto w-full">
                   {{-- @foreach ($all_fish_names as $fish)
-                     <option value="{{ $fish->id }}" @selected(($entry['fish_name_id'] ?? '') == $fish->id)>{{ $fish->name }}
+                     <option value="{{ $fish->id }}" @selected(($entry['fish_name'] ?? '') == $fish->id)>{{ $fish->name }}
                      </option>
                   @endforeach --}}
                </div>

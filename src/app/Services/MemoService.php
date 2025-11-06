@@ -79,11 +79,30 @@ class MemoService
      */
     public static function attachExistingFishNames($request, int $memo_id): void
     {
-        // 既存エサの選択があれば、メモに紐付けて中間テーブルに保存
-        if (!empty($request->fish_names)) {
-            foreach ($request->fish_names as $fish_name_number) {
-                Memo::findOrFail($memo_id)->fish_names()->attach($fish_name_number);
+        // 釣果のデータ配列を取得。
+        $entries = $request->input('fishing_results', []);
+        if (empty($entries) || !is_array($entries)) {
+            return;
+        }
+
+        $memo = Memo::findOrFail($memo_id);
+        $attachData = [];
+        foreach ($entries as $entry) {
+            // 選択された魚名のid
+            $fishNameId = $entry['fish_name'] ?? null;
+            if (empty($fishNameId)) {
+                continue;
             }
+            // 匹数
+            $count = isset($entry['count']) && $entry['count'] !== '' ? (int) $entry['count'] : 0;
+            // 魚の長さ(cm)
+            $length = isset($entry['length']) && $entry['length'] !== '' ? (int) $entry['length'] : 0;
+            // syncWithoutDetaching を使って既存の関係は残しつつ、ピボットデータを追加/更新する
+            $attachData[$fishNameId] = ['count' => $count, 'length' => $length];
+        }
+
+        if (!empty($attachData)) {
+            $memo->fish_names()->syncWithoutDetaching($attachData);
         }
     }
 

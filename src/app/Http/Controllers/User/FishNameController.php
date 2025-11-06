@@ -23,7 +23,7 @@ class FishNameController extends Controller
       try {
          $fish = DB::transaction(function () use ($request) {
             return FishName::create([
-               'name' => $request->input('new_fish'),
+               'name' => $request->input('new_fish_name'),
                'user_id' => Auth::id(),
             ]);
          }, 10);
