@@ -20,7 +20,7 @@
          <label class="mb-1 block text-sm text-gray-700">気温</label>
          <div class="flex items-center gap-2">
             <input class="w-24 rounded text-right" type="number" name="air_temp" value="{{ old('air_temp') }}"
-               placeholder="10" inputmode="numeric" step="1" min="0" max="60" />
+               placeholder="0" inputmode="numeric" step="1" min="0" max="60" />
             <span class="text-gray-600">℃</span>
          </div>
          {{-- エラーメッセージ（気温） --}}
@@ -31,7 +31,7 @@
          <label class="mb-1 block text-sm text-gray-700">最大風速</label>
          <div class="flex items-center gap-2">
             <input class="w-24 rounded text-right" type="number" name="max_wind" value="{{ old('max_wind') }}"
-               placeholder="1" inputmode="numeric" step="1" min="0" max="99" />
+               placeholder="0" inputmode="numeric" step="1" min="0" max="99" />
             <span class="text-gray-600">m/s</span>
          </div>
          {{-- エラーメッセージ（風速） --}}

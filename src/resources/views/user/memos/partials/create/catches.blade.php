@@ -196,7 +196,6 @@
       });
    });
 
-
    // === 釣果入力エリア（最大5件） =====================================
    // 定数・要素参照
    const catchesContainer = document.getElementById('catches-container');
@@ -206,14 +205,17 @@
    // 行の取得
    const getCatchRows = () => Array.from(catchesContainer?.querySelectorAll('.catch-row') || []);
 
-   // 再インデックスとUI更新
+   // 再インデックスとUI更新（簡潔版）
    function updateCatchControls() {
       const rows = getCatchRows();
       rows.forEach((row, idx) => {
-         row.querySelectorAll('select[name^="fish_entries["], input[name^="fish_entries["]').forEach(el => {
+         // 各行内の select/input の name を必要なら更新
+         row.querySelectorAll('select, input').forEach(el => {
             const name = el.getAttribute('name') || '';
-            const newName = name.replace(/fish_entries\[\d+\]/, `fish_entries[${idx}]`);
-            el.setAttribute('name', newName);
+            if (name.startsWith('fish_entries[')) {
+               const newName = name.replace(/^fish_entries\[\d+\]/, `fish_entries[${idx}]`);
+               el.setAttribute('name', newName);
+            }
          });
          const del = row.querySelector('.remove-catch-row');
          if (del) del.classList.toggle('hidden', idx === 0);

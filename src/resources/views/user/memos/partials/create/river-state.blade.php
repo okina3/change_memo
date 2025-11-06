@@ -78,7 +78,7 @@
          <label class="mb-1 block text-sm text-gray-700">水温</label>
          <div class="flex items-center gap-2">
             <input class="w-24 rounded text-right" type="number" name="water_temp" value="{{ old('water_temp') }}"
-               placeholder="10" inputmode="numeric" step="1" min="0" max="99" />
+               placeholder="0" inputmode="numeric" step="1" min="0" max="99" />
             <span class="text-gray-600">℃</span>
          </div>
          {{-- エラーメッセージ（水温） --}}
