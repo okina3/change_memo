@@ -1,5 +1,5 @@
 <div class="mb-8">
-   <div class="md:gap-8 md:flex-row md:flex-wrap flex flex-col items-start gap-6">
+   <div class="md:gap-8 md:flex-row md:flex-wrap lg:gap-12 flex flex-col items-start gap-6">
       {{-- 釣果の入力 --}}
       <div class="">
          <h2 class="sub_heading mb-1">釣果</h2>
@@ -7,13 +7,13 @@
             // 初期表示行数（最低1、最大5）
             $initialRows = max(1, min(count(old('fish_entries', [])), 5));
          @endphp
-         <div class="flex items-start gap-6">
+         <div class="flex items-start">
             <div id="catches-container" class="space-y-2 flex-1">
                @for ($i = 0; $i < $initialRows; $i++)
                   @php
                      $entry = old('fish_entries', [])[$i] ?? ['fish_name_id' => '', 'count' => '', 'length' => ''];
                   @endphp
-                  <div class="flex flex-wrap items-center gap-3 catch-row">
+                  <div class="lg:gap-6 flex flex-wrap items-center gap-3 catch-row">
                      {{-- 魚種の選択 --}}
                      <div class="md:w-auto w-full">
                         <select class="w-60 rounded" name="fish_entries[{{ $i }}][fish_name_id]">
@@ -52,31 +52,21 @@
             </button>
          </div>
       </div>
-      <div class="lg:flex gap-6">
-         {{-- 魚名の追加 --}}
-         <div>
-            <h2 class="mt-2 mb-1 block text-sm text-gray-700">（魚種を選択肢に追加）</h2>
-            <div class="flex gap-2 items-center">
-               <input id="new_fish_input" class="w-60 rounded" type="text" name="new_fish"
-                  value="{{ old('new_fish') }}" placeholder="例: ヤマメ">
-               <button type="button" id="add_fish_btn" data-url="{{ route('user.fish-name.store') }}"
-                  class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
-                  追加
-               </button>
-            </div>
-            {{-- エラーメッセージ（魚名の追加） --}}
-            <x-input-error class="mt-2" :messages="$errors->get('new_fish')" />
-            {{-- AJAX 用メッセージ表示領域 --}}
-            <div id="fish_message" class="mt-2 text-sm" aria-live="polite"></div>
+      {{-- 魚名の追加 --}}
+      <div>
+         <h2 class="mt-2 mb-1 block text-sm text-gray-700">（魚種を選択肢に追加）</h2>
+         <div class="flex gap-2 items-center">
+            <input id="new_fish_input" class="w-60 rounded" type="text" name="new_fish" value="{{ old('new_fish') }}"
+               placeholder="例: ヤマメ">
+            <button type="button" id="add_fish_btn" data-url="{{ route('user.fish-name.store') }}"
+               class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
+               追加
+            </button>
          </div>
-         {{-- 釣果合計 --}}
-         <div id="catch-total" class="lg:mt-6 mt-3 p-1 w-28 border rounded self-center">
-            <div class="flex items-baseline justify-center gap-3">
-               <div class="text-sm text-gray-600">合計</div>
-               <div id="catch-total-number" class="text-2xl font-semibold">0</div>
-               <div class="text-sm text-gray-600">匹</div>
-            </div>
-         </div>
+         {{-- エラーメッセージ（魚名の追加） --}}
+         <x-input-error class="mt-2" :messages="$errors->get('new_fish')" />
+         {{-- AJAX 用メッセージ表示領域 --}}
+         <div id="fish_message" class="mt-2 text-sm" aria-live="polite"></div>
       </div>
    </div>
 
