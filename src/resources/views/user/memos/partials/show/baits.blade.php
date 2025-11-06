@@ -6,12 +6,11 @@
          <div>
             <div id="baits-container" class="space-y-2">
                <div class="flex items-center gap-3 bait-row">
-
-                  {{-- @foreach ($$select_memo->baits as $bait)
-                     <div class="rounded w-60">
-                        {{ $bait->name }}
+                  @foreach ($get_memo_baits_name as $bait_name)
+                     <div class="p-2 w-52 border border-gray-500 rounded">
+                        {{ $bait_name }}
                      </div>
-                  @endforeach --}}
+                  @endforeach
                </div>
             </div>
          </div>

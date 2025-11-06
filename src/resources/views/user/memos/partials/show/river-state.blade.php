@@ -1,7 +1,7 @@
 <div class="mb-8">
    {{-- 川の状態 --}}
    <h2 class="sub_heading mb-1">川の状態</h2>
-   <div class="sm:flex-row sm:flex-wrap sm:gap-6 md:gap-8 lg:gap-12 flex flex-col items-start gap-6">
+   <div class="sm:flex-row sm:flex-wrap sm:gap-6 md:gap-10 flex flex-col items-start gap-6">
       {{-- 川の流れ --}}
       <div>
          <h2 class="mb-1 block text-sm text-gray-700">川の流れ</h2>

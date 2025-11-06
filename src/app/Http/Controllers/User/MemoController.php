@@ -93,7 +93,7 @@ class MemoController extends Controller
                     'fishing_date' => $request->input('fishing_date'),
                     'start_time' => $request->input('start_time'),
                     'end_time' => $request->input('end_time'),
-                    'spot_id'=> $request->input('fishing_spot'),
+                    'spot_id' => $request->input('fishing_spot'),
                     'weather' => $request->input('weather'),
                     'air_temp' => $request->input('air_temp'),
                     'max_wind' => $request->input('max_wind'),
@@ -137,6 +137,8 @@ class MemoController extends Controller
     {
         // 選択したメモを、一件取得
         $select_memo = Memo::availableSelectMemo($id)->first();
+        // 選択したメモに紐づいたエサの名前を取得
+        $get_memo_baits_name = BaitService::getMemoBaitsName($select_memo->baits);
         // 選択したメモに紐づいたタグの名前を取得
         $get_memo_tags_name = TagService::getMemoTagsName($select_memo->tags);
         // 選択したメモに紐づいた画像を取得
@@ -146,7 +148,7 @@ class MemoController extends Controller
         // 自分が共有しているメモの、共有状態の情報を取得
         $shared_users = ShareSettingService::checkSharedMemoStatus($id);
 
-        return view('user.memos.show', compact('select_memo', 'get_memo_tags_name', 'get_memo_images', 'shared_users'));
+        return view('user.memos.show', compact('select_memo', 'get_memo_baits_name', 'get_memo_tags_name', 'get_memo_images', 'shared_users'));
     }
 
     /**

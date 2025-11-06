@@ -3,29 +3,23 @@
 namespace App\Services;
 
 use App\Models\Bait;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class BaitService
 {
    /**
-    * 新規エサの保存・更新するメソッド。
-    * @param $request_new_bait
-    * @param int $memo_id
-    * @return void
+    * 選択したメモに紐づいた、エサのNameを、配列で取得するメソッド。
+    * @param Collection $select_memo_baits
+    * @return array
     */
-   public static function storeNewBait($request_new_bait, int $memo_id): void
+   public static function getMemoBaitsName(Collection $select_memo_baits): array
    {
-      // 新規エサの入力があった場合、エサが重複していないか調べる
-      $bait_exists = Bait::availableCheckDuplicateBait($request_new_bait)->exists();
-      // 新規エサがあり、重複していなければ、エサを保存し、中間テーブルに保存
-      if (!empty($request_new_bait) && !$bait_exists) {
-         // エサを保存
-         $bait = Bait::create([
-            'name' => $request_new_bait,
-            'user_id' => Auth::id()
-         ]);
-         // メモとエサの中間テーブルに値を保存
-         Bait::findOrFail($bait->id)->memos()->attach($memo_id);
+      $memo_relation_baits_name = [];
+      foreach ($select_memo_baits as $memo_relation_bait) {
+         // メモにリレーションされたタグのidを、配列に追加
+         $memo_relation_baits_name[] = $memo_relation_bait->name;
       }
+      return $memo_relation_baits_name;
    }
 }
