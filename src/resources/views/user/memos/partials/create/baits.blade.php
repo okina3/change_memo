@@ -35,9 +35,9 @@
             <x-input-error class="mt-2" :messages="$errors->get('baits.*')" />
          </div>
       </div>
-      {{-- 新規エサの追加 --}}
+      {{-- エサの追加 --}}
       <div>
-         <h2 class="mt-2 mb-1 block text-sm text-gray-700">（新規エサを選択肢に追加）</h2>
+         <h2 class="mt-2 mb-1 block text-sm text-gray-700">（エサを選択肢に追加）</h2>
          <div class="flex gap-2 items-center">
             <input id="new_bait_input" class="w-60 rounded" type="text" name="new_bait" value="{{ old('new_bait') }}"
                placeholder="例: アオイソメ">
@@ -46,7 +46,7 @@
                追加
             </button>
          </div>
-         {{-- エラーメッセージ（新規エサの追加） --}}
+         {{-- エラーメッセージ（エサの追加） --}}
          <x-input-error class="mt-2" :messages="$errors->get('new_bait')" />
          {{-- AJAX 用メッセージ表示領域 --}}
          <div id="bait_message" class="mt-2 text-sm" aria-live="polite"></div>

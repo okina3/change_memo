@@ -53,9 +53,9 @@
          </div>
       </div>
       <div class="lg:flex gap-6">
-         {{-- 新規魚名の追加 --}}
+         {{-- 魚名の追加 --}}
          <div>
-            <h2 class="mt-2 mb-1 block text-sm text-gray-700">（新規魚種を選択肢に追加）</h2>
+            <h2 class="mt-2 mb-1 block text-sm text-gray-700">（魚種を選択肢に追加）</h2>
             <div class="flex gap-2 items-center">
                <input id="new_fish_input" class="w-60 rounded" type="text" name="new_fish"
                   value="{{ old('new_fish') }}" placeholder="例: ヤマメ">
@@ -64,7 +64,7 @@
                   追加
                </button>
             </div>
-            {{-- エラーメッセージ（新規魚名の追加） --}}
+            {{-- エラーメッセージ（魚名の追加） --}}
             <x-input-error class="mt-2" :messages="$errors->get('new_fish')" />
             {{-- AJAX 用メッセージ表示領域 --}}
             <div id="fish_message" class="mt-2 text-sm" aria-live="polite"></div>

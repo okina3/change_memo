@@ -1,7 +1,7 @@
 <div class="mb-8">
    {{-- 気象状態 --}}
    <h2 class="sub_heading mb-1">気象状態</h2>
-   <div class="sm:flex-row sm:flex-wrap sm:gap-6 md:gap-8 lg:gap-12 flex flex-col items-start gap-6">
+   <div class="sm:flex-row sm:flex-wrap sm:gap-6 md:gap-8 flex flex-col items-start gap-6">
       {{-- 天気 --}}
       <div class="">
          <label class="mb-1 block text-sm text-gray-700">天気</label>
