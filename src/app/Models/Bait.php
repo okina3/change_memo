@@ -34,16 +34,4 @@ class Bait extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    /**
-     * エサが重複していないか調べる為のスコープ。
-     * @param Builder $query
-     * @param $request_new_bait
-     * @return void
-     */
-    public function scopeAvailableCheckDuplicateBait(Builder $query, $request_new_bait): void
-    {
-        $query->where('name', $request_new_bait)
-            ->where('user_id', Auth::id());
-    }
 }
