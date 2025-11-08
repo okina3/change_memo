@@ -90,23 +90,7 @@ class MemoController extends Controller
         try {
             DB::transaction(function () use ($request) {
                 // メモを保存
-                $memo = Memo::create([
-                    'fishing_date' => $request->input('fishing_date'),
-                    'start_time' => $request->input('start_time'),
-                    'end_time' => $request->input('end_time'),
-                    'spot_id' => $request->input('fishing_spot'),
-                    'weather' => $request->input('weather'),
-                    'air_temp' => $request->input('air_temp'),
-                    'max_wind' => $request->input('max_wind'),
-                    'wind_dir' => $request->input('wind_dir'),
-                    'river_flow' => $request->input('river_flow'),
-                    'turbidity' => $request->input('turbidity'),
-                    'debris' => $request->input('debris'),
-                    'water_level' => $request->input('water_level'),
-                    'water_temp' => $request->input('water_temp'),
-                    'content' => $request->input('content'),
-                    'user_id' => Auth::id(),
-                ]);
+                $memo = MemoService::createMemo($request);
                 // エサを、メモに紐付けて中間テーブルに保存
                 MemoService::attachExistingBaits($request, $memo->id);
                 // 釣果データ（名前・匹数・長さ）を、メモに紐付けて中間テーブルに保存
@@ -137,22 +121,8 @@ class MemoController extends Controller
         $select_memo = Memo::availableSelectMemo($id)->first();
         // 選択したメモに紐づいたエサの名前を取得
         $get_memo_baits_name = BaitService::getMemoBaitsName($select_memo->baits);
-
-
-
         // 選択したメモに紐づいた釣果のデータを取得（名前・匹数・長さ）
-        // $get_memo_fish_names = FishNameService::getMemoFishResults($select_memo->fish_names);
-
-        $get_memo_fish_results = [];
-        foreach ($select_memo->fish_names as $fish) {
-            $get_memo_fish_results[] = [
-                'name' => $fish->name,
-                'count' => $fish->pivot->count ?? 0,
-                'length' => $fish->pivot->length ?? 0,
-            ];
-        }
-
-
+        $get_memo_fish_results = FishNameService::getMemoFishResults($select_memo->fish_names);
         // 選択したメモに紐づいたタグの名前を取得
         $get_memo_tags_name = TagService::getMemoTagsName($select_memo->tags);
         // 選択したメモに紐づいた画像を取得

@@ -15,7 +15,7 @@ class BaitService
    {
       $memo_relation_baits_name = [];
       foreach ($select_memo_baits as $memo_relation_bait) {
-         // メモにリレーションされたタグのidを、配列に追加
+         // メモにリレーションされたエサのnameを、配列に追加
          $memo_relation_baits_name[] = $memo_relation_bait->name;
       }
       return $memo_relation_baits_name;

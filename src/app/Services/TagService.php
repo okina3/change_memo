@@ -54,7 +54,7 @@ class TagService
     {
         $memo_relation_tags_name = [];
         foreach ($select_memo_tags as $memo_relation_tag) {
-            // メモにリレーションされたタグのidを、配列に追加
+            // メモにリレーションされたタグのnameを、配列に追加
             $memo_relation_tags_name[] = $memo_relation_tag->name;
         }
         return $memo_relation_tags_name;

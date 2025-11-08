@@ -7,7 +7,7 @@
             <div id="baits-container" class="space-y-2">
                <div class="flex items-center gap-3 bait-row">
                   @foreach ($get_memo_baits_name as $bait_name)
-                     <div class="p-2 w-52 border border-gray-500 rounded">
+                     <div class="p-2 w-60 border border-gray-500 rounded">
                         {{ $bait_name }}
                      </div>
                   @endforeach
