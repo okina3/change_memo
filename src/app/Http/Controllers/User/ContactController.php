@@ -4,7 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContactRequest;
-use App\Models\Contact;
+use App\Services\ContactService;
 use App\Services\SessionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -34,7 +34,7 @@ class ContactController extends Controller
         // ブラウザバック対策（値を確認）
         SessionService::clickBrowserBackSession();
         // 問い合わせ情報を保存
-        Contact::availableCreateContact($request);
+        ContactService::storeContact($request);
 
         return to_route('user.index')->with(['message' => '管理人にメッセージを送りました。', 'status' => 'info']);
     }

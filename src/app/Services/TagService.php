@@ -10,25 +10,25 @@ class TagService
 {
     /**
      * タグをDBに保存するメソッド。
-     * @param string $name
-     * @return Tag|null
+     * @param string $new_tag
+     * @return Tag
      */
-    public static function storeTag(string $name)
+    public static function storeTag(string $new_tag)
     {
         return Tag::firstOrCreate([
-            'name' => $name,
+            'name' => $new_tag,
             'user_id' => Auth::id(),
         ]);
     }
 
     /**
      * タグが重複していないか調べるメソッド。
-     * @param string|null $name
+     * @param string|null $new_tag
      * @return bool
      */
-    public static function tagExists(?string $name): bool
+    public static function tagExists(?string $new_tag): bool
     {
-        return Tag::where('name', $name)
+        return Tag::where('name', $new_tag)
             ->where('user_id', Auth::id())
             ->exists();
     }

@@ -50,21 +50,6 @@ class Contact extends Model
     }
 
     /**
-     * 問い合わせをDBに保存する為のスコープ。
-     * @param Builder $query
-     * @param $request
-     * @return void
-     */
-    public function scopeAvailableCreateContact(Builder $query, $request): void
-    {
-        $query->create([
-            'subject' => $request->subject,
-            'message' => $request->message,
-            'user_id' => Auth::id(),
-        ]);
-    }
-
-    /**
      * 検索した件名、問い合わせを表示するの為のスコープ。
      * @param Builder $query
      * @param string|null $keyword
