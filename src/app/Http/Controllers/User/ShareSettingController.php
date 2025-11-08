@@ -55,7 +55,7 @@ class ShareSettingController extends Controller
                 // 共有設定が、重複していたら、共有設定を、一旦解除する。
                 ShareSettingService::resetDuplicateShareSettings($request->memoId, $shared_user->id);
                 // ユーザーを特定できたら、DBに保存する
-                ShareSetting::availableCreateSetting($request, $shared_user->id);
+                ShareSettingService::storeSetting($request, $shared_user->id);
             }, 10);
 
             return to_route('user.index')->with(['message' => 'メモを共有しました。', 'status' => 'info']);

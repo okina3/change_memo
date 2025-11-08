@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\ShareSetting;
 use Illuminate\Database\Eloquent\Collection;
+use App\Http\Requests\ShareStartRequest;
 
 class ShareSettingService
 {
@@ -16,6 +17,8 @@ class ShareSettingService
     {
         // クエリパラメータを取得。
         $get_url_user_id = \Request::query('user');
+        // クエリパラメータを取得。
+        // $get_url_user_id = request()->query('user');
         // 全ての共有メモ、または、ユーザー別の共有メモを格納する空の配列
         $shared_memos = [];
 
@@ -43,6 +46,21 @@ class ShareSettingService
             }
         }
         return $shared_memos;
+    }
+
+    /**
+     * 共有設定をDBに保存するメソッド。
+     * @param ShareStartRequest $request
+     * @param int $shared_user_id
+     * @return ShareSetting
+     */
+    public static function storeSetting(ShareStartRequest $request, int $shared_user_id): ShareSetting
+    {
+        return ShareSetting::create([
+            'sharing_user_id' => $shared_user_id,
+            'memo_id' => $request->memoId,
+            'edit_access' => $request->edit_access,
+        ]);
     }
 
     /**
