@@ -34,6 +34,8 @@ class MemoService
     {
         // クエリパラメータを取得
         $get_url_tag = \Request::query('tag');
+        // クエリパラメータを取得 (Facade の未定義警告を避けるためヘルパを使う)
+        // $get_url_tag = request()->query('tag');
         // クエリパラメータがあった場合の処理
         if (!empty($get_url_tag)) {
             // クエリパラメータから絞り込んだタグを取得

@@ -9,6 +9,31 @@ use Illuminate\Support\Facades\Auth;
 class TagService
 {
     /**
+     * タグをDBに保存するメソッド。
+     * @param string $name
+     * @return Tag|null
+     */
+    public static function storeTag(string $name)
+    {
+        return Tag::firstOrCreate([
+            'name' => $name,
+            'user_id' => Auth::id(),
+        ]);
+    }
+
+    /**
+     * タグが重複していないか調べるメソッド。
+     * @param string|null $name
+     * @return bool
+     */
+    public static function tagExists(?string $name): bool
+    {
+        return Tag::where('name', $name)
+            ->where('user_id', Auth::id())
+            ->exists();
+    }
+
+    /**
      * 新規タグの保存・更新するメソッド。
      * @param $request_new_tag
      * @param int $memo_id
@@ -17,14 +42,11 @@ class TagService
     public static function storeNewTag($request_new_tag, int $memo_id): void
     {
         // 新規タグの入力があった場合、タグが重複していないか調べる
-        $tag_exists = Tag::availableCheckDuplicateTag($request_new_tag)->exists();
+        $tag_exists = self::tagExists($request_new_tag);
         // 新規タグがあり、重複していなければ、タグを保存し、中間テーブルに保存
         if (!empty($request_new_tag) && !$tag_exists) {
             // タグを保存
-            $tag = Tag::create([
-                'name' => $request_new_tag,
-                'user_id' => Auth::id()
-            ]);
+            $tag = self::storeTag($request_new_tag);
             // メモとタグの中間テーブルに値を保存
             Tag::findOrFail($tag->id)->memos()->attach($memo_id);
         }
