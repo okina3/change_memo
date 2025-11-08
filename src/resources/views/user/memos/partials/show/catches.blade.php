@@ -4,28 +4,27 @@
       <div class="">
          <h2 class="sub_heading mb-1">釣果</h2>
          <div class="flex items-start">
-            <div class="lg:gap-6 flex flex-wrap items-center gap-3 catch-row">
-               {{-- 魚名 --}}
-               <div class="md:w-auto w-full">
-                  {{-- @foreach ($all_fish_names as $fish)
-                     <option value="{{ $fish->id }}" @selected(($entry['fish_name'] ?? '') == $fish->id)>{{ $fish->name }}
-                     </option>
-                  @endforeach --}}
-               </div>
-               {{-- 釣果（匹） --}}
-               <div class="flex items-center gap-2">
-                  <div class="p-2 md:w-24 w-20 border border-gray-500 text-right rounded">
-
+            <div class="space-y-2 w-full">
+               @forelse($get_memo_fish_results as $result)
+                  <div class="lg:gap-6 flex flex-wrap items-center gap-3 catch-row">
+                     {{-- 魚名 --}}
+                     <div class="md:w-auto w-full">
+                        <div class="p-2 border border-gray-300 rounded">{{ $result['name'] }}</div>
+                     </div>
+                     {{-- 釣果（匹） --}}
+                     <div class="flex items-center gap-2">
+                        <div class="p-2 md:w-24 w-20 border border-gray-500 text-right rounded">{{ $result['count'] }}</div>
+                        <span class="text-gray-600">匹</span>
+                     </div>
+                     {{-- サイズ（cm） --}}
+                     <div class="flex items-center gap-2">
+                        <div class="p-2 md:w-24 w-20 border border-gray-500 text-right rounded">{{ $result['length'] }}</div>
+                        <span class="text-gray-600">cm</span>
+                     </div>
                   </div>
-                  <span class="text-gray-600">匹</span>
-               </div>
-               {{-- サイズ（cm） --}}
-               <div class="flex items-center gap-2">
-                  <div class="p-2 md:w-24 w-20 border border-gray-500 text-right rounded">
-
-                  </div>
-                  <span class="text-gray-600">cm</span>
-               </div>
+               @empty
+                  <div class="text-gray-600">釣果は登録されていません。</div>
+               @endforelse
             </div>
          </div>
       </div>

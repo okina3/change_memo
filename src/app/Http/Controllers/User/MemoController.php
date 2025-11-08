@@ -13,6 +13,7 @@ use App\Models\MemoTag;
 use App\Models\Spot;
 use App\Models\Tag;
 use App\Services\BaitService;
+use App\Services\FishNameService;
 use App\Services\ImageService;
 use App\Services\MemoService;
 use App\Services\SessionService;
@@ -106,13 +107,10 @@ class MemoController extends Controller
                     'content' => $request->input('content'),
                     'user_id' => Auth::id(),
                 ]);
-
                 // エサを、メモに紐付けて中間テーブルに保存
                 MemoService::attachExistingBaits($request, $memo->id);
-
-                // 釣果データを、メモに紐付けて中間テーブルに保存
+                // 釣果データ（名前・匹数・長さ）を、メモに紐付けて中間テーブルに保存
                 MemoService::attachExistingFishNames($request, $memo->id);
-
                 // 新規タグの入力があれば、各データを保存。
                 TagService::storeNewTag($request->new_tag, $memo->id);
                 // 既存のタグの選択があれば、メモに紐付けて中間テーブルに保存
@@ -139,6 +137,22 @@ class MemoController extends Controller
         $select_memo = Memo::availableSelectMemo($id)->first();
         // 選択したメモに紐づいたエサの名前を取得
         $get_memo_baits_name = BaitService::getMemoBaitsName($select_memo->baits);
+
+
+
+        // 選択したメモに紐づいた釣果のデータを取得（名前・匹数・長さ）
+        // $get_memo_fish_names = FishNameService::getMemoFishResults($select_memo->fish_names);
+
+        $get_memo_fish_results = [];
+        foreach ($select_memo->fish_names as $fish) {
+            $get_memo_fish_results[] = [
+                'name' => $fish->name,
+                'count' => $fish->pivot->count ?? 0,
+                'length' => $fish->pivot->length ?? 0,
+            ];
+        }
+
+
         // 選択したメモに紐づいたタグの名前を取得
         $get_memo_tags_name = TagService::getMemoTagsName($select_memo->tags);
         // 選択したメモに紐づいた画像を取得
@@ -148,7 +162,7 @@ class MemoController extends Controller
         // 自分が共有しているメモの、共有状態の情報を取得
         $shared_users = ShareSettingService::checkSharedMemoStatus($id);
 
-        return view('user.memos.show', compact('select_memo', 'get_memo_baits_name', 'get_memo_tags_name', 'get_memo_images', 'shared_users'));
+        return view('user.memos.show', compact('select_memo', 'get_memo_baits_name', 'get_memo_tags_name', 'get_memo_images', 'shared_users', 'get_memo_fish_results'));
     }
 
     /**
