@@ -22,30 +22,15 @@ class TagService
     }
 
     /**
-     * タグが重複していないか調べるメソッド。
-     * @param string|null $new_tag
-     * @return bool
-     */
-    public static function tagExists(?string $new_tag): bool
-    {
-        return Tag::where('name', $new_tag)
-            ->where('user_id', Auth::id())
-            ->exists();
-    }
-
-    /**
-     * 新規タグの保存・更新するメソッド。
+     * メモ画面の新規タグの保存・更新するメソッド。
      * @param $request_new_tag
      * @param int $memo_id
      * @return void
      */
     public static function storeNewTag($request_new_tag, int $memo_id): void
     {
-        // 新規タグの入力があった場合、タグが重複していないか調べる
-        $tag_exists = self::tagExists($request_new_tag);
-        // 新規タグがあり、重複していなければ、タグを保存し、中間テーブルに保存
-        if (!empty($request_new_tag) && !$tag_exists) {
-            // タグを保存
+        if (!empty($request_new_tag)) {
+            // タグを保存または取得
             $tag = self::storeTag($request_new_tag);
             // メモとタグの中間テーブルに値を保存
             Tag::findOrFail($tag->id)->memos()->attach($memo_id);
