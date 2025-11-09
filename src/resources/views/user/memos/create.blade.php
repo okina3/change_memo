@@ -17,44 +17,12 @@
                @include('user.memos.partials.create.baits')
                {{-- 釣果の入力 --}}
                @include('user.memos.partials.create.catches')
-
                {{-- メモの備考入力 --}}
-               <div class="mb-5">
-                  <h2 class="sub_heading mb-1">備考</h2>
-                  <textarea class="w-full rounded" name="content" rows="7" placeholder="ここに入力">{{ old('content') }}</textarea>
-                  {{-- エラーメッセージ（メモの備考） --}}
-                  <x-input-error class="mt-2" :messages="$errors->get('content')" />
-               </div>
-
-               {{-- 既存タグの選択 --}}
-               <div class="mb-10">
-                  <h2 class="sub_heading mb-1">既存タグの選択</h2>
-                  <div class="flex flex-wrap gap-3">
-                     @foreach ($all_tags as $tag)
-                        <div class="flex items-center gap-1 hover:font-semibold">
-                           <input class="mb-1 rounded" type="checkbox" name="tags[]" id="{{ $tag->id }}"
-                              value="{{ $tag->id }}" @checked(in_array($tag->id, old('tags', []))) />
-                           <label for="{{ $tag->id }}">{{ $tag->name }}</label>
-                        </div>
-                     @endforeach
-                  </div>
-               </div>
-               {{-- 新規タグ入力 --}}
-               <div class="mb-10">
-                  <h2 class="sub_heading mb-1">新規タグの追加</h2>
-                  <input class="w-60 rounded" type="text" name="new_tag" value="{{ old('new_tag') }}"
-                     placeholder="ここに新規タグを入力" />
-                  {{-- エラーメッセージ（新規タグ） --}}
-                  <x-input-error class="mt-2" :messages="$errors->get('new_tag')" />
-               </div>
-
+               @include('user.memos.partials.create.content')
+               {{-- タグの選択・新規タグ入力 --}}
+               @include('user.memos.partials.create.tags')
                {{-- 画像の選択 --}}
-               <div class="mb-10">
-                  <h2 class="sub_heading">画像の選択</h2>
-                  {{-- モーダルウィンドウ --}}
-                  <x-user.list-select-image :allImages='$all_images' />
-               </div>
-
+               @include('user.memos.partials.create.images')
                {{-- メモの保存ボタン --}}
                <div class="mb-5">
                   <button class="btn bg-blue-800 hover:bg-blue-700" type="submit">保存する</button>

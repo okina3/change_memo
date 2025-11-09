@@ -14,14 +14,14 @@
                      <p class="mark">{{ $select_memo->status }}</p>
                   </div>
                @endif
-               {{-- 選択したメモのタイトルを表示 --}}
+               {{-- 選択したメモのタイトルを表示
                <div class="mb-5">
                   <h2 class="sub_heading mb-1">タイトル</h2>
                   <input class="w-60 rounded" type="text" name="title" value="{{ $select_memo->title }}"
                      placeholder="ここにタイトルを入力" />
-                  {{-- エラーメッセージ（メモのタイトル） --}}
+                  エラーメッセージ（メモのタイトル）
                   <x-input-error class="mt-2" :messages="$errors->get('title')" />
-               </div>
+               </div> --}}
 
                {{-- 選択したメモの備考の表示 --}}
                <div class="mb-5">
