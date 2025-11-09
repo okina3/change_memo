@@ -28,7 +28,6 @@
                   <button class="btn bg-blue-800 hover:bg-blue-700" type="submit">保存する</button>
                </div>
             </form>
-
             {{-- 戻るボタン --}}
             <div class="flex justify-end">
                <button class="btn bg-gray-800 hover:bg-gray-700" onclick="location.href='{{ route('user.index') }}'">

@@ -18,7 +18,6 @@
                      <p class="mark">{{ $select_memo->status }}</p>
                   </div>
                @endif
-
                {{-- 釣行日・釣行時間・釣り場所 --}}
                @include('user.memos.partials.show.basic-info')
                {{-- 気象状態 --}}
@@ -29,33 +28,12 @@
                @include('user.memos.partials.show.baits')
                {{-- 釣果の入力 --}}
                @include('user.memos.partials.show.catches')
-
-               {{-- 選択したメモの備考を表示 --}}
-               <div class="mb-5">
-                  <h2 class="sub_heading mb-1">備考</h2>
-                  <textarea class="w-full rounded" name="content" rows="7" disabled>{{ $select_memo->content }}</textarea>
-               </div>
-
-               {{-- 選択したメモのタグを表示 --}}
-               <div class="mb-10">
-                  <h2 class="sub_heading mb-1">タグ</h2>
-                  <div class="flex flex-wrap gap-3">
-                     @foreach ($get_memo_tags_name as $tag_name)
-                        <div class="flex items-center gap-1">
-                           <input class="mb-1 rounded" type="checkbox" checked disabled />
-                           {{ $tag_name }}
-                        </div>
-                     @endforeach
-                  </div>
-               </div>
-
-               {{-- 選択したメモの画像の表示 --}}
-               <div class="mb-10">
-                  <h2 class="sub_heading mb-1">登録画像</h2>
-                  {{-- モーダルウィンドウ --}}
-                  <x-user.big-select-image :getMemoImages='$get_memo_images' />
-               </div>
-
+               {{-- メモの備考表示 --}}
+               @include('user.memos.partials.show.content')
+               {{-- タグの表示 --}}
+               @include('user.memos.partials.show.tags')
+               {{-- 画像の表示 --}}
+               @include('user.memos.partials.show.images')
                {{-- 戻るボタン --}}
                <div class="mb-2 flex justify-end">
                   <button onclick="location.href='{{ route('user.index') }}'" class="btn bg-gray-800 hover:bg-gray-700">
