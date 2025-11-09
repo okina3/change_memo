@@ -16,9 +16,7 @@ class ShareSettingService
     public static function searchSharedMemos(Collection $share_setting_memos): array
     {
         // クエリパラメータを取得。
-        $get_url_user_id = \Request::query('user');
-        // クエリパラメータを取得。
-        // $get_url_user_id = request()->query('user');
+        $get_url_user_id = request()->query('user');
         // 全ての共有メモ、または、ユーザー別の共有メモを格納する空の配列
         $shared_memos = [];
 

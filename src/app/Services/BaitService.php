@@ -9,18 +9,6 @@ use Illuminate\Support\Facades\Auth;
 class BaitService
 {
    /**
-    * エサが重複していないか調べるメソッド。
-    * @param string|null $new_bait
-    * @return bool
-    */
-   public static function baitExists(?string $new_bait): bool
-   {
-      return Bait::where('name', $new_bait)
-         ->where('user_id', Auth::id())
-         ->exists();
-   }
-
-   /**
     * 選択したメモに紐づいた、エサのNameを、配列で取得するメソッド。
     * @param Collection $select_memo_baits
     * @return array

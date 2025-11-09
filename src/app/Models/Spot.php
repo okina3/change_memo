@@ -35,16 +35,4 @@ class Spot extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    /**
-     * スポットが重複していないか調べる為のスコープ。
-     * @param Builder $query
-     * @param $request_new_spot
-     * @return void
-     */
-    public function scopeAvailableCheckDuplicateSpot(Builder $query, $request_new_spot): void
-    {
-        $query->where('name', $request_new_spot)
-            ->where('user_id', Auth::id());
-    }
 }
