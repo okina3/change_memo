@@ -58,18 +58,4 @@ class Image extends Model
         $query->where('id', $id)
             ->where('user_id', Auth::id());
     }
-
-    /**
-     * 画像をDBに保存する為のスコープ。
-     * @param Builder $query
-     * @param string $only_one_file_name
-     * @return void
-     */
-    public function scopeAvailableCreateImage(Builder $query, string $only_one_file_name): void
-    {
-        $query->create([
-            'user_id' => Auth::id(),
-            'filename' => $only_one_file_name
-        ]);
-    }
 }

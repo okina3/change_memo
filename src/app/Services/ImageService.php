@@ -30,6 +30,19 @@ class ImageService
     }
 
     /**
+     * 画像を DB に保存するメソッド。
+     * @param string $filename
+     * @return Image
+     */
+    public static function createImage(string $filename): Image
+    {
+        return Image::create([
+            'user_id' => Auth::id(),
+            'filename' => $filename,
+        ]);
+    }
+
+    /**
      * 選択したメモに紐づいた画像を取得するメソッド
      * @param Collection $select_memo_images
      * @return array
