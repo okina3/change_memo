@@ -4,29 +4,22 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreFishRequest;
-use App\Models\FishName;
+use App\Services\FishNameService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class FishNameController extends Controller
 {
    /**
-    * 新規魚種を保存する
+    * 新規魚種を保存するメソッド
     * @param StoreFishRequest $request
     * @return JsonResponse
     */
    public function store(StoreFishRequest $request): JsonResponse
    {
       try {
-         $fish = DB::transaction(function () use ($request) {
-            return FishName::create([
-               'name' => $request->input('new_fish_name'),
-               'user_id' => Auth::id(),
-            ]);
-         }, 10);
+         $fish = FishNameService::storeFishName($request->input('new_fish_name'));
 
          return response()->json([
             'id' => $fish->id,
