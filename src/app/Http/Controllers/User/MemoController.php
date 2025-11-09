@@ -61,20 +61,20 @@ class MemoController extends Controller
      */
     public function create(): View
     {
-        // 全タグを取得する
-        $all_tags = Tag::availableAllTags()->get();
-        // 全画像を取得する
-        $all_images = Image::availableAllImages()->get();
         // 全スポットを取得する
         $all_spots = Spot::availableAllSpots()->get();
         // 全エサを取得する
         $all_baits = Bait::availableAllBaits()->get();
         // 全魚名を取得する
         $all_fish_names = FishName::availableAllFishNames()->get();
+        // 全タグを取得する
+        $all_tags = Tag::availableAllTags()->get();
+        // 全画像を取得する
+        $all_images = Image::availableAllImages()->get();
         // ブラウザバック対策（値を持たせる）
         SessionService::setBrowserBackSession();
 
-        return view('user.memos.create', compact('all_tags', 'all_images', 'all_spots', 'all_baits', 'all_fish_names'));
+        return view('user.memos.create', compact('all_spots', 'all_baits', 'all_fish_names', 'all_tags', 'all_images'));
     }
 
     /**
@@ -142,6 +142,12 @@ class MemoController extends Controller
      */
     public function edit(int $id): View
     {
+        // 全スポットを取得する
+        $all_spots = Spot::availableAllSpots()->get();
+        // 全エサを取得する
+        $all_baits = Bait::availableAllBaits()->get();
+        // 全魚名を取得する
+        $all_fish_names = FishName::availableAllFishNames()->get();
         // 全タグの一覧表示
         $all_tags = Tag::availableAllTags()->get();
         // 全画像を取得する
@@ -161,7 +167,7 @@ class MemoController extends Controller
 
         return view(
             'user.memos.edit',
-            compact('all_tags', 'all_images', 'select_memo', 'get_memo_tags_id', 'get_memo_images_id', 'get_memo_images')
+            compact('all_spots', 'all_baits', 'all_fish_names', 'all_tags', 'all_images', 'select_memo', 'get_memo_tags_id', 'get_memo_images_id', 'get_memo_images')
         );
     }
 
