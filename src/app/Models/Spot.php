@@ -35,4 +35,15 @@ class Spot extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * 自分自身の、全ての釣り場を取得する為のスコープ。
+     * @param Builder $query
+     * @return void
+     */
+    public function scopeAvailableAllSpots(Builder $query): void
+    {
+        $query->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc');
+    }
 }

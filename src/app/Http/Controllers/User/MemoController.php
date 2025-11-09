@@ -66,11 +66,11 @@ class MemoController extends Controller
         // 全画像を取得する
         $all_images = Image::availableAllImages()->get();
         // 全スポットを取得する
-        $all_spots = Spot::where('user_id', Auth::id())->get();
+        $all_spots = Spot::availableAllSpots()->get();
         // 全エサを取得する
-        $all_baits = Bait::where('user_id', Auth::id())->get();
+        $all_baits = Bait::availableAllBaits()->get();
         // 全魚名を取得する
-        $all_fish_names = FishName::where('user_id', Auth::id())->get();
+        $all_fish_names = FishName::availableAllFishNames()->get();
         // ブラウザバック対策（値を持たせる）
         SessionService::setBrowserBackSession();
 

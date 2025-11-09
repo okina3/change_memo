@@ -34,4 +34,15 @@ class Bait extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * 自分自身の、全てのエサを取得する為のスコープ。
+     * @param Builder $query
+     * @return void
+     */
+    public function scopeAvailableAllBaits(Builder $query): void
+    {
+        $query->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc');
+    }
 }
