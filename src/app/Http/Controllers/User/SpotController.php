@@ -4,10 +4,8 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSpotRequest;
-use App\Models\Spot;
+use App\Services\SpotService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -21,12 +19,7 @@ class SpotController extends Controller
     public function store(StoreSpotRequest $request): JsonResponse
     {
         try {
-            $spot = DB::transaction(function () use ($request) {
-                return Spot::create([
-                    'name' => $request->input('new_spot'),
-                    'user_id' => Auth::id(),
-                ]);
-            }, 10);
+            $spot = SpotService::storeSpot($request->input('new_spot'));
 
             return response()->json([
                 'id' => $spot->id,
