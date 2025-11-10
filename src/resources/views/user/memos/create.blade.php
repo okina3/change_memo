@@ -16,7 +16,7 @@
                {{-- エサの入力 --}}
                @include('user.memos.partials.create.baits')
                {{-- 釣果の入力 --}}
-               @include('user.memos.partials.create.catches')
+               @include('user.memos.partials.create.fishing_results')
                {{-- メモの備考入力 --}}
                @include('user.memos.partials.create.content')
                {{-- タグの選択・新規タグ入力 --}}
