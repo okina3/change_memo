@@ -21,7 +21,7 @@
                {{-- 川の状態 --}}
                @include('user.memos.partials.edit.river-state')
                {{-- エサの入力 --}}
-               {{-- @include('user.memos.partials.edit.baits') --}}
+               @include('user.memos.partials.edit.baits')
                {{-- 釣果の入力 --}}
                {{-- @include('user.memos.partials.edit.catches') --}}
                {{-- 選択したメモの備考の表示 --}}
