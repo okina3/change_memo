@@ -16,7 +16,7 @@ class TagSeeder extends Seeder
         DB::table('tags')->insert([
             //ユーザー１のダミーデータ
             [
-                'name' => 'タグ１(ユ1)',
+                'name' => '60cm以上(ユ1)',
                 'user_id' => 1,
                 'created_at' => '2023/010/01/ 11:11:11'
             ],
@@ -26,12 +26,12 @@ class TagSeeder extends Seeder
                 'created_at' => '2023/010/01/ 11:11:11'
             ],
             [
-                'name' => 'タグ３(ユ1)',
+                'name' => '5匹以上(ユ1)',
                 'user_id' => 1,
                 'created_at' => '2023/010/02/ 11:11:11'
             ],
             [
-                'name' => 'タグ４(ユ1)',
+                'name' => '釣果なし(ユ1)',
                 'user_id' => 1,
                 'created_at' => '2023/010/02/ 11:11:11'
             ],
