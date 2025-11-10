@@ -8,6 +8,8 @@ use App\Models\Bait;
 use App\Models\FishName;
 use App\Models\Image;
 use App\Models\Memo;
+use App\Models\MemoBait;
+use App\Models\MemoFishName;
 use App\Models\MemoImage;
 use App\Models\MemoTag;
 use App\Models\Spot;
@@ -22,7 +24,6 @@ use App\Services\TagService;
 use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
@@ -185,10 +186,18 @@ class MemoController extends Controller
             DB::transaction(function () use ($request) {
                 // メモを更新
                 $memo = MemoService::updateMemo($request);
+                // 一旦メモとエサを紐付けた中間デーブルのデータを削除
+                MemoBait::where('memo_id', $request->memoId)->delete();
+                // 一旦メモと釣果のデータを紐付けた中間デーブルのデータを削除
+                MemoFishName::where('memo_id', $request->memoId)->delete();
                 // 一旦メモとタグを紐付けた中間デーブルのデータを削除
                 MemoTag::where('memo_id', $request->memoId)->delete();
                 // 一旦メモと画像を紐付けた中間デーブルのデータを削除
                 MemoImage::where('memo_id', $request->memoId)->delete();
+                // エサを、メモに紐付けて中間テーブルに保存
+                MemoService::attachExistingBaits($request, $memo->id);
+                // 釣果データ（名前・匹数・長さ）を、メモに紐付けて中間テーブルに保存
+                MemoService::attachExistingFishNames($request, $memo->id);
                 // 新規タグの入力があれば、各データを保存。
                 TagService::storeNewTag($request->new_tag, $memo->id);
                 // 既存のタグの選択があれば、メモに紐付けて中間テーブルに保存

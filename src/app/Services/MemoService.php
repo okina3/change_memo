@@ -82,6 +82,35 @@ class MemoService
     }
 
     /**
+     * メモを更新するメソッド。
+     * @param $request
+     * @return mixed
+     */
+    public static function updateMemo($request): mixed
+    {
+        $memo = Memo::availableSelectMemo($request->memoId)->first();
+        
+        $memo->fishing_date = $request->input('fishing_date');
+        $memo->start_time = $request->input('start_time');
+        $memo->end_time = $request->input('end_time');
+        $memo->spot_id = $request->input('fishing_spot');
+        $memo->weather = $request->input('weather');
+        $memo->air_temp = $request->input('air_temp');
+        $memo->max_wind = $request->input('max_wind');
+        $memo->wind_dir = $request->input('wind_dir');
+        $memo->river_flow = $request->input('river_flow');
+        $memo->turbidity = $request->input('turbidity');
+        $memo->debris = $request->input('debris');
+        $memo->water_level = $request->input('water_level');
+        $memo->water_temp = $request->input('water_temp');
+        $memo->content = $request->input('content');
+
+        $memo->save();
+
+        return $memo;
+    }
+
+    /**
      * メモに紐づいたエサを、中間テーブルに保存するメソッド
      * @param $request
      * @param int $memo_id
@@ -161,21 +190,6 @@ class MemoService
                 Memo::findOrFail($memo_id)->images()->attach($memo_image);
             }
         }
-    }
-
-    /**
-     * メモを更新するメソッド。
-     * @param $request
-     * @return mixed
-     */
-    public static function updateMemo($request): mixed
-    {
-        $memo = Memo::availableSelectMemo($request->memoId)->first();
-        $memo->title = $request->title;
-        $memo->content = $request->content;
-        $memo->save();
-
-        return $memo;
     }
 
     /**
