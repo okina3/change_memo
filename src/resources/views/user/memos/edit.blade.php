@@ -16,6 +16,8 @@
                @endif
                {{-- 釣行日・釣行時間・釣り場所 --}}
                @include('user.memos.partials.edit.basic-info')
+               {{-- 気象状態 --}}
+               @include('user.memos.partials.edit.weather-state')
 
                {{-- 選択したメモの備考の表示 --}}
                @include('user.memos.partials.edit.content')
