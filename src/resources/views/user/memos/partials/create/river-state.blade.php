@@ -9,10 +9,10 @@
             <option value="" @selected(old('river_flow', '') === '')>
                未選択
             </option>
-            <option value="flow" @selected(old('river_flow') === 'flow')>
+            <option value="流れあり" @selected(old('river_flow') === '流れあり')>
                流れあり
             </option>
-            <option value="no_flow" @selected(old('river_flow') === 'no_flow')>
+            <option value="流れなし" @selected(old('river_flow') === '流れなし')>
                流れなし
             </option>
          </select>
@@ -26,16 +26,16 @@
             <option value="" @selected(old('turbidity', '') === '')>
                未選択
             </option>
-            <option value="clear" @selected(old('turbidity') === 'clear')>
+            <option value="クリア" @selected(old('turbidity') === 'クリア')>
                クリア
             </option>
-            <option value="slightly" @selected(old('turbidity') === 'slightly')>
+            <option value="やや濁り" @selected(old('turbidity') === 'やや濁り')>
                やや濁り
             </option>
-            <option value="turbid" @selected(old('turbidity') === 'turbid')>
+            <option value="濁り" @selected(old('turbidity') === '濁り')>
                濁り
             </option>
-            <option value="very_turbid" @selected(old('turbidity') === 'very_turbid')>
+            <option value="強い濁り" @selected(old('turbidity') === '強い濁り')>
                強い濁り
             </option>
          </select>
@@ -49,13 +49,13 @@
             <option value="" @selected(old('debris', '') === '')>
                未選択
             </option>
-            <option value="none" @selected(old('debris') === 'none')>
+            <option value="なし" @selected(old('debris') === 'なし')>
                なし
             </option>
-            <option value="slightly" @selected(old('debris') === 'slightly')>
+            <option value="ややあり" @selected(old('debris') === 'ややあり')>
                ややあり
             </option>
-            <option value="present" @selected(old('debris') === 'present')>
+            <option value="あり" @selected(old('debris') === 'あり')>
                あり
             </option>
          </select>
