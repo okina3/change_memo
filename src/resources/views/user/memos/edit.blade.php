@@ -18,7 +18,12 @@
                @include('user.memos.partials.edit.basic-info')
                {{-- 気象状態 --}}
                @include('user.memos.partials.edit.weather-state')
-
+               {{-- 川の状態 --}}
+               @include('user.memos.partials.edit.river-state')
+               {{-- エサの入力 --}}
+               {{-- @include('user.memos.partials.edit.baits') --}}
+               {{-- 釣果の入力 --}}
+               {{-- @include('user.memos.partials.edit.catches') --}}
                {{-- 選択したメモの備考の表示 --}}
                @include('user.memos.partials.edit.content')
                {{-- 選択したメモに紐づいた既存タグ、新規タグ入力を表示 --}}
