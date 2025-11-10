@@ -40,6 +40,7 @@ return new class extends Migration
             $table->decimal('water_level', 4, 1)->nullable();
             $table->integer('water_temp')->nullable();
 
+            // 備考
             $table->text('content');
             //ソフトデリート
             $table->softDeletes();
