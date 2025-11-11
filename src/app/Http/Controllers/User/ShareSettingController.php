@@ -130,8 +130,11 @@ class ShareSettingController extends Controller
      */
     public function update(UploadMemoRequest $request): RedirectResponse
     {
-        $memo = Memo::findOrFail($request->memoId);
-        $memo->content = $request->content;
+        // バリデーション済みデータを使う（警告を抑制）
+        $validated = $request->validated();
+
+        $memo = Memo::findOrFail($validated['memoId']);
+        $memo->content = $validated['content'] ?? null;
         $memo->save();
 
         return to_route('user.share-setting.index')
