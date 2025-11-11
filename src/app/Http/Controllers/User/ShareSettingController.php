@@ -106,6 +106,10 @@ class ShareSettingController extends Controller
         ShareSettingService::checkSharedMemoEdit($id);
         // 選択した共有メモを、一件取得
         $select_memo = Memo::with('tags.user')->where('id', $id)->first();
+        // 選択したメモに紐づいたエサの名前を取得
+        $get_memo_baits_name = BaitService::getMemoBaitsName($select_memo->baits);
+        // 選択したメモに紐づいた釣果のデータを取得（名前・匹数・長さ）
+        $get_memo_fish_results = FishNameService::getMemoFishResults($select_memo->fish_names);
         // 選択したメモに紐づいたタグの名前を取得
         $get_memo_tags_name = TagService::getMemoTagsName($select_memo->tags);
         // 選択したメモに紐づいた画像を取得
@@ -115,7 +119,7 @@ class ShareSettingController extends Controller
 
         return view(
             'user.shareSettings.edit',
-            compact('select_memo', 'get_memo_tags_name', 'get_memo_images', 'select_user')
+            compact('select_memo', 'get_memo_baits_name', 'get_memo_fish_results', 'get_memo_tags_name', 'get_memo_images', 'select_user')
         );
     }
 
