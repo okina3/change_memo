@@ -19,7 +19,7 @@
                </div>
             @endif
             <div class="mb-2">
-               {{-- メモのタイトル --}}
+               {{-- メモの釣行日 --}}
                <p class="sub_heading mb-1 truncate">
                   {{ optional(optional($memo)->fishing_date)->format('Y-m-d') ?? '-' }}
                </p>

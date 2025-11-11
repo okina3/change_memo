@@ -6,7 +6,7 @@
          {{-- タグ検索の表示エリア --}}
          @include('user.memos.partials.index.tags-search')
          {{-- メモ一覧の表示エリア --}}
-         @include('user.memos.partials.index.memo-list')
+         @include('user.memos.partials.index.memos-list')
       </div>
    </div>
    <script>
