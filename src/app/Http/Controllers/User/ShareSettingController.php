@@ -5,7 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShareEndRequest;
 use App\Http\Requests\ShareStartRequest;
-use App\Http\Requests\UploadMemoRequest;
+use App\Http\Requests\UpdateSharedMemoRequest;
 use App\Models\Memo;
 use App\Models\ShareSetting;
 use App\Models\User;
@@ -125,13 +125,15 @@ class ShareSettingController extends Controller
 
     /**
      * 共有されているメモの更新をするメソッド。
-     * @param UploadMemoRequest $request
+     * @param UpdateSharedMemoRequest $request
      * @return RedirectResponse
      */
-    public function update(UploadMemoRequest $request): RedirectResponse
+    public function update(UpdateSharedMemoRequest $request): RedirectResponse
     {
         // バリデーション済みデータを使う（警告を抑制）
         $validated = $request->validated();
+        // 編集許可があるかをチェック
+        ShareSettingService::checkSharedMemoEdit($validated['memoId']);
 
         $memo = Memo::findOrFail($validated['memoId']);
         $memo->content = $validated['content'] ?? null;
