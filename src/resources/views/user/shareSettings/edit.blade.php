@@ -19,23 +19,21 @@
                @csrf
                @method('patch')
                {{-- 選択した共有メモの釣行日・釣行時間・釣り場所を表示 --}}
-               @include('user.memos.partials.show.basic-info')
+               <x-user.memos.show.basic-info :selectMemo='$select_memo' />
                {{-- 選択した共有メモの気象状態を表示 --}}
-               @include('user.memos.partials.show.weather-state')
+               <x-user.memos.show.weather-state :selectMemo='$select_memo' />
                {{-- 選択した共有メモの川の状態を表示 --}}
-               @include('user.memos.partials.show.river-state')
+               <x-user.memos.show.river-state :selectMemo='$select_memo' />
                {{-- 選択した共有メモのエサの入力を表示 --}}
-               @include('user.memos.partials.show.baits')
+               <x-user.memos.show.baits :getMemoBaitsName='$get_memo_baits_name' />
                {{-- 選択した共有メモの釣果の入力を表示 --}}
-               @include('user.memos.partials.show.fishing_results')
+               <x-user.memos.show.fishing_results :getMemoFishResults='$get_memo_fish_results' />
                {{-- 選択した共有メモの備考を表示 --}}
-               @include('user.memos.partials.edit.content')
+               <x-user.memos.edit.content :selectMemo='$select_memo' />
                {{-- 選択した共有メモに紐づいたタグの表示 --}}
-               @include('user.memos.partials.show.tags')
-               {{-- 選択した共有メモに紐づいた画像を表示 --}}
-               @include('user.memos.partials.show.images')
-               {{-- 選択されている共有メモのidを取得 --}}
-               <input type="hidden" name="memoId" value="{{ $select_memo->id }}">
+               <x-user.memos.show.tags :getMemoTagsName='$get_memo_tags_name' />
+               {{-- 選択した共有メモに紐づいた画像の表示 --}}
+               <x-user.memos.show.big-select-image :getMemoImages='$get_memo_images' />
                {{-- 更新するボタン --}}
                <div class="mb-5">
                   <button class="btn bg-blue-800 hover:bg-blue-700" type="submit">更新する</button>

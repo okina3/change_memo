@@ -6,7 +6,7 @@
       <div>
          <h2 class="mb-1 block text-sm text-gray-700">天気</h2>
          <div class="p-2 w-28 border border-gray-500 rounded">
-            {{ optional($select_memo)->weather ?? '-' }}
+            {{ optional($selectMemo)->weather ?? '-' }}
          </div>
       </div>
       {{-- 気温 --}}
@@ -14,7 +14,7 @@
          <h2 class="mb-1 block text-sm text-gray-700">気温</h2>
          <div class="flex items-center gap-2">
             <div class="p-2 w-24 border border-gray-500 text-right rounded">
-               {{ optional($select_memo)->air_temp ?? '-' }}
+               {{ optional($selectMemo)->air_temp ?? '-' }}
             </div>
             <span class="text-gray-600">℃</span>
          </div>
@@ -24,7 +24,7 @@
          <h2 class="mb-1 block text-sm text-gray-700">最大風速</h2>
          <div class="flex items-center gap-2">
             <div class="p-2 w-24 border border-gray-500 text-right rounded">
-               {{ optional($select_memo)->max_wind ?? '-' }}
+               {{ optional($selectMemo)->max_wind ?? '-' }}
             </div>
             <span class="text-gray-600">m/s</span>
          </div>
@@ -33,7 +33,7 @@
       <div>
          <h2 class="mb-1 block text-sm text-gray-700">風向</h2>
          <div class="p-2 w-28 border border-gray-500 rounded">
-            {{ optional($select_memo)->wind_dir ?? '-' }}
+            {{ optional($selectMemo)->wind_dir ?? '-' }}
          </div>
       </div>
    </div>

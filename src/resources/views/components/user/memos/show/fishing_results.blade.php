@@ -5,7 +5,7 @@
          <h2 class="sub_heading mb-1">釣果</h2>
          <div class="flex items-start">
             <div class="space-y-2 w-full">
-               @forelse($get_memo_fish_results as $result)
+               @forelse($getMemoFishResults as $result)
                   <div class="lg:gap-6 flex flex-wrap items-center gap-3 catch-row">
                      {{-- 魚名 --}}
                      <div class="p-2 w-60 border border-gray-500 rounded">

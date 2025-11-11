@@ -22,7 +22,7 @@
                {{-- タグの選択・新規タグ入力 --}}
                @include('user.memos.partials.create.tags')
                {{-- 画像の選択 --}}
-               @include('user.memos.partials.create.images')
+               <x-user.memos.create.list-select-image :allImages='$all_images' />
                {{-- メモの保存ボタン --}}
                <div class="mb-5">
                   <button class="btn bg-blue-800 hover:bg-blue-700" type="submit">保存する</button>

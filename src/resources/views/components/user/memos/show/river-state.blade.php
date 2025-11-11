@@ -6,21 +6,21 @@
       <div>
          <h2 class="mb-1 block text-sm text-gray-700">川の流れ</h2>
          <div class="p-2 w-32 border border-gray-500 rounded">
-            {{ optional($select_memo)->river_flow ?? '-' }}
+            {{ optional($selectMemo)->river_flow ?? '-' }}
          </div>
       </div>
       {{-- 濁り --}}
       <div>
          <h2 class="mb-1 block text-sm text-gray-700">濁り</h2>
          <div class="p-2 w-32 border border-gray-500 rounded">
-            {{ optional($select_memo)->turbidity ?? '-' }}
+            {{ optional($selectMemo)->turbidity ?? '-' }}
          </div>
       </div>
       {{-- 水中のゴミ --}}
       <div>
          <h2 class="mb-1 block text-sm text-gray-700">水中のゴミ</h2>
          <div class="p-2 w-32 border border-gray-500 rounded">
-            {{ optional($select_memo)->debris ?? '-' }}
+            {{ optional($selectMemo)->debris ?? '-' }}
          </div>
       </div>
       {{-- 水位 --}}
@@ -28,7 +28,7 @@
          <h2 class="mb-1 block text-sm text-gray-700">水位</h2>
          <div class="flex items-center gap-2">
             <div class="p-2 w-24 border border-gray-500 text-right rounded">
-               {{ optional($select_memo)->water_level ?? '-' }}
+               {{ optional($selectMemo)->water_level ?? '-' }}
             </div>
             <span class="text-gray-600">m</span>
          </div>
@@ -38,7 +38,7 @@
          <h2 class="mb-1 block text-sm text-gray-700">水温</h2>
          <div class="flex items-center gap-2">
             <div class="p-2 border border-gray-500 w-24 text-right rounded">
-               {{ optional($select_memo)->water_temp ?? '-' }}
+               {{ optional($selectMemo)->water_temp ?? '-' }}
             </div>
             <span class="text-gray-600">℃</span>
          </div>
