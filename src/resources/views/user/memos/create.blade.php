@@ -19,8 +19,10 @@
                @include('user.memos.partials.create.fishing_results')
                {{-- メモの備考入力 --}}
                @include('user.memos.partials.create.content')
-               {{-- タグの選択・新規タグ入力 --}}
+               {{-- タグの選択 --}}
                @include('user.memos.partials.create.tags')
+               {{-- 新規タグ入力 --}}
+               <x-user.memos.create.new_tag />
                {{-- 画像の選択 --}}
                <x-user.memos.create.list-select-image :allImages='$all_images' />
                {{-- メモの保存ボタン --}}

@@ -26,8 +26,10 @@
                @include('user.memos.partials.edit.fishing_results')
                {{-- 選択したメモの備考の表示 --}}
                <x-user.memos.edit.content :selectMemo='$select_memo' />
-               {{-- 選択したメモに紐づいた既存タグ、新規タグ入力を表示 --}}
+               {{-- 選択したメモに紐づいた既存タグを表示 --}}
                @include('user.memos.partials.edit.tags')
+               {{-- 新規タグを表示 --}}
+               <x-user.memos.create.new_tag />
                {{-- 選択したメモに紐づいた画像の表示 --}}
                <x-user.memos.create.list-select-image :allImages='$all_images' :getMemoImagesId="$get_memo_images_id" />
                {{-- 選択されているメモのidを取得 --}}
