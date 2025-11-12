@@ -40,13 +40,13 @@ class UploadMemoRequest extends FormRequest
             'water_level' => 'nullable|numeric|min:0|max:999.9',
             'water_temp' => 'nullable|integer|min:0|max:99',
             // エサ
-            'baits' => 'required|array|min:1',
-            'baits.*' => 'required|integer|exists:baits,id',
+            'baits' => 'array',
+            'baits.*' => 'required|integer|distinct|exists:baits,id',
             // 釣果入力（配列）
             'fishing_results' => 'array',
-            'fishing_results.*.fish_name' => 'required|integer|exists:fish_names,id',
-            'fishing_results.*.count' => 'nullable|integer|min:0',
-            'fishing_results.*.length' => 'nullable|integer|min:0',
+            'fishing_results.*.fish_name' => 'nullable|integer|exists:fish_names,id',
+            'fishing_results.*.count' => 'nullable|required_with:fishing_results.*.fish_name|integer|min:0',
+            'fishing_results.*.length' => 'nullable|required_with:fishing_results.*.fish_name|integer|min:0',
             // 新規タグ
             'new_tag'      => [
                 'nullable',
@@ -106,14 +106,16 @@ class UploadMemoRequest extends FormRequest
             'baits.array' => 'エサの形式が不正です。',
             'baits.*.required' => 'エサを選択してください。',
             'baits.*.integer' => 'エサの選択値が不正です。',
+            'baits.*.distinct' => '同じエサが複数選択されています。',
             'baits.*.exists' => '選択されたエサは存在しません。',
             // 釣果入力（配列）
             'fishing_results.array' => '釣果データの形式が不正です。',
-            'fishing_results.*.fish_name.required' => '魚名を選択してください。',
             'fishing_results.*.fish_name.integer' => '魚名の値が不正です。',
             'fishing_results.*.fish_name.exists' => '選択された魚名は存在しません。',
+            'fishing_results.*.count.required_with' => '匹数も入力してください。',
             'fishing_results.*.count.integer' => '匹数は整数で指定してください。',
             'fishing_results.*.count.min' => '匹数は 0 以上で指定してください。',
+            'fishing_results.*.length.required_with' => '長さも入力してください。',
             'fishing_results.*.length.integer' => '長さは整数で指定してください。',
             'fishing_results.*.length.min' => '長さは 0 以上で指定してください。',
             // 新規タグ
