@@ -33,7 +33,15 @@ class UploadMemoRequest extends FormRequest
             'air_temp'     => 'nullable|integer|min:0|max:60',
             'max_wind'     => 'nullable|integer|min:0|max:99',
             'wind_dir'     => 'nullable|string|in:北,北東,東,南東,南,南西,西,北西',
-
+            // 川の状態
+            'river_flow' => 'required|string|in:流れあり,流れなし',
+            'turbidity' => 'nullable|string|in:クリア,やや濁り,濁り,強い濁り',
+            'debris' => 'required|string|in:なし,ややあり,あり',
+            'water_level' => 'nullable|numeric|min:0|max:999.9',
+            'water_temp' => 'nullable|integer|min:0|max:99',
+            // エサ
+            'baits' => 'required|array|min:1',
+            'baits.*' => 'required|integer|exists:baits,id',
             // 釣果入力（配列）
             'fishing_results' => 'array',
             'fishing_results.*.fish_name' => 'required|integer|exists:fish_names,id',
@@ -83,9 +91,22 @@ class UploadMemoRequest extends FormRequest
             'max_wind.max' => '最大風速は 99 以下で指定してください。',
             'wind_dir.in' => '風向の値が不正です。',
             // 川の状態
-
+            'river_flow.required' => '川の流れを選択してください。',
+            'river_flow.in' => '川の流れの値が不正です。',
+            'turbidity.in' => '濁りの値が不正です。',
+            'debris.required' => '水中のゴミの値を選択してください。',
+            'debris.in' => '水中のゴミの値が不正です。',
+            'water_level.numeric' => '水位は数値で指定してください。',
+            'water_level.min' => '水位は 0 以上で指定してください。',
+            'water_level.max' => '水位は 999.9 以下で指定してください。',
+            'water_temp.integer' => '水温は整数で指定してください。',
+            'water_temp.min' => '水温は 0 以上で指定してください。',
+            'water_temp.max' => '水温は 99 以下で指定してください。',
             // エサ
-
+            'baits.array' => 'エサの形式が不正です。',
+            'baits.*.required' => 'エサを選択してください。',
+            'baits.*.integer' => 'エサの選択値が不正です。',
+            'baits.*.exists' => '選択されたエサは存在しません。',
             // 釣果入力（配列）
             'fishing_results.array' => '釣果データの形式が不正です。',
             'fishing_results.*.fish_name.required' => '魚名を選択してください。',
