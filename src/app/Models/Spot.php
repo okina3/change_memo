@@ -37,14 +37,13 @@ class Spot extends Model
     }
 
     /**
-     * スポットが重複していないか調べる為のスコープ。
+     * 自分自身の、全ての釣り場を取得する為のスコープ。
      * @param Builder $query
-     * @param $request_new_spot
      * @return void
      */
-    public function scopeAvailableCheckDuplicateSpot(Builder $query, $request_new_spot): void
+    public function scopeAvailableAllSpots(Builder $query): void
     {
-        $query->where('name', $request_new_spot)
-            ->where('user_id', Auth::id());
+        $query->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc');
     }
 }

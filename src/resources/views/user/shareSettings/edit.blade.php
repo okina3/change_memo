@@ -7,7 +7,9 @@
          <div class="p-3">
             {{-- 選択した共有メモのユーザーの名前を表示 --}}
             <div class="mb-5 flex items-center font-semibold">
-               <p class="text-blue-700 border-b border-slate-500">{{ $select_user->name }}</p>
+               <p class="text-blue-700 border-b border-slate-500">
+                  {{ optional($select_user)->name ?? '' }}
+               </p>
                <p class="ml-1">さん のメモ</p>
             </div>
             {{-- コメント --}}
@@ -16,38 +18,22 @@
             <form action="{{ route('user.share-setting.update') }}" method="post">
                @csrf
                @method('patch')
-               {{-- 選択した共有メモのタイトルを表示 --}}
-               <div class="mb-5">
-                  <h2 class="sub_heading mb-1">タイトル</h2>
-                  <p class="p-2 border border-gray-500 rounded bg-white">{{ $select_memo->title }}</p>
-               </div>
+               {{-- 選択した共有メモの釣行日・釣行時間・釣り場所を表示 --}}
+               <x-user.memos.show.basic-info :selectMemo='$select_memo' />
+               {{-- 選択した共有メモの気象状態を表示 --}}
+               <x-user.memos.show.weather-state :selectMemo='$select_memo' />
+               {{-- 選択した共有メモの川の状態を表示 --}}
+               <x-user.memos.show.river-state :selectMemo='$select_memo' />
+               {{-- 選択した共有メモのエサの入力を表示 --}}
+               <x-user.memos.show.baits :getMemoBaitsName='$get_memo_baits_name' />
+               {{-- 選択した共有メモの釣果の入力を表示 --}}
+               <x-user.memos.show.fishing_results :getMemoFishResults='$get_memo_fish_results' />
                {{-- 選択した共有メモの備考を表示 --}}
-               <div class="mb-5">
-                  <h2 class="sub_heading mb-1">備考</h2>
-                  <textarea class="w-full rounded" name="content" rows="7" placeholder="ここにメモを入力">{{ $select_memo->content }}</textarea>
-                  {{-- エラーメッセージ （メモの備考） --}}
-                  <x-input-error class="mt-2" :messages="$errors->get('content')" />
-               </div>
+               <x-user.memos.edit.content :selectMemo='$select_memo' />
                {{-- 選択した共有メモに紐づいたタグの表示 --}}
-               <div class="mb-10">
-                  <h2 class="sub_heading mb-1">タグ</h2>
-                  <div class="flex flex-wrap gap-3">
-                     @foreach ($get_memo_tags_name as $tag_name)
-                        <div class="flex items-center gap-1">
-                           <input class="mb-1 rounded" type="checkbox" checked disabled />
-                           {{ $tag_name }}
-                        </div>
-                     @endforeach
-                  </div>
-               </div>
-               {{-- 選択した共有メモに紐づいた画像を表示 --}}
-               <div class="mb-10">
-                  <h2 class="sub_heading mb-1">画像</h2>
-                  {{-- モーダルウィンドウ --}}
-                  <x-user.big-select-image :getMemoImages='$get_memo_images' />
-               </div>
-               {{-- 選択されている共有メモのidを取得 --}}
-               <input type="hidden" name="memoId" value="{{ $select_memo->id }}">
+               <x-user.memos.show.tags :getMemoTagsName='$get_memo_tags_name' />
+               {{-- 選択した共有メモに紐づいた画像の表示 --}}
+               <x-user.memos.show.big-select-image :getMemoImages='$get_memo_images' />
                {{-- 更新するボタン --}}
                <div class="mb-5">
                   <button class="btn bg-blue-800 hover:bg-blue-700" type="submit">更新する</button>

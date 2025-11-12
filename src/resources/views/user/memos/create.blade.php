@@ -16,51 +16,20 @@
                {{-- エサの入力 --}}
                @include('user.memos.partials.create.baits')
                {{-- 釣果の入力 --}}
-               @include('user.memos.partials.create.catches')
-
+               @include('user.memos.partials.create.fishing_results')
                {{-- メモの備考入力 --}}
-               <div class="mb-5">
-                  <h2 class="sub_heading mb-1">備考</h2>
-                  <textarea class="w-full rounded" name="content" rows="7" placeholder="ここに入力">{{ old('content') }}</textarea>
-                  {{-- エラーメッセージ（メモの備考） --}}
-                  <x-input-error class="mt-2" :messages="$errors->get('content')" />
-               </div>
-
-               {{-- 既存タグの選択 --}}
-               <div class="mb-10">
-                  <h2 class="sub_heading mb-1">既存タグの選択</h2>
-                  <div class="flex flex-wrap gap-3">
-                     @foreach ($all_tags as $tag)
-                        <div class="flex items-center gap-1 hover:font-semibold">
-                           <input class="mb-1 rounded" type="checkbox" name="tags[]" id="{{ $tag->id }}"
-                              value="{{ $tag->id }}" @checked(in_array($tag->id, old('tags', []))) />
-                           <label for="{{ $tag->id }}">{{ $tag->name }}</label>
-                        </div>
-                     @endforeach
-                  </div>
-               </div>
+               @include('user.memos.partials.create.content')
+               {{-- タグの選択 --}}
+               @include('user.memos.partials.create.tags')
                {{-- 新規タグ入力 --}}
-               <div class="mb-10">
-                  <h2 class="sub_heading mb-1">新規タグの追加</h2>
-                  <input class="w-60 rounded" type="text" name="new_tag" value="{{ old('new_tag') }}"
-                     placeholder="ここに新規タグを入力" />
-                  {{-- エラーメッセージ（新規タグ） --}}
-                  <x-input-error class="mt-2" :messages="$errors->get('new_tag')" />
-               </div>
-
+               <x-user.memos.create.new_tag />
                {{-- 画像の選択 --}}
-               <div class="mb-10">
-                  <h2 class="sub_heading">画像の選択</h2>
-                  {{-- モーダルウィンドウ --}}
-                  <x-user.list-select-image :allImages='$all_images' />
-               </div>
-
+               <x-user.memos.create.list-select-image :allImages='$all_images' />
                {{-- メモの保存ボタン --}}
                <div class="mb-5">
                   <button class="btn bg-blue-800 hover:bg-blue-700" type="submit">保存する</button>
                </div>
             </form>
-
             {{-- 戻るボタン --}}
             <div class="flex justify-end">
                <button class="btn bg-gray-800 hover:bg-gray-700" onclick="location.href='{{ route('user.index') }}'">

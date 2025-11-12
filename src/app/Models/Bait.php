@@ -36,14 +36,13 @@ class Bait extends Model
     }
 
     /**
-     * エサが重複していないか調べる為のスコープ。
+     * 自分自身の、全てのエサを取得する為のスコープ。
      * @param Builder $query
-     * @param $request_new_bait
      * @return void
      */
-    public function scopeAvailableCheckDuplicateBait(Builder $query, $request_new_bait): void
+    public function scopeAvailableAllBaits(Builder $query): void
     {
-        $query->where('name', $request_new_bait)
-            ->where('user_id', Auth::id());
+        $query->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc');
     }
 }

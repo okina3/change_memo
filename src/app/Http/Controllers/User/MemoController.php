@@ -8,11 +8,14 @@ use App\Models\Bait;
 use App\Models\FishName;
 use App\Models\Image;
 use App\Models\Memo;
+use App\Models\MemoBait;
+use App\Models\MemoFishName;
 use App\Models\MemoImage;
 use App\Models\MemoTag;
 use App\Models\Spot;
 use App\Models\Tag;
 use App\Services\BaitService;
+use App\Services\FishNameService;
 use App\Services\ImageService;
 use App\Services\MemoService;
 use App\Services\SessionService;
@@ -21,7 +24,6 @@ use App\Services\TagService;
 use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
@@ -60,20 +62,20 @@ class MemoController extends Controller
      */
     public function create(): View
     {
+        // 全スポットを取得する
+        $all_spots = Spot::availableAllSpots()->get();
+        // 全エサを取得する
+        $all_baits = Bait::availableAllBaits()->get();
+        // 全魚名を取得する
+        $all_fish_names = FishName::availableAllFishNames()->get();
         // 全タグを取得する
         $all_tags = Tag::availableAllTags()->get();
         // 全画像を取得する
         $all_images = Image::availableAllImages()->get();
-        // 全スポットを取得する
-        $all_spots = Spot::where('user_id', Auth::id())->get();
-        // 全エサを取得する
-        $all_baits = Bait::where('user_id', Auth::id())->get();
-        // 全魚名を取得する
-        $all_fish_names = FishName::where('user_id', Auth::id())->get();
         // ブラウザバック対策（値を持たせる）
         SessionService::setBrowserBackSession();
 
-        return view('user.memos.create', compact('all_tags', 'all_images', 'all_spots', 'all_baits', 'all_fish_names'));
+        return view('user.memos.create', compact('all_spots', 'all_baits', 'all_fish_names', 'all_tags', 'all_images'));
     }
 
     /**
@@ -89,34 +91,15 @@ class MemoController extends Controller
         try {
             DB::transaction(function () use ($request) {
                 // メモを保存
-                $memo = Memo::create([
-                    'fishing_date' => $request->input('fishing_date'),
-                    'start_time' => $request->input('start_time'),
-                    'end_time' => $request->input('end_time'),
-                    'spot_id'=> $request->input('fishing_spot'),
-                    'weather' => $request->input('weather'),
-                    'air_temp' => $request->input('air_temp'),
-                    'max_wind' => $request->input('max_wind'),
-                    'wind_dir' => $request->input('wind_dir'),
-                    'river_flow' => $request->input('river_flow'),
-                    'turbidity' => $request->input('turbidity'),
-                    'debris' => $request->input('debris'),
-                    'water_level' => $request->input('water_level'),
-                    'water_temp' => $request->input('water_temp'),
-                    'content' => $request->input('content'),
-                    'user_id' => Auth::id(),
-                ]);
-
-                // 新規エサの入力があれば、各データを保存。
-                BaitService::storeNewBait($request->new_bait, $memo->id);
-                // 既存のエサの選択があれば、メモに紐付けて中間テーブルに保存
+                $memo = MemoService::createMemo($request);
+                // エサを、メモに紐付けて中間テーブルに保存
                 MemoService::attachExistingBaits($request, $memo->id);
-
+                // 釣果データ（名前・匹数・長さ）を、メモに紐付けて中間テーブルに保存
+                MemoService::attachExistingFishNames($request, $memo->id);
                 // 新規タグの入力があれば、各データを保存。
                 TagService::storeNewTag($request->new_tag, $memo->id);
                 // 既存のタグの選択があれば、メモに紐付けて中間テーブルに保存
                 MemoService::attachExistingTags($request, $memo->id);
-
                 // 既存の画像の選択があれば、メモに紐付けて中間テーブルに保存
                 MemoService::attachExistingImages($request, $memo->id);
             }, 10);
@@ -137,6 +120,10 @@ class MemoController extends Controller
     {
         // 選択したメモを、一件取得
         $select_memo = Memo::availableSelectMemo($id)->first();
+        // 選択したメモに紐づいたエサの名前を取得
+        $get_memo_baits_name = BaitService::getMemoBaitsName($select_memo->baits);
+        // 選択したメモに紐づいた釣果のデータを取得（名前・匹数・長さ）
+        $get_memo_fish_results = FishNameService::getMemoFishResults($select_memo->fish_names);
         // 選択したメモに紐づいたタグの名前を取得
         $get_memo_tags_name = TagService::getMemoTagsName($select_memo->tags);
         // 選択したメモに紐づいた画像を取得
@@ -146,7 +133,7 @@ class MemoController extends Controller
         // 自分が共有しているメモの、共有状態の情報を取得
         $shared_users = ShareSettingService::checkSharedMemoStatus($id);
 
-        return view('user.memos.show', compact('select_memo', 'get_memo_tags_name', 'get_memo_images', 'shared_users'));
+        return view('user.memos.show', compact('select_memo', 'get_memo_baits_name', 'get_memo_tags_name', 'get_memo_images', 'shared_users', 'get_memo_fish_results'));
     }
 
     /**
@@ -156,6 +143,12 @@ class MemoController extends Controller
      */
     public function edit(int $id): View
     {
+        // 全スポットを取得する
+        $all_spots = Spot::availableAllSpots()->get();
+        // 全エサを取得する
+        $all_baits = Bait::availableAllBaits()->get();
+        // 全魚名を取得する
+        $all_fish_names = FishName::availableAllFishNames()->get();
         // 全タグの一覧表示
         $all_tags = Tag::availableAllTags()->get();
         // 全画像を取得する
@@ -175,7 +168,7 @@ class MemoController extends Controller
 
         return view(
             'user.memos.edit',
-            compact('all_tags', 'all_images', 'select_memo', 'get_memo_tags_id', 'get_memo_images_id', 'get_memo_images')
+            compact('all_spots', 'all_baits', 'all_fish_names', 'all_tags', 'all_images', 'select_memo', 'get_memo_tags_id', 'get_memo_images_id', 'get_memo_images')
         );
     }
 
@@ -193,14 +186,24 @@ class MemoController extends Controller
             DB::transaction(function () use ($request) {
                 // メモを更新
                 $memo = MemoService::updateMemo($request);
+                // 一旦メモとエサを紐付けた中間デーブルのデータを削除
+                MemoBait::where('memo_id', $request->memoId)->delete();
+                // 一旦メモと釣果のデータを紐付けた中間デーブルのデータを削除
+                MemoFishName::where('memo_id', $request->memoId)->delete();
                 // 一旦メモとタグを紐付けた中間デーブルのデータを削除
                 MemoTag::where('memo_id', $request->memoId)->delete();
                 // 一旦メモと画像を紐付けた中間デーブルのデータを削除
                 MemoImage::where('memo_id', $request->memoId)->delete();
+                // エサを、メモに紐付けて中間テーブルに保存
+                MemoService::attachExistingBaits($request, $memo->id);
+                // 釣果データ（名前・匹数・長さ）を、メモに紐付けて中間テーブルに保存
+                MemoService::attachExistingFishNames($request, $memo->id);
                 // 新規タグの入力があれば、各データを保存。
                 TagService::storeNewTag($request->new_tag, $memo->id);
-                // 既存のタグと画像の選択があれば、メモに紐付けて中間テーブルに保存
-                // MemoService::attachTagsAndImages($request, $memo->id);
+                // 既存のタグの選択があれば、メモに紐付けて中間テーブルに保存
+                MemoService::attachExistingTags($request, $memo->id);
+                // 既存の画像の選択があれば、メモに紐付けて中間テーブルに保存
+                MemoService::attachExistingImages($request, $memo->id);
             }, 10);
 
             return to_route('user.index')->with(['message' => 'メモを更新しました。', 'status' => 'info']);

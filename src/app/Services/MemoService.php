@@ -33,7 +33,7 @@ class MemoService
     public static function searchMemos(): mixed
     {
         // クエリパラメータを取得
-        $get_url_tag = \Request::query('tag');
+        $get_url_tag = request()->query('tag');
         // クエリパラメータがあった場合の処理
         if (!empty($get_url_tag)) {
             // クエリパラメータから絞り込んだタグを取得
@@ -56,7 +56,62 @@ class MemoService
     }
 
     /**
-     * メモに紐づいた既存のエサを、中間テーブルに保存するメソッド
+     * メモを保存するメソッド。
+     * @param $request
+     * @return Memo
+     */
+    public static function createMemo($request): Memo
+    {
+        return Memo::create([
+            'fishing_date' => $request->input('fishing_date'),
+            'start_time' => $request->input('start_time'),
+            'end_time' => $request->input('end_time'),
+            'spot_id' => $request->input('fishing_spot'),
+            'weather' => $request->input('weather'),
+            'air_temp' => $request->input('air_temp'),
+            'max_wind' => $request->input('max_wind'),
+            'wind_dir' => $request->input('wind_dir'),
+            'river_flow' => $request->input('river_flow'),
+            'turbidity' => $request->input('turbidity'),
+            'debris' => $request->input('debris'),
+            'water_level' => $request->input('water_level'),
+            'water_temp' => $request->input('water_temp'),
+            'content' => $request->input('content'),
+            'user_id' => Auth::id(),
+        ]);
+    }
+
+    /**
+     * メモを更新するメソッド。
+     * @param $request
+     * @return mixed
+     */
+    public static function updateMemo($request): mixed
+    {
+        $memo = Memo::availableSelectMemo($request->memoId)->first();
+        
+        $memo->fishing_date = $request->input('fishing_date');
+        $memo->start_time = $request->input('start_time');
+        $memo->end_time = $request->input('end_time');
+        $memo->spot_id = $request->input('fishing_spot');
+        $memo->weather = $request->input('weather');
+        $memo->air_temp = $request->input('air_temp');
+        $memo->max_wind = $request->input('max_wind');
+        $memo->wind_dir = $request->input('wind_dir');
+        $memo->river_flow = $request->input('river_flow');
+        $memo->turbidity = $request->input('turbidity');
+        $memo->debris = $request->input('debris');
+        $memo->water_level = $request->input('water_level');
+        $memo->water_temp = $request->input('water_temp');
+        $memo->content = $request->input('content');
+
+        $memo->save();
+
+        return $memo;
+    }
+
+    /**
+     * メモに紐づいたエサを、中間テーブルに保存するメソッド
      * @param $request
      * @param int $memo_id
      * @return void
@@ -68,6 +123,40 @@ class MemoService
             foreach ($request->baits as $bait_number) {
                 Memo::findOrFail($memo_id)->baits()->attach($bait_number);
             }
+        }
+    }
+
+    /**
+     * メモに紐づいた釣果データを、中間テーブルに保存するメソッド
+     * @param $request
+     * @param int $memo_id
+     * @return void
+     */
+    public static function attachExistingFishNames($request, int $memo_id): void
+    {
+        // 釣果入力があれば処理を進める
+        $fishing_results = $request->input('fishing_results', []);
+        if (!is_array($fishing_results) || count($fishing_results) === 0) {
+            return;
+        }
+
+        // ピボット属性付きで中間テーブルに保存するための配列を作成
+        $attachData = [];
+        foreach ($fishing_results as $fishing_result) {
+            $fishNameId = (int) ($fishing_result['fish_name'] ?? 0);
+            if ($fishNameId <= 0) {
+                // 無効値はスキップ
+                continue;
+            }
+            $count = isset($fishing_result['count']) ? (int) $fishing_result['count'] : 0;
+            $length = isset($fishing_result['length']) ? (int) $fishing_result['length'] : 0;
+            $attachData[$fishNameId] = ['count' => $count, 'length' => $length];
+        }
+
+        // 釣果のデータを、メモに紐付けて中間テーブルに保存
+        if (!empty($attachData)) {
+            $memo = Memo::findOrFail($memo_id);
+            $memo->fish_names()->attach($attachData);
         }
     }
 
@@ -101,21 +190,6 @@ class MemoService
                 Memo::findOrFail($memo_id)->images()->attach($memo_image);
             }
         }
-    }
-
-    /**
-     * メモを更新するメソッド。
-     * @param $request
-     * @return mixed
-     */
-    public static function updateMemo($request): mixed
-    {
-        $memo = Memo::availableSelectMemo($request->memoId)->first();
-        $memo->title = $request->title;
-        $memo->content = $request->content;
-        $memo->save();
-
-        return $memo;
     }
 
     /**

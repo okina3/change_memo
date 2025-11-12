@@ -7,6 +7,7 @@ use App\Http\Controllers\User\MemoController;
 use App\Http\Controllers\User\ShareSettingController;
 use App\Http\Controllers\User\SpotController;
 use App\Http\Controllers\User\BaitController;
+use App\Http\Controllers\User\FishNameController;
 use App\Http\Controllers\User\TagController;
 use App\Http\Controllers\User\TrashedMemoController;
 use App\Http\Middleware\KeepBackFlashForAjax;
@@ -52,6 +53,13 @@ Route::prefix('/')->as('user.')->group(function () {
             ->middleware(['auth:users', KeepBackFlashForAjax::class])
             ->group(function () {
                 Route::post('/store', 'store')->name('bait.store');
+            });
+
+        // 魚種の登録
+        Route::controller(FishNameController::class)->prefix('fish-name')
+            ->middleware(['auth:users', KeepBackFlashForAjax::class])
+            ->group(function () {
+                Route::post('/store', 'store')->name('fish-name.store');
             });
 
 

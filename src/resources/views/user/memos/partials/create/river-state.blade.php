@@ -1,7 +1,7 @@
 <div class="mb-8">
    {{-- 川の状態 --}}
    <h2 class="sub_heading mb-1">川の状態</h2>
-   <div class="sm:flex-row sm:flex-wrap sm:gap-6 md:gap-8 lg:gap-12 flex flex-col items-start gap-6">
+   <div class="sm:flex-row sm:flex-wrap sm:gap-6 md:gap-8 flex flex-col items-start gap-6">
       {{-- 川の流れ --}}
       <div class="">
          <label class="mb-1 block text-sm text-gray-700">川の流れ</label>
@@ -9,10 +9,10 @@
             <option value="" @selected(old('river_flow', '') === '')>
                未選択
             </option>
-            <option value="flow" @selected(old('river_flow') === 'flow')>
+            <option value="流れあり" @selected(old('river_flow') === '流れあり')>
                流れあり
             </option>
-            <option value="no_flow" @selected(old('river_flow') === 'no_flow')>
+            <option value="流れなし" @selected(old('river_flow') === '流れなし')>
                流れなし
             </option>
          </select>
@@ -26,16 +26,16 @@
             <option value="" @selected(old('turbidity', '') === '')>
                未選択
             </option>
-            <option value="clear" @selected(old('turbidity') === 'clear')>
+            <option value="クリア" @selected(old('turbidity') === 'クリア')>
                クリア
             </option>
-            <option value="slightly" @selected(old('turbidity') === 'slightly')>
+            <option value="やや濁り" @selected(old('turbidity') === 'やや濁り')>
                やや濁り
             </option>
-            <option value="turbid" @selected(old('turbidity') === 'turbid')>
+            <option value="濁り" @selected(old('turbidity') === '濁り')>
                濁り
             </option>
-            <option value="very_turbid" @selected(old('turbidity') === 'very_turbid')>
+            <option value="強い濁り" @selected(old('turbidity') === '強い濁り')>
                強い濁り
             </option>
          </select>
@@ -49,13 +49,13 @@
             <option value="" @selected(old('debris', '') === '')>
                未選択
             </option>
-            <option value="none" @selected(old('debris') === 'none')>
+            <option value="なし" @selected(old('debris') === 'なし')>
                なし
             </option>
-            <option value="slightly" @selected(old('debris') === 'slightly')>
+            <option value="ややあり" @selected(old('debris') === 'ややあり')>
                ややあり
             </option>
-            <option value="present" @selected(old('debris') === 'present')>
+            <option value="あり" @selected(old('debris') === 'あり')>
                あり
             </option>
          </select>
@@ -78,7 +78,7 @@
          <label class="mb-1 block text-sm text-gray-700">水温</label>
          <div class="flex items-center gap-2">
             <input class="w-24 rounded text-right" type="number" name="water_temp" value="{{ old('water_temp') }}"
-               placeholder="10" inputmode="numeric" step="1" min="0" max="99" />
+               placeholder="0" inputmode="numeric" step="1" min="0" max="99" />
             <span class="text-gray-600">℃</span>
          </div>
          {{-- エラーメッセージ（水温） --}}

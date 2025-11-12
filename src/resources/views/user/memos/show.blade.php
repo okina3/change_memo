@@ -18,42 +18,22 @@
                      <p class="mark">{{ $select_memo->status }}</p>
                   </div>
                @endif
-
                {{-- 釣行日・釣行時間・釣り場所 --}}
-               @include('user.memos.partials.show.basic-info')
+               <x-user.memos.show.basic-info :selectMemo='$select_memo' />
                {{-- 気象状態 --}}
-               @include('user.memos.partials.show.weather-state')
+               <x-user.memos.show.weather-state :selectMemo='$select_memo' />
                {{-- 川の状態 --}}
-               @include('user.memos.partials.show.river-state')
-                              {{-- エサの入力 --}}
-               @include('user.memos.partials.show.baits')
-
-               {{-- 選択したメモの備考を表示 --}}
-               <div class="mb-5">
-                  <h2 class="sub_heading mb-1">備考</h2>
-                  <textarea class="w-full rounded" name="content" rows="7" disabled>{{ $select_memo->content }}</textarea>
-               </div>
-
-               {{-- 選択したメモのタグを表示 --}}
-               <div class="mb-10">
-                  <h2 class="sub_heading mb-1">タグ</h2>
-                  <div class="flex flex-wrap gap-3">
-                     @foreach ($get_memo_tags_name as $tag_name)
-                        <div class="flex items-center gap-1">
-                           <input class="mb-1 rounded" type="checkbox" checked disabled />
-                           {{ $tag_name }}
-                        </div>
-                     @endforeach
-                  </div>
-               </div>
-
-               {{-- 選択したメモの画像の表示 --}}
-               <div class="mb-10">
-                  <h2 class="sub_heading mb-1">登録画像</h2>
-                  {{-- モーダルウィンドウ --}}
-                  <x-user.big-select-image :getMemoImages='$get_memo_images' />
-               </div>
-
+               <x-user.memos.show.river-state :selectMemo='$select_memo' />
+               {{-- エサの入力 --}}
+               <x-user.memos.show.baits :getMemoBaitsName='$get_memo_baits_name' />
+               {{-- 釣果の入力 --}}
+               <x-user.memos.show.fishing_results :getMemoFishResults='$get_memo_fish_results' />
+               {{-- メモの備考表示 --}}
+               <x-user.memos.show.content :selectMemo='$select_memo' />
+               {{-- タグの表示 --}}
+               <x-user.memos.show.tags :getMemoTagsName='$get_memo_tags_name' />
+               {{-- 画像の表示 --}}
+               <x-user.memos.show.big-select-image :getMemoImages='$get_memo_images' />
                {{-- 戻るボタン --}}
                <div class="mb-2 flex justify-end">
                   <button onclick="location.href='{{ route('user.index') }}'" class="btn bg-gray-800 hover:bg-gray-700">

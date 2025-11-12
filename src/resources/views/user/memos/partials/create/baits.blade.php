@@ -1,6 +1,6 @@
 <div class="mb-8">
    {{-- エサの入力 --}}
-   <div class="md:flex-row md:gap-8 flex flex-col items-start gap-6">
+   <div class="md:flex-row flex flex-col items-start gap-4">
       <div class="">
          <h2 class="sub_heading mb-1">エサ</h2>
          @php
@@ -35,17 +35,18 @@
             <x-input-error class="mt-2" :messages="$errors->get('baits.*')" />
          </div>
       </div>
-      {{-- 新規エサの追加 --}}
+      {{-- エサの追加 --}}
       <div>
-         <h2 class="mt-2 mb-1 block text-sm text-gray-700">（新規エサを選択肢に追加）</h2>
+         <h2 class="mt-2 mb-1 block text-sm text-gray-700">（エサを選択肢に追加）</h2>
          <div class="flex gap-2 items-center">
             <input id="new_bait_input" class="w-60 rounded" type="text" name="new_bait" value="{{ old('new_bait') }}"
                placeholder="例: アオイソメ">
-            <button type="button" id="add_bait_btn" class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
+            <button type="button" id="add_bait_btn" data-url="{{ route('user.bait.store') }}"
+               class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
                追加
             </button>
          </div>
-         {{-- エラーメッセージ（新規エサの追加） --}}
+         {{-- エラーメッセージ（エサの追加） --}}
          <x-input-error class="mt-2" :messages="$errors->get('new_bait')" />
          {{-- AJAX 用メッセージ表示領域 --}}
          <div id="bait_message" class="mt-2 text-sm" aria-live="polite"></div>
@@ -56,13 +57,11 @@
    'use strict'
    // === 新規エサの追加 =====================================
    document.addEventListener('DOMContentLoaded', () => {
-      // 追加ボタン、新規エサ入力欄、エサ選択セレクト（最初のもの）要素の取得
+      // 追加ボタン、新規エサ入力欄、エサセレクトボックスの要素の取得
       const addBtn = document.getElementById('add_bait_btn');
       const input = document.getElementById('new_bait_input');
-      // baits の select は複数ある可能性があるので、最初の select 要素をターゲットにする
       const baitsContainer = document.getElementById('baits-container');
-      const select = baitsContainer ? baitsContainer.querySelector('select') : null;
-      if (!addBtn || !input || !select) return;
+      if (!addBtn || !input || !baitsContainer) return;
 
       // CSRFトークン取得
       const getCsrfToken = () => {
@@ -73,7 +72,7 @@
       };
 
       // メッセージ表示（フォーム内の表示領域に入れる）
-   const messageEl = document.getElementById('bait_message');
+      const messageEl = document.getElementById('bait_message');
       const clearMessage = () => {
          if (!messageEl) return;
          messageEl.textContent = '';
@@ -94,7 +93,7 @@
 
       // エサの追加の実行
       const addBait = async (newBait) => {
-         const url = "{{ route('user.bait.store') }}";
+         const url = addBtn.dataset.url || "{{ route('user.bait.store') }}";
          const headers = {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': getCsrfToken(),
@@ -107,6 +106,7 @@
          addBtn.textContent = '追加中...';
 
          try {
+            // サーバーへ新規エサを送信する
             const res = await fetch(url, {
                method: 'POST',
                headers,
@@ -115,28 +115,26 @@
                }),
             });
 
-            // 成功: セレクトに追加して選択状態にする
+            // 成功: 全てのエサ選択欄に新しい option を追加
             if (res.status === 201) {
                const data = await res.json();
-               const opt = document.createElement('option');
-               opt.value = data.id;
-               opt.textContent = data.name;
-               opt.selected = true;
-               // すべての bait select に追加して選択状態にする
-               const allSelects = baitsContainer.querySelectorAll('select');
-               allSelects.forEach(s => s.appendChild(opt.cloneNode(true)));
-               // 最初の select を変更イベント発火
-               select.dispatchEvent(new Event('change'));
+               const allSelects = Array.from(document.querySelectorAll('select[name="baits[]"]'));
+               allSelects.forEach((s) => {
+                  const opt = document.createElement('option');
+                  opt.value = data.id;
+                  opt.textContent = data.name;
+                  s.appendChild(opt);
+               });
                input.value = '';
-               showMessage('追加しました', 'success');
-               setTimeout(clearMessage, 3000);
+               showMessage('エサの選択肢に追加しました', 'success');
+               setTimeout(clearMessage, 6000);
                return;
             }
 
             // 失敗: 422エラーメッセージを表示
             if (res.status === 422) {
                const data = await res.json().catch(() => ({}));
-               const serverMsg = data?.errors?.new_spot?.[0] ?? data?.message;
+               const serverMsg = data?.errors?.new_bait?.[0] ?? data?.message;
                // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
                showMessage(serverMsg ?? '入力に誤りがあります', 'error');
                return;
@@ -145,7 +143,7 @@
             // 失敗: それ以外のエラーメッセージを表示
             try {
                const otherData = await res.json().catch(() => ({}));
-                  const otherMsg = otherData?.errors?.new_bait?.[0] ?? otherData?.message;
+               const otherMsg = otherData?.errors?.new_bait?.[0] ?? otherData?.message;
                // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
                showMessage(otherMsg ?? '追加に失敗しました。時間をおいて再試行してください。', 'error');
             } catch (err) {
@@ -156,7 +154,7 @@
          } catch (e) {
             console.error(e);
             // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
-               showMessage('通信エラーが発生しました', 'error');
+            showMessage('通信エラーが発生しました', 'error');
          } finally {
             addBtn.disabled = false;
             addBtn.textContent = originalText;

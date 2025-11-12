@@ -5,10 +5,12 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShareEndRequest;
 use App\Http\Requests\ShareStartRequest;
-use App\Http\Requests\UploadMemoRequest;
+use App\Http\Requests\UpdateSharedMemoRequest;
 use App\Models\Memo;
 use App\Models\ShareSetting;
 use App\Models\User;
+use App\Services\BaitService;
+use App\Services\FishNameService;
 use App\Services\ImageService;
 use App\Services\SessionService;
 use App\Services\ShareSettingService;
@@ -55,7 +57,7 @@ class ShareSettingController extends Controller
                 // 共有設定が、重複していたら、共有設定を、一旦解除する。
                 ShareSettingService::resetDuplicateShareSettings($request->memoId, $shared_user->id);
                 // ユーザーを特定できたら、DBに保存する
-                ShareSetting::availableCreateSetting($request, $shared_user->id);
+                ShareSettingService::storeSetting($request, $shared_user->id);
             }, 10);
 
             return to_route('user.index')->with(['message' => 'メモを共有しました。', 'status' => 'info']);
@@ -76,6 +78,10 @@ class ShareSettingController extends Controller
         ShareSettingService::checkSharedMemoShow($id);
         // 選択した共有メモを、一件取得
         $select_memo = Memo::with('tags.user')->where('id', $id)->first();
+        // 選択したメモに紐づいたエサの名前を取得
+        $get_memo_baits_name = BaitService::getMemoBaitsName($select_memo->baits);
+        // 選択したメモに紐づいた釣果のデータを取得（名前・匹数・長さ）
+        $get_memo_fish_results = FishNameService::getMemoFishResults($select_memo->fish_names);
         // 選択したメモに紐づいたタグの名前を取得
         $get_memo_tags_name = TagService::getMemoTagsName($select_memo->tags);
         // 選択したメモに紐づいた画像を取得
@@ -85,7 +91,7 @@ class ShareSettingController extends Controller
 
         return view(
             'user.shareSettings.show',
-            compact('select_memo', 'get_memo_tags_name', 'get_memo_images', 'select_user')
+            compact('select_memo', 'get_memo_baits_name', 'get_memo_fish_results', 'get_memo_tags_name', 'get_memo_images', 'select_user')
         );
     }
 
@@ -100,6 +106,10 @@ class ShareSettingController extends Controller
         ShareSettingService::checkSharedMemoEdit($id);
         // 選択した共有メモを、一件取得
         $select_memo = Memo::with('tags.user')->where('id', $id)->first();
+        // 選択したメモに紐づいたエサの名前を取得
+        $get_memo_baits_name = BaitService::getMemoBaitsName($select_memo->baits);
+        // 選択したメモに紐づいた釣果のデータを取得（名前・匹数・長さ）
+        $get_memo_fish_results = FishNameService::getMemoFishResults($select_memo->fish_names);
         // 選択したメモに紐づいたタグの名前を取得
         $get_memo_tags_name = TagService::getMemoTagsName($select_memo->tags);
         // 選択したメモに紐づいた画像を取得
@@ -109,19 +119,24 @@ class ShareSettingController extends Controller
 
         return view(
             'user.shareSettings.edit',
-            compact('select_memo', 'get_memo_tags_name', 'get_memo_images', 'select_user')
+            compact('select_memo', 'get_memo_baits_name', 'get_memo_fish_results', 'get_memo_tags_name', 'get_memo_images', 'select_user')
         );
     }
 
     /**
      * 共有されているメモの更新をするメソッド。
-     * @param UploadMemoRequest $request
+     * @param UpdateSharedMemoRequest $request
      * @return RedirectResponse
      */
-    public function update(UploadMemoRequest $request): RedirectResponse
+    public function update(UpdateSharedMemoRequest $request): RedirectResponse
     {
-        $memo = Memo::findOrFail($request->memoId);
-        $memo->content = $request->content;
+        // バリデーション済みデータを使う（警告を抑制）
+        $validated = $request->validated();
+        // 編集許可があるかをチェック
+        ShareSettingService::checkSharedMemoEdit($validated['memoId']);
+
+        $memo = Memo::findOrFail($validated['memoId']);
+        $memo->content = $validated['content'] ?? null;
         $memo->save();
 
         return to_route('user.share-setting.index')

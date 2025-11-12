@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DeleteTagRequest;
 use App\Http\Requests\UploadTagRequest;
 use App\Models\Tag;
+use App\Services\TagService;
 use App\Services\SessionService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class TagController extends Controller
@@ -34,12 +34,9 @@ class TagController extends Controller
      */
     public function store(UploadTagRequest $request): RedirectResponse
     {
-        // タグが重複していないか調べる
-        $tag_exists = Tag::availableCheckDuplicateTag($request->new_tag)->exists();
-        // タグが、重複していなれば、タグを保存
-        if (!empty($request->new_tag) && !$tag_exists) {
-            Tag::availableCreateTag($request->new_tag);
-        }
+        //タグを保存
+        TagService::storeTag($request->new_tag);
+
         return to_route('user.tag.index')->with(['message' => 'タグを登録しました。', 'status' => 'info']);
     }
 

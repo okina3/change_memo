@@ -9,22 +9,29 @@ use Illuminate\Support\Facades\Auth;
 class TagService
 {
     /**
-     * 新規タグの保存・更新するメソッド。
+     * タグをDBに保存するメソッド。
+     * @param string $new_tag
+     * @return Tag
+     */
+    public static function storeTag(string $new_tag)
+    {
+        return Tag::firstOrCreate([
+            'name' => $new_tag,
+            'user_id' => Auth::id(),
+        ]);
+    }
+
+    /**
+     * メモ画面の新規タグの保存・更新するメソッド。
      * @param $request_new_tag
      * @param int $memo_id
      * @return void
      */
     public static function storeNewTag($request_new_tag, int $memo_id): void
     {
-        // 新規タグの入力があった場合、タグが重複していないか調べる
-        $tag_exists = Tag::availableCheckDuplicateTag($request_new_tag)->exists();
-        // 新規タグがあり、重複していなければ、タグを保存し、中間テーブルに保存
-        if (!empty($request_new_tag) && !$tag_exists) {
-            // タグを保存
-            $tag = Tag::create([
-                'name' => $request_new_tag,
-                'user_id' => Auth::id()
-            ]);
+        if (!empty($request_new_tag)) {
+            // タグを保存または取得
+            $tag = self::storeTag($request_new_tag);
             // メモとタグの中間テーブルに値を保存
             Tag::findOrFail($tag->id)->memos()->attach($memo_id);
         }
@@ -54,7 +61,7 @@ class TagService
     {
         $memo_relation_tags_name = [];
         foreach ($select_memo_tags as $memo_relation_tag) {
-            // メモにリレーションされたタグのidを、配列に追加
+            // メモにリレーションされたタグのnameを、配列に追加
             $memo_relation_tags_name[] = $memo_relation_tag->name;
         }
         return $memo_relation_tags_name;

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class FishName extends Model
 {
@@ -35,5 +37,16 @@ class FishName extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * 自分自身の、全ての魚名を取得する為のスコープ。
+     * @param Builder $query
+     * @return void
+     */
+    public function scopeAvailableAllFishNames(Builder $query): void
+    {
+        $query->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc');
     }
 }

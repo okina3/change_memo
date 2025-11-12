@@ -19,12 +19,24 @@ class MemoBaitSeeder extends Seeder
                 'bait_id' => 1,
             ],
             [
+                'memo_id' => 1,
+                'bait_id' => 3,
+            ],
+            [
                 'memo_id' => 2,
                 'bait_id' => 2,
             ],
             [
+                'memo_id' => 2,
+                'bait_id' => 3,
+            ],
+            [
                 'memo_id' => 3,
                 'bait_id' => 3,
+            ],
+            [
+                'memo_id' => 3,
+                'bait_id' => 1,
             ],
 
             //ユーザー２のダミーデータ

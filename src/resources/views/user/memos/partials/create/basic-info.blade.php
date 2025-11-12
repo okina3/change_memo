@@ -1,13 +1,13 @@
 <div class="mb-8">
    {{-- 基本情報 --}}
    <h2 class="sub_heading mb-1">基本情報</h2>
-   <div class="md:flex-row md:flex-wrap md:gap-8 lg:gap-12 flex flex-col items-start gap-6">
+   <div class="md:flex-row md:flex-wrap md:gap-8 flex flex-col items-start gap-6">
       <div class="sm:flex-row sm:gap-6 md:gap-8 flex flex-col items-start gap-4">
          {{-- 釣行日 --}}
          <div>
             <label class="mb-1 block text-sm text-gray-700">釣行日</label>
-            <input class="sm:w-44 md:w-44 w-full rounded" type="date" name="fishing_date"
-               value="{{ old('fishing_date') }}" max="{{ now()->toDateString() }}" />
+            <input class="rounded" type="date" name="fishing_date" value="{{ old('fishing_date') }}"
+               max="{{ now()->toDateString() }}" />
             {{-- エラーメッセージ（釣行日） --}}
             <x-input-error class="mt-2" :messages="$errors->get('fishing_date')" />
          </div>
@@ -15,10 +15,10 @@
          <div>
             <label class="mb-1 block text-sm text-gray-700">釣行時間</label>
             <div class="flex items-center w-full">
-               <input class="w-28 rounded text-center" type="time" name="start_time" value="{{ old('start_time') }}"
+               <input class="text-center rounded" type="time" name="start_time" value="{{ old('start_time') }}"
                   step="60" />
                <span class="my-0 mx-1 text-gray-600">〜</span>
-               <input class="w-28 rounded text-center" type="time" name="end_time" value="{{ old('end_time') }}"
+               <input class="text-center rounded" type="time" name="end_time" value="{{ old('end_time') }}"
                   step="60" />
             </div>
             {{-- エラーメッセージ（釣行時間） --}}
@@ -26,7 +26,7 @@
             <x-input-error class="mt-2" :messages="$errors->get('end_time')" />
          </div>
       </div>
-      <div class="sm:flex-row flex flex-col items-start gap-8">
+      <div class="sm:flex-row flex flex-col items-start gap-4">
          {{-- 釣り場所 --}}
          <div>
             <label class="mb-1 block text-sm text-gray-700">場所</label>
@@ -43,17 +43,18 @@
             {{-- エラーメッセージ（場所） --}}
             <x-input-error class="mt-2" :messages="$errors->get('fishing_spot')" />
          </div>
-         {{-- 新規釣り場の追加 --}}
+         {{-- 釣り場の追加 --}}
          <div>
-            <h2 class="mb-1 block text-sm text-gray-700">（新規釣り場を選択肢に追加）</h2>
+            <h2 class="mb-1 block text-sm text-gray-700">（釣り場を選択肢に追加）</h2>
             <div class="flex gap-2 items-center">
                <input id="new_spot_input" class="w-60 rounded" type="text" name="new_spot"
                   value="{{ old('new_spot') }}" placeholder="例:相模川上流">
-               <button type="button" id="add_spot_btn" class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
+               <button type="button" id="add_spot_btn" data-url="{{ route('user.spot.store') }}"
+                  class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
                   追加
                </button>
             </div>
-            {{-- エラーメッセージ（新規釣り場の追加） --}}
+            {{-- エラーメッセージ（釣り場の追加） --}}
             <x-input-error class="mt-2" :messages="$errors->get('new_spot')" />
             {{-- AJAX 用メッセージ表示領域 --}}
             <div id="spot_message" class="mt-2 text-sm" aria-live="polite"></div>
@@ -65,7 +66,7 @@
    'use strict'
    // === 新規釣り場の追加 =====================================
    document.addEventListener('DOMContentLoaded', () => {
-      //追加ボタン、新規釣り場入力欄、釣り場セレクトボックス要素の取得
+      //追加ボタン、新規釣り場入力欄、釣り場セレクトボックスの要素の取得
       const addBtn = document.getElementById('add_spot_btn');
       const input = document.getElementById('new_spot_input');
       const select = document.getElementById('fishing_spot_select');
@@ -101,7 +102,7 @@
 
       // 釣り場の追加の実行
       const addSpot = async (newSpot) => {
-         const url = "{{ route('user.spot.store') }}";
+         const url = addBtn.dataset.url || "{{ route('user.spot.store') }}";
          const headers = {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': getCsrfToken(),
@@ -114,6 +115,7 @@
          addBtn.textContent = '追加中...';
 
          try {
+            // サーバーへ新規釣り場を送信する
             const res = await fetch(url, {
                method: 'POST',
                headers,
@@ -122,18 +124,16 @@
                }),
             });
 
-            // 成功: セレクトに追加して選択状態にする
+            // 成功: 場所選択欄に新しい option を追加
             if (res.status === 201) {
                const data = await res.json();
                const opt = document.createElement('option');
                opt.value = data.id;
                opt.textContent = data.name;
-               opt.selected = true;
                select.appendChild(opt);
-               select.dispatchEvent(new Event('change'));
                input.value = '';
-               showMessage('追加しました', 'success');
-               setTimeout(clearMessage, 3000);
+               showMessage('場所の選択肢に追加しました', 'success');
+               setTimeout(clearMessage, 6000);
                return;
             }
 
@@ -172,6 +172,10 @@
          // メッセージをクリアし、入力値をトリムしてサーバーへ送信
          clearMessage();
          const newSpot = input.value.trim();
+         if (!newSpot) {
+            showMessage('場所名を入力してください。', 'error');
+            return;
+         }
          addSpot(newSpot);
       });
    });
