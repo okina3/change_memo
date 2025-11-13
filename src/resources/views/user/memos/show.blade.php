@@ -35,11 +35,7 @@
                {{-- 画像の表示 --}}
                <x-user.images.big-select-image :getMemoImages='$get_memo_images' />
                {{-- 戻るボタン --}}
-               <div class="mb-2 flex justify-end">
-                  <button onclick="location.href='{{ route('user.index') }}'" class="btn bg-gray-800 hover:bg-gray-700">
-                     戻る
-                  </button>
-               </div>
+               <x-user.button.back-button />
             </div>
          </div>
       </section>
