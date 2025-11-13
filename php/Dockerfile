@@ -11,8 +11,8 @@ RUN apt update \
     libicu-dev \
     libpq-dev \
     libzip-dev \
-    libpng-dev \    
-    libjpeg-dev \   
+    libpng-dev \
+    libjpeg-dev \
     zip \
     zip unzip \
     zlib1g-dev \
@@ -28,7 +28,8 @@ RUN apt update \
     pgsql \
     pdo_mysql \
     bcmath \ 
-    -j$(nproc) gd   
+    -j$(nproc) \ 
+    gd 
 
 # Composerをグローバルにインストール
 
