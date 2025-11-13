@@ -19,21 +19,21 @@
                   </div>
                @endif
                {{-- 釣行日・釣行時間・釣り場所 --}}
-               <x-user.memos.show.basic-info :selectMemo='$select_memo' />
+               <x-user.show.basic-info :selectMemo='$select_memo' />
                {{-- 気象状態 --}}
-               <x-user.memos.show.weather-state :selectMemo='$select_memo' />
+               <x-user.show.weather-state :selectMemo='$select_memo' />
                {{-- 川の状態 --}}
-               <x-user.memos.show.river-state :selectMemo='$select_memo' />
+               <x-user.show.river-state :selectMemo='$select_memo' />
                {{-- エサの入力 --}}
-               <x-user.memos.show.baits :getMemoBaitsName='$get_memo_baits_name' />
+               <x-user.show.baits :getMemoBaitsName='$get_memo_baits_name' />
                {{-- 釣果の入力 --}}
-               <x-user.memos.show.fishing_results :getMemoFishResults='$get_memo_fish_results' />
+               <x-user.show.fishing_results :getMemoFishResults='$get_memo_fish_results' />
                {{-- メモの備考表示 --}}
-               <x-user.memos.show.content :selectMemo='$select_memo' />
+               <x-user.show.content :selectMemo='$select_memo' />
                {{-- タグの表示 --}}
-               <x-user.memos.show.tags :getMemoTagsName='$get_memo_tags_name' />
+               <x-user.tags.tags :getMemoTagsName='$get_memo_tags_name' />
                {{-- 画像の表示 --}}
-               <x-user.memos.show.big-select-image :getMemoImages='$get_memo_images' />
+               <x-user.images.big-select-image :getMemoImages='$get_memo_images' />
                {{-- 戻るボタン --}}
                <div class="mb-2 flex justify-end">
                   <button onclick="location.href='{{ route('user.index') }}'" class="btn bg-gray-800 hover:bg-gray-700">
