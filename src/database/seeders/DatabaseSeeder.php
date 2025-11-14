@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             MemoFishNameSeeder::class,
             MemoBaitSeeder::class,
             ShareSettingsSeeder::class,
+            ContactSeeder::class,
         ]);
     }
 }
