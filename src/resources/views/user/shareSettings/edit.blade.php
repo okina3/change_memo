@@ -34,6 +34,8 @@
                <x-user.tags.tags :getMemoTagsName='$get_memo_tags_name' />
                {{-- 選択した共有メモに紐づいた画像の表示 --}}
                <x-user.images.big-select-image :getMemoImages='$get_memo_images' />
+               {{-- 選択されている共有メモのidを取得 --}}
+               <input type="hidden" name="memoId" value="{{ $select_memo->id }}">
                {{-- 更新するボタン --}}
                <div class="mb-5">
                   <button class="btn bg-blue-800 hover:bg-blue-700" type="submit">更新する</button>

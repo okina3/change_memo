@@ -17,33 +17,33 @@ class ShareSettingService
     {
         // クエリパラメータを取得。
         $get_url_user_id = request()->query('user');
-        // 全ての共有メモ、または、ユーザー別の共有メモを格納する空の配列
-        $shared_memos = [];
 
         // クエリパラメータの有無の処理
         if (!empty($get_url_user_id)) {
             // クエリパラメータの暗号化を元に戻す
             $decrypted_user_id = decrypt($get_url_user_id);
-            // クエリーパラメーターから絞り込んだユーザーの、自分に共有しているメモを、空の配列に追加。
-            foreach ($share_setting_memos as $share_setting_memo) {
-                // 絞り込んだユーザーが自分に共有しているメモに、詳細のみか、編集可能か、の判定の情報を追加
-                $share_setting_memo->memo->access = $share_setting_memo->edit_access;
-                // 絞り込んだユーザーの共有メモが、自分に共有されているかの確認
-                if ($share_setting_memo->memo->user_id === $decrypted_user_id) {
-                    // 空の配列に追加
-                    $shared_memos[] = $share_setting_memo->memo;
-                }
-            }
+            // クエリーパラメーターから絞り込んだユーザーの、自分に共有しているメモを取得
+            return $share_setting_memos
+                ->filter(function ($share_setting_memo) use ($decrypted_user_id) {
+                    return $share_setting_memo->memo->user_id === $decrypted_user_id;
+                })
+                ->map(function ($share_setting_memo) {
+                    // 自分に共有しているメモに、詳細のみか、編集可能か、の判定の情報を追加
+                    $share_setting_memo->memo->access = $share_setting_memo->edit_access;
+                    return $share_setting_memo->memo;
+                })
+                ->values()
+                ->all();
         } else {
-            // 自分に共有されている全てのメモを、空の配列に追加。
-            foreach ($share_setting_memos as $share_setting_memo) {
-                // 自分に共有しているメモに、詳細のみか、編集可能か、の判定の情報を追加
-                $share_setting_memo->memo->access = $share_setting_memo->edit_access;
-                // 空の配列に追加
-                $shared_memos[] = $share_setting_memo->memo;
-            }
+            // 自分に共有されている全てのメモを取得
+            return $share_setting_memos
+                ->map(function ($share_setting_memo) {
+                    // 自分に共有しているメモに、詳細のみか、編集可能か、の判定の情報を追加
+                    $share_setting_memo->memo->access = $share_setting_memo->edit_access;
+                    return $share_setting_memo->memo;
+                })
+                ->all();
         }
-        return $shared_memos;
     }
 
     /**
@@ -68,15 +68,14 @@ class ShareSettingService
      */
     public static function searchSharedUser(Collection $share_setting_memos): array
     {
-        // メモを共有している全ユーザーを、空の配列に追加
-        $shared_users = [];
-        foreach ($share_setting_memos as $share_setting_user) {
-            // 配列に、同じユーザーが存在しない場合に追加する
-            if (!in_array($share_setting_user->memo->user, $shared_users)) {
-                $shared_users[] = $share_setting_user->memo->user;
-            }
-        }
-        return $shared_users;
+        // メモを共有している全ユーザーを重複なく取得
+        return $share_setting_memos
+            ->map(function ($share_setting_user) {
+                return $share_setting_user->memo->user;
+            })
+            ->unique('id')
+            ->values()
+            ->all();
     }
 
     /**
