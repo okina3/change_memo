@@ -3,9 +3,9 @@
       {{-- フラッシュメッセージ --}}
       <x-common.flash-message status="session('status')" />
       {{-- ユーザーの検索の表示エリア --}}
-      @include('admin.users.partials.index.users-search')
+      @include('admin.users.partials.users-search')
       {{-- 登録ユーザー一覧の表示エリア --}}
-      @include('admin.users.partials.index.users-list')
+      @include('admin.users.partials.users-list')
    </div>
    <script>
       'use strict'
