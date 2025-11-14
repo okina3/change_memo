@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use App\Http\Requests\User\ShareStartRequest;
 use App\Models\ShareSetting;
 use Illuminate\Database\Eloquent\Collection;
-use App\Http\Requests\ShareStartRequest;
 
 class ShareSettingService
 {
