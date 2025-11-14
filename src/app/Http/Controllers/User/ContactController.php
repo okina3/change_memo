@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ContactRequest;
+use App\Http\Requests\User\ContactRequest;
 use App\Services\ContactService;
 use App\Services\SessionService;
 use Illuminate\Http\RedirectResponse;

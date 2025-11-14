@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ShareEndRequest;
-use App\Http\Requests\ShareStartRequest;
-use App\Http\Requests\UpdateSharedMemoRequest;
+use App\Http\Requests\User\ShareEndRequest;
+use App\Http\Requests\User\ShareStartRequest;
+use App\Http\Requests\User\UpdateSharedMemoRequest;
 use App\Models\Memo;
 use App\Models\ShareSetting;
 use App\Models\User;

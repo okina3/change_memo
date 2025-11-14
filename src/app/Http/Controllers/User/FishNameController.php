@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreFishRequest;
+use App\Http\Requests\User\StoreFishRequest;
 use App\Services\FishNameService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;

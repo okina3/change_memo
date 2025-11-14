@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UploadImageRequest;
+use App\Http\Requests\User\UploadImageRequest;
 use App\Models\Image;
 use App\Services\ImageService;
 use App\Services\SessionService;

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UploadMemoRequest;
+use App\Http\Requests\User\UploadMemoRequest;
 use App\Models\Bait;
 use App\Models\FishName;
 use App\Models\Image;

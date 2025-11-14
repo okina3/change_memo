@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\DeleteTagRequest;
-use App\Http\Requests\UploadTagRequest;
+use App\Http\Requests\User\DeleteTagRequest;
+use App\Http\Requests\User\UploadTagRequest;
 use App\Models\Tag;
 use App\Services\TagService;
 use App\Services\SessionService;
