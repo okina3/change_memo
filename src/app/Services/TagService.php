@@ -44,12 +44,7 @@ class TagService
      */
     public static function getMemoTagsId(Collection $select_memo_tags): array
     {
-        $memo_relation_tags_id = [];
-        foreach ($select_memo_tags as $memo_relation_tag) {
-            // メモにリレーションされたタグのidを、配列に追加
-            $memo_relation_tags_id[] = $memo_relation_tag->id;
-        }
-        return $memo_relation_tags_id;
+        return $select_memo_tags->pluck('id')->toArray();
     }
 
     /**
@@ -59,11 +54,6 @@ class TagService
      */
     public static function getMemoTagsName(Collection $select_memo_tags): array
     {
-        $memo_relation_tags_name = [];
-        foreach ($select_memo_tags as $memo_relation_tag) {
-            // メモにリレーションされたタグのnameを、配列に追加
-            $memo_relation_tags_name[] = $memo_relation_tag->name;
-        }
-        return $memo_relation_tags_name;
+        return $select_memo_tags->pluck('name')->toArray();
     }
 }
