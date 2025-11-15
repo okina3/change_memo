@@ -12,8 +12,8 @@ class StoreFishRequest extends FormRequest
     */
    public function authorize(): bool
    {
-      // 新規魚種の追加はログインユーザーのみ許可
-      return auth()->check();
+      // users ガードで認証されていることを確認する
+      return $this->user('users') !== null;
    }
 
    /**

@@ -12,7 +12,8 @@ class UploadTagRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        // users ガードで認証されていることを確認する
+        return $this->user('users') !== null;
     }
 
     /**
