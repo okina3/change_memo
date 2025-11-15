@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\UploadMemoRequest;
+use App\Http\Requests\User\StoreMemoRequest;
 use App\Models\Bait;
 use App\Models\FishName;
 use App\Models\Image;
@@ -80,11 +80,11 @@ class MemoController extends Controller
 
     /**
      * メモを保存するメソッド。
-     * @param UploadMemoRequest $request
+     * @param StoreMemoRequest $request
      * @return RedirectResponse
      * @throws Throwable
      */
-    public function store(UploadMemoRequest $request): RedirectResponse
+    public function store(StoreMemoRequest $request): RedirectResponse
     {
         // ブラウザバック対策（値を確認）
         SessionService::clickBrowserBackSession();
@@ -174,11 +174,11 @@ class MemoController extends Controller
 
     /**
      * メモを更新するメソッド。
-     * @param UploadMemoRequest $request
+     * @param StoreMemoRequest $request
      * @return RedirectResponse
      * @throws Throwable
      */
-    public function update(UploadMemoRequest $request): RedirectResponse
+    public function update(StoreMemoRequest $request): RedirectResponse
     {
         // ブラウザバック対策（値を確認）
         SessionService::clickBrowserBackSession();

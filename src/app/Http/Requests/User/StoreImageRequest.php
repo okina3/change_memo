@@ -3,9 +3,8 @@
 namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class UploadTagRequest extends FormRequest
+class StoreImageRequest extends FormRequest
 {
     /**
      * @return bool
@@ -23,13 +22,7 @@ class UploadTagRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'new_tag' => [
-                'string',
-                'max:25',
-                Rule::unique('tags', 'name')->where(function ($query) {
-                    return $query->where('user_id', auth()->id());
-                }),
-            ],
+            'images' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ];
     }
 
@@ -40,9 +33,10 @@ class UploadTagRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'new_tag.string' => 'タグが、入力されていません。また、文字列で指定してください。',
-            'new_tag.max' => 'タグは、25文字以内で入力してください。',
-            'new_tag.unique' => 'このタグは、すでに登録されています。',
+            'images.required' => '画像が指定されていません。',
+            'images.image' => '指定されたファイルが画像ではありません。',
+            'images.mimes' => '指定された拡張子(jpg/jpeg/png)ではありません。',
+            'images.max' => 'ファイルサイズは2MB以内にしてください。',
         ];
     }
 }

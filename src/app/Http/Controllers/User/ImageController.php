@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\UploadImageRequest;
+use App\Http\Requests\User\StoreImageRequest;
 use App\Models\Image;
 use App\Services\ImageService;
 use App\Services\SessionService;
@@ -55,12 +55,12 @@ class ImageController extends Controller
 
     /**
      * 画像を保存するメソッド。
-     * @param UploadImageRequest $request
+     * @param StoreImageRequest $request
      * @param ImageManager $manager
      * @return RedirectResponse
      * @throws Throwable
      */
-    public function store(UploadImageRequest $request, ImageManager $manager): RedirectResponse
+    public function store(StoreImageRequest $request, ImageManager $manager): RedirectResponse
     {
         // ブラウザバック対策（値を確認）
         SessionService::clickBrowserBackSession();
