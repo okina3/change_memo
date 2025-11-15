@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\DeleteUserRequest;
+use App\Http\Requests\Admin\IndexUserRequest;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
@@ -16,10 +18,10 @@ class UsersController extends Controller
 {
     /**
      * 全ユーザー、また、検索したユーザーを表示するメソッド。
-     * @param Request $request
+     * @param IndexUserRequest $request
      * @return View
      */
-    public function index(Request $request): View
+    public function index(IndexUserRequest $request): View
     {
         // 全ユーザー、また、検索したユーザーを取得
         $all_users = User::availableAllUsers()->searchKeyword($request->keyword)->get();
@@ -29,11 +31,11 @@ class UsersController extends Controller
 
     /**
      * ユーザーのサービス利用を停止（ソフトデリート）するメソッド。
-     * @param Request $request
+     * @param DeleteUserRequest $request
      * @return RedirectResponse
      * @throws Throwable
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(DeleteUserRequest $request): RedirectResponse
     {
         try {
             DB::transaction(function () use ($request) {

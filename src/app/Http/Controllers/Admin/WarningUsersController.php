@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\DeleteUserRequest;
+use App\Http\Requests\Admin\IndexUserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,10 +14,10 @@ class WarningUsersController extends Controller
 {
     /**
      * 警告したユーザー一覧を表示するメソッド。
-     * @param Request $request
+     * @param IndexUserRequest $request
      * @return View
      */
-    public function index(Request $request): View
+    public function index(IndexUserRequest $request): View
     {
         // 警告したユーザーを取得する
         $all_warning_users = User::onlyTrashed()->searchKeyword($request->keyword)->availableAllUsers()->get();
@@ -25,10 +27,10 @@ class WarningUsersController extends Controller
 
     /**
      * 警告したユーザーを元に戻すメソッド。
-     * @param Request $request
+     * @param DeleteUserRequest $request
      * @return RedirectResponse
      */
-    public function undo(Request $request): RedirectResponse
+    public function undo(DeleteUserRequest $request): RedirectResponse
     {
         User::onlyTrashed()->availableSelectUser($request->userId)->restore();
 
@@ -37,10 +39,10 @@ class WarningUsersController extends Controller
 
     /**
      * 警告したユーザーを完全削除するメソッド。
-     * @param Request $request
+     * @param DeleteUserRequest $request
      * @return RedirectResponse
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(DeleteUserRequest $request): RedirectResponse
     {
         User::onlyTrashed()->availableSelectUser($request->userId)->forceDelete();
 
