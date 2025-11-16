@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class FishNameService
 {
    /**
-    * 新しい魚種を保存して返すメソッド。
+    * 新しい魚種を保存するメソッド。
     * @param string $new_fish_name
     * @return FishName
     */

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class BaitService
 {
    /**
-    * 新しいエサを保存して返すメソッド。
+    * 新しいエサを保存するメソッド。
     * @param string $new_bait
     * @return Bait
     */
