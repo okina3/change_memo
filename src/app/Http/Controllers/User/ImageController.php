@@ -73,8 +73,8 @@ class ImageController extends Controller
                     foreach ($image_files as $image_file) {
                         // 画像をリサイズして、Laravelのフォルダ内に保存
                         $only_one_file_name = ImageService::afterResizingImage($image_file, $manager);
-                        // リサイズした画像をDBに保存（サービス層へ移譲）
-                        ImageService::createImage($only_one_file_name);
+                        // リサイズした画像をDBに保存
+                        ImageService::storeImage($only_one_file_name);
                     }
                 }
             }, 10);

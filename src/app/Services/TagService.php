@@ -13,7 +13,7 @@ class TagService
      * @param string $new_tag
      * @return Tag
      */
-    public static function storeTag(string $new_tag)
+    public static function storeTag(string $new_tag): Tag
     {
         return Tag::firstOrCreate([
             'name' => $new_tag,

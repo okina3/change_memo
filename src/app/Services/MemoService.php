@@ -19,8 +19,8 @@ class MemoService
         $id_memo = $request->route()->parameter('memo');
         // 自分自身のメモなのかチェック
         if (!is_null($id_memo)) {
-            $memo_relation_user = Memo::findOrFail($id_memo)->user->id;
-            if ($memo_relation_user !== Auth::id()) {
+            $memo = Memo::select('user_id')->findOrFail($id_memo);
+            if ($memo->user_id !== Auth::id()) {
                 abort(404);
             }
         }
@@ -89,7 +89,7 @@ class MemoService
     public static function updateMemo($request): mixed
     {
         $memo = Memo::availableSelectMemo($request->memoId)->first();
-        
+
         $memo->fishing_date = $request->input('fishing_date');
         $memo->start_time = $request->input('start_time');
         $memo->end_time = $request->input('end_time');

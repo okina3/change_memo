@@ -22,8 +22,8 @@ class ImageService
         $id_image = $request->route()->parameter('image');
         // 自分自身の画像なのかチェック
         if (!is_null($id_image)) {
-            $image_relation_user = Image::findOrFail($id_image)->user->id;
-            if ($image_relation_user !== Auth::id()) {
+            $image = Image::select('user_id')->findOrFail($id_image);
+            if ($image->user_id !== Auth::id()) {
                 abort(404);
             }
         }
@@ -34,7 +34,7 @@ class ImageService
      * @param string $filename
      * @return Image
      */
-    public static function createImage(string $filename): Image
+    public static function storeImage(string $filename): Image
     {
         return Image::create([
             'user_id' => Auth::id(),
@@ -43,33 +43,23 @@ class ImageService
     }
 
     /**
-     * 選択したメモに紐づいた画像を取得するメソッド
+     * 選択したメモに紐づいた画像を取得するメソッド。
      * @param Collection $select_memo_images
      * @return array
      */
     public static function getMemoImages(Collection $select_memo_images): array
     {
-        // メモにリレーションされた画像を、配列に追加
-        $memo_relation_images = [];
-        foreach ($select_memo_images as $memo_relation_image) {
-            $memo_relation_images[] = $memo_relation_image;
-        }
-        return $memo_relation_images;
+        return $select_memo_images->all();
     }
 
     /**
-     * 選択したメモに紐づいた画像のidを取得するメソッド
+     * 選択したメモに紐づいた画像のidを取得するメソッド。
      * @param Collection $select_memo_images
      * @return array
      */
     public static function getMemoImagesId(Collection $select_memo_images): array
     {
-        // メモにリレーションされた画像のidを、配列に追加
-        $memo_relation_images_id = [];
-        foreach ($select_memo_images as $memo_relation_image) {
-            $memo_relation_images_id[] = $memo_relation_image->id;
-        }
-        return $memo_relation_images_id;
+        return $select_memo_images->pluck('id')->toArray();
     }
 
     /**
@@ -105,9 +95,8 @@ class ImageService
     public static function deleteStorage(string $image_filename): void
     {
         // Storageフォルダ内の画像ファイルを削除
-        $file_path = 'public/' . $image_filename;
-        if (Storage::exists($file_path)) {
-            Storage::delete($file_path);
+        if (Storage::disk('public')->exists($image_filename)) {
+            Storage::disk('public')->delete($image_filename);
         }
     }
 }
