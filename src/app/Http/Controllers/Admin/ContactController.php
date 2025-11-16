@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\DeleteContactRequest;
+use App\Http\Requests\Admin\IndexUserRequest;
 use App\Models\Contact;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,10 +14,10 @@ class ContactController extends Controller
 {
     /**
      * ユーザーの問い合わせ一覧を表示するメソッド。
-     * @param Request $request
+     * @param IndexUserRequest $request
      * @return View
      */
-    public function index(Request $request): View
+    public function index(IndexUserRequest $request): View
     {
         // 全ての問い合わせ情報を取得する
         $all_contact = Contact::with('user')->searchKeyword($request->keyword)->availableAllContacts()->get();
@@ -38,10 +40,10 @@ class ContactController extends Controller
 
     /**
      * ユーザーの問い合わせを削除（ソフトデリート）するメソッド。
-     * @param Request $request
+     * @param DeleteContactRequest $request
      * @return RedirectResponse
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(DeleteContactRequest $request): RedirectResponse
     {
         // 選択した問い合わせ情報を削除する
         Contact::availableSelectContact($request->contentId)->delete();

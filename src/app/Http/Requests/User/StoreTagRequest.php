@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UploadTagRequest extends FormRequest
+class StoreTagRequest extends FormRequest
 {
     /**
      * @return bool
      */
     public function authorize(): bool
     {
-        return true;
+        // users ガードで認証されていることを確認する
+        return $this->user('users') !== null;
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreBaitRequest;
+use App\Http\Requests\User\StoreBaitRequest;
 use App\Services\BaitService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;

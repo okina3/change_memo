@@ -29,6 +29,8 @@
             <div class="m-2">
                {{ $all_images->links() }}
             </div>
+            {{-- 戻るボタン --}}
+            <div class="mr-2"><x-user.button.back-button /></div>
          </div>
       </section>
    </div>

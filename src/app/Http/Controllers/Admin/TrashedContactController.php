@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\DeleteContactRequest;
+use App\Http\Requests\Admin\IndexUserRequest;
 use App\Models\Contact;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,10 +14,10 @@ class TrashedContactController extends Controller
 {
     /**
      * ソフトデリートした問い合わせ一覧を表示するメソッド。
-     * @param Request $request
+     * @param IndexUserRequest $request
      * @return View
      */
-    public function index(Request $request): View
+    public function index(IndexUserRequest $request): View
     {
         // 警告したユーザーを取得する
         $all_trashed_contacts = Contact::onlyTrashed()->availableAllContacts()->get();
@@ -25,10 +27,10 @@ class TrashedContactController extends Controller
 
     /**
      * ソフトデリートした問い合わせを元に戻すメソッド。
-     * @param Request $request
+     * @param DeleteContactRequest $request
      * @return RedirectResponse
      */
-    public function undo(Request $request): RedirectResponse
+    public function undo(DeleteContactRequest $request): RedirectResponse
     {
         Contact::onlyTrashed()->availableSelectContact($request->contentId)->restore();
 
@@ -38,10 +40,10 @@ class TrashedContactController extends Controller
 
     /**
      * ソフトデリートした問い合わせをを完全削除するメソッド。
-     * @param Request $request
+     * @param DeleteContactRequest $request
      * @return RedirectResponse
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(DeleteContactRequest $request): RedirectResponse
     {
         Contact::onlyTrashed()->availableSelectContact($request->contentId)->forceDelete();
 

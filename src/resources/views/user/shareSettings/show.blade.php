@@ -13,28 +13,23 @@
                <p class="ml-1">さん のメモ</p>
             </div>
             {{-- 選択した共有メモの釣行日・釣行時間・釣り場所を表示 --}}
-            <x-user.memos.show.basic-info :selectMemo='$select_memo' />
+            <x-user.show.basic-info :selectMemo='$select_memo' />
             {{-- 選択した共有メモの気象状態を表示 --}}
-            <x-user.memos.show.weather-state :selectMemo='$select_memo' />
+            <x-user.show.weather-state :selectMemo='$select_memo' />
             {{-- 選択した共有メモの川の状態を表示 --}}
-            <x-user.memos.show.river-state :selectMemo='$select_memo' />
+            <x-user.show.river-state :selectMemo='$select_memo' />
             {{-- 選択した共有メモのエサの入力を表示 --}}
-            <x-user.memos.show.baits :getMemoBaitsName='$get_memo_baits_name' />
+            <x-user.show.baits :getMemoBaitsName='$get_memo_baits_name' />
             {{-- 選択した共有メモの釣果の入力を表示 --}}
-            <x-user.memos.show.fishing_results :getMemoFishResults='$get_memo_fish_results' />
+            <x-user.show.fishing_results :getMemoFishResults='$get_memo_fish_results' />
             {{-- 選択した共有メモの備考の表示 --}}
-            <x-user.memos.show.content :selectMemo='$select_memo' />
+            <x-user.show.content :selectMemo='$select_memo' />
             {{-- 選択した共有メモに紐づいたタグの表示 --}}
-            <x-user.memos.show.tags :getMemoTagsName='$get_memo_tags_name' />
+            <x-user.tags.tags :getMemoTagsName='$get_memo_tags_name' />
             {{-- 選択した共有メモに紐づいた画像の表示 --}}
-            <x-user.memos.show.big-select-image :getMemoImages='$get_memo_images' />
+            <x-user.images.big-select-image :getMemoImages='$get_memo_images' />
             {{-- 戻るボタン --}}
-            <div class="mb-2 flex justify-end">
-               <button class="btn bg-gray-800 hover:bg-gray-700"
-                  onclick="location.href='{{ route('user.share-setting.index') }}'">
-                  戻る
-               </button>
-            </div>
+            <x-user.button.back-button-shared />
          </div>
       </section>
    </div>

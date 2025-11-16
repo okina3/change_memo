@@ -13,7 +13,7 @@ class TagService
      * @param string $new_tag
      * @return Tag
      */
-    public static function storeTag(string $new_tag)
+    public static function storeTag(string $new_tag): Tag
     {
         return Tag::firstOrCreate([
             'name' => $new_tag,
@@ -44,12 +44,7 @@ class TagService
      */
     public static function getMemoTagsId(Collection $select_memo_tags): array
     {
-        $memo_relation_tags_id = [];
-        foreach ($select_memo_tags as $memo_relation_tag) {
-            // メモにリレーションされたタグのidを、配列に追加
-            $memo_relation_tags_id[] = $memo_relation_tag->id;
-        }
-        return $memo_relation_tags_id;
+        return $select_memo_tags->pluck('id')->toArray();
     }
 
     /**
@@ -59,11 +54,19 @@ class TagService
      */
     public static function getMemoTagsName(Collection $select_memo_tags): array
     {
-        $memo_relation_tags_name = [];
-        foreach ($select_memo_tags as $memo_relation_tag) {
-            // メモにリレーションされたタグのnameを、配列に追加
-            $memo_relation_tags_name[] = $memo_relation_tag->name;
+        return $select_memo_tags->pluck('name')->toArray();
+    }
+
+    /**
+     * タグを一括削除するメソッド。
+     * @param array|
+     * @return void
+     */
+    public static function deleteTags(array $tags): void
+    {
+        $tagIds = array_map('intval', (array) $tags);
+        if (!empty($tagIds)) {
+            Tag::whereIn('id', $tagIds)->delete();
         }
-        return $memo_relation_tags_name;
     }
 }

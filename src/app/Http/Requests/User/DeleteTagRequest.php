@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UploadImageRequest extends FormRequest
+class DeleteTagRequest extends FormRequest
 {
     /**
      * @return bool
      */
     public function authorize(): bool
     {
-        return true;
+        // users ガードで認証されていることを確認する
+        return $this->user('users') !== null;
     }
 
     /**
@@ -21,7 +22,7 @@ class UploadImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'images' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'tags' => 'required ',
         ];
     }
 
@@ -32,10 +33,7 @@ class UploadImageRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'images.required' => '画像が指定されていません。',
-            'images.image' => '指定されたファイルが画像ではありません。',
-            'images.mimes' => '指定された拡張子(jpg/jpeg/png)ではありません。',
-            'images.max' => 'ファイルサイズは2MB以内にしてください。',
+            'tags.required' => '削除したいタグに、チェックを入れてください。',
         ];
     }
 }

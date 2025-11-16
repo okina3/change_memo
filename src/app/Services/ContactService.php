@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
+use App\Http\Requests\User\ContactRequest;
 use App\Models\Contact;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\ContactRequest;
 
 class ContactService
 {

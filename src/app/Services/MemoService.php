@@ -19,8 +19,8 @@ class MemoService
         $id_memo = $request->route()->parameter('memo');
         // 自分自身のメモなのかチェック
         if (!is_null($id_memo)) {
-            $memo_relation_user = Memo::findOrFail($id_memo)->user->id;
-            if ($memo_relation_user !== Auth::id()) {
+            $memo = Memo::select('user_id')->findOrFail($id_memo);
+            if ($memo->user_id !== Auth::id()) {
                 abort(404);
             }
         }
@@ -89,7 +89,7 @@ class MemoService
     public static function updateMemo($request): mixed
     {
         $memo = Memo::availableSelectMemo($request->memoId)->first();
-        
+
         $memo->fishing_date = $request->input('fishing_date');
         $memo->start_time = $request->input('start_time');
         $memo->end_time = $request->input('end_time');
@@ -120,8 +120,10 @@ class MemoService
     {
         // 既存エサの選択があれば、メモに紐付けて中間テーブルに保存
         if (!empty($request->baits)) {
-            foreach ($request->baits as $bait_number) {
-                Memo::findOrFail($memo_id)->baits()->attach($bait_number);
+            $memo = Memo::findOrFail($memo_id);
+            $baitIds = array_map('intval', (array) $request->baits);
+            if (!empty($baitIds)) {
+                $memo->baits()->attach($baitIds);
             }
         }
     }
@@ -161,7 +163,7 @@ class MemoService
     }
 
     /**
-     * メモに紐づいた既存のタグを、中間テーブルに保存するメソッド
+     * メモに紐づいた既存のタグを、中間テーブルに保存するメソッド。
      * @param $request
      * @param int $memo_id
      * @return void
@@ -170,14 +172,16 @@ class MemoService
     {
         // 既存タグの選択があれば、メモに紐付けて中間テーブルに保存
         if (!empty($request->tags)) {
-            foreach ($request->tags as $tag_number) {
-                Memo::findOrFail($memo_id)->tags()->attach($tag_number);
+            $memo = Memo::findOrFail($memo_id);
+            $tagIds = array_map('intval', (array) $request->tags);
+            if (!empty($tagIds)) {
+                $memo->tags()->attach($tagIds);
             }
         }
     }
 
     /**
-     * メモに紐づいた既存画像を、中間テーブルに値を保存するメソッド
+     * メモに紐づいた既存画像を、中間テーブルに値を保存するメソッド。
      * @param $request
      * @param int $memo_id
      * @return void
@@ -186,8 +190,10 @@ class MemoService
     {
         // 画像の選択があれば、メモに紐付けて中間テーブルに保存
         if (!empty($request->images)) {
-            foreach ($request->images as $memo_image) {
-                Memo::findOrFail($memo_id)->images()->attach($memo_image);
+            $memo = Memo::findOrFail($memo_id);
+            $imageIds = array_map('intval', (array) $request->images);
+            if (!empty($imageIds)) {
+                $memo->images()->attach($imageIds);
             }
         }
     }

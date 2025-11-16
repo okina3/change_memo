@@ -9,6 +9,8 @@
             <x-common.flash-message status="session('status')" />
             {{-- ソフトデリートされたメモ一覧 --}}
             @include('user.trashedMemos.partials.index.trashed-memos-list')
+            {{-- 戻るボタン --}}
+            <div class="mt-2"><x-user.button.back-button /></div>
          </div>
       </section>
    </div>

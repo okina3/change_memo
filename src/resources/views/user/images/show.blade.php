@@ -20,12 +20,7 @@
                </form>
             </div>
             {{-- 戻るボタン --}}
-            <div class="my-2 flex justify-end">
-               <button class="btn bg-gray-800 hover:bg-gray-700"
-                  onclick="location.href='{{ route('user.image.index') }}'">
-                  戻る
-               </button>
-            </div>
+            <x-user.button.back-button-image />
          </div>
       </section>
    </div>

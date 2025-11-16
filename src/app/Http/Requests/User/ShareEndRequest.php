@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
@@ -14,7 +14,8 @@ class ShareEndRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        // users ガードで認証されていることを確認する
+        return $this->user('users') !== null;
     }
 
     /**

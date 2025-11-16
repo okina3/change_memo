@@ -22,20 +22,16 @@
                {{-- タグの選択 --}}
                @include('user.memos.partials.create.tags')
                {{-- 新規タグ入力 --}}
-               <x-user.memos.create.new_tag />
+               <x-user.tags.new_tag />
                {{-- 画像の選択 --}}
-               <x-user.memos.create.list-select-image :allImages='$all_images' />
+               <x-user.images.list-select-image :allImages='$all_images' />
                {{-- メモの保存ボタン --}}
                <div class="mb-5">
                   <button class="btn bg-blue-800 hover:bg-blue-700" type="submit">保存する</button>
                </div>
             </form>
             {{-- 戻るボタン --}}
-            <div class="flex justify-end">
-               <button class="btn bg-gray-800 hover:bg-gray-700" onclick="location.href='{{ route('user.index') }}'">
-                  戻る
-               </button>
-            </div>
+            <x-user.button.back-button />
          </div>
       </section>
    </div>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UploadImageRequest;
+use App\Http\Requests\User\StoreImageRequest;
 use App\Models\Image;
 use App\Services\ImageService;
 use App\Services\SessionService;
@@ -55,12 +55,12 @@ class ImageController extends Controller
 
     /**
      * 画像を保存するメソッド。
-     * @param UploadImageRequest $request
+     * @param StoreImageRequest $request
      * @param ImageManager $manager
      * @return RedirectResponse
      * @throws Throwable
      */
-    public function store(UploadImageRequest $request, ImageManager $manager): RedirectResponse
+    public function store(StoreImageRequest $request, ImageManager $manager): RedirectResponse
     {
         // ブラウザバック対策（値を確認）
         SessionService::clickBrowserBackSession();
@@ -73,8 +73,8 @@ class ImageController extends Controller
                     foreach ($image_files as $image_file) {
                         // 画像をリサイズして、Laravelのフォルダ内に保存
                         $only_one_file_name = ImageService::afterResizingImage($image_file, $manager);
-                        // リサイズした画像をDBに保存（サービス層へ移譲）
-                        ImageService::createImage($only_one_file_name);
+                        // リサイズした画像をDBに保存
+                        ImageService::storeImage($only_one_file_name);
                     }
                 }
             }, 10);
