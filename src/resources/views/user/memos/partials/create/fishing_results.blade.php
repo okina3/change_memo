@@ -74,7 +74,7 @@
       </div>
    </div>
 </div>
-{{-- 固有の JavaScript の読み込み（魚名を追加ボタンの AJAX 処理と UI 表示を実装） --}}
-@vite(['resources/js/user/memos/new-fish-name-add.js'])
-{{-- 固有の JavaScript の読み込み（釣果の入力エリアの AJAX 処理と UI 表示を実装） --}}
-@vite(['resources/js/user/memos/fishing-result-add.js'])
+{{-- 固有の JavaScript の読み込み --}}
+{{-- new-fish-name-add.js: 魚名追加ボタンの AJAX 処理と UI 表示 --}}
+{{-- fishing-result-add.js: 釣果入力エリアの追加/削除などの UI 制御 --}}
+@vite(['resources/js/user/memos/new-fish-name-add.js', 'resources/js/user/memos/fishing-result-add.js'])

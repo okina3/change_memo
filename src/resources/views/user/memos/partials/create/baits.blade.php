@@ -53,7 +53,7 @@
       </div>
    </div>
 </div>
-{{-- 固有の JavaScript の読み込み（エサを追加ボタンの AJAX 処理と UI 表示を実装） --}}
-@vite(['resources/js/user/memos/new-bait-add.js'])
-{{-- 固有の JavaScript の読み込み（エサの入力エリアの AJAX 処理と UI 表示を実装） --}}
-@vite(['resources/js/user/memos/bait-area-add.js'])
+{{-- 固有の JavaScript の読み込み --}}
+{{-- new-bait-add.js: エサ追加ボタンの AJAX 処理と UI 表示 --}}
+{{-- bait-area-add.js: エサ入力エリアの追加/削除などの UI 制御 --}}
+@vite(['resources/js/user/memos/new-bait-add.js', 'resources/js/user/memos/bait-area-add.js'])
