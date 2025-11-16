@@ -56,4 +56,17 @@ class TagService
     {
         return $select_memo_tags->pluck('name')->toArray();
     }
+
+    /**
+     * タグを一括削除するメソッド。
+     * @param array|
+     * @return void
+     */
+    public static function deleteTags(array $tags): void
+    {
+        $tagIds = array_map('intval', (array) $tags);
+        if (!empty($tagIds)) {
+            Tag::whereIn('id', $tagIds)->delete();
+        }
+    }
 }

@@ -47,10 +47,9 @@ class TagController extends Controller
      */
     public function destroy(DeleteTagRequest $request): RedirectResponse
     {
-        //タグを複数まとめて削除
-        foreach ($request->tags as $tag) {
-            Tag::availableSelectTag($tag)->delete();
-        }
+        // タグを複数まとめて削除
+        TagService::deleteTags((array) $request->tags);
+
         return to_route('user.tag.index')->with(['message' => 'タグを削除しました。', 'status' => 'alert']);
     }
 }
