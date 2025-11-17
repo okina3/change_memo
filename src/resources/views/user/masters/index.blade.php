@@ -4,15 +4,16 @@
          {{-- マスター管理ページのタイトル --}}
          <h1 class="heading heading_bg">マスター管理</h1>
          <div class="p-3 h-[85vh] overflow-y-scroll overscroll-none">
-            <div class="mt-4 mb-4">
-               <form method="get" class="flex items-center" action="{{ route('user.masters.index') }}">
-                  <input type="text" name="q" value="{{ $q ?? '' }}" placeholder="検索キーワード"
-                     class="border rounded px-2 py-1 mr-2">
-                  <select name="tab" class="border rounded px-2 py-1 mr-2">
-                     <option value="spots" {{ $tab === 'spots' ? 'selected' : '' }}>釣り場</option>
+            {{-- 検索エリア --}}
+            <div class="my-3">
+               <form method="get" action="{{ route('user.masters.index') }}">
+                  <select class="px-2 py-1.5 mr-2 w-24 border rounded" name="tab">
+                     <option value="spots" {{ $tab === 'spots' ? 'selected' : '' }}>場所</option>
                      <option value="baits" {{ $tab === 'baits' ? 'selected' : '' }}>エサ</option>
                      <option value="fishNames" {{ $tab === 'fishNames' ? 'selected' : '' }}>魚種</option>
                   </select>
+                  <input class="px-2 py-1.5 mr-2 w-48 border rounded" type="text" name="q"
+                     value="{{ $q ?? '' }}" placeholder="検索キーワード">
                   <button class="btn bg-blue-800 text-white px-3 py-1">検索</button>
                </form>
             </div>
@@ -21,7 +22,7 @@
                {{-- タブ表示 --}}
                <div class="mb-3">
                   <a href="?tab=spots"
-                     class="px-3 py-1 mr-2 {{ $tab === 'spots' ? 'bg-blue-600 text-white rounded' : 'bg-gray-100 rounded' }}">釣り場</a>
+                     class="px-3 py-1 mr-2 {{ $tab === 'spots' ? 'bg-blue-600 text-white rounded' : 'bg-gray-100 rounded' }}">場所</a>
                   <a href="?tab=baits"
                      class="px-3 py-1 mr-2 {{ $tab === 'baits' ? 'bg-blue-600 text-white rounded' : 'bg-gray-100 rounded' }}">エサ</a>
                   <a href="?tab=fishNames"
