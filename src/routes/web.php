@@ -1,13 +1,14 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\User\BaitController;
 use App\Http\Controllers\User\ContactController;
+use App\Http\Controllers\User\FishNameController;
 use App\Http\Controllers\User\ImageController;
+use App\Http\Controllers\User\MasterController;
 use App\Http\Controllers\User\MemoController;
 use App\Http\Controllers\User\ShareSettingController;
 use App\Http\Controllers\User\SpotController;
-use App\Http\Controllers\User\BaitController;
-use App\Http\Controllers\User\FishNameController;
 use App\Http\Controllers\User\TagController;
 use App\Http\Controllers\User\TrashedMemoController;
 use App\Http\Middleware\KeepBackFlashForAjax;
@@ -25,11 +26,6 @@ Route::get('/dashboard', function () {
 // ユーザー用ルーティング
 Route::prefix('/')->as('user.')->group(function () {
     Route::middleware('auth:users')->group(function () {
-        // メモ管理画面
-        // Route::controller(MemoController::class)->group(function () {
-        //     Route::get('/index', 'index')->name('index');
-        // });
-
         //メモ管理画面
         Route::controller(MemoController::class)->group(function () {
             Route::get('/', 'index')->name('index');
@@ -39,6 +35,12 @@ Route::prefix('/')->as('user.')->group(function () {
             Route::get('edit/{memo}', 'edit')->name('edit');
             Route::patch('update', 'update')->name('update');
             Route::delete('destroy', 'destroy')->name('destroy');
+        });
+
+        // マスター管理画面（釣り場・エサ・魚種）
+        Route::controller(MasterController::class)->prefix('masters')->group(function () {
+            Route::get('/', 'index')->name('masters.index');
+            Route::delete('/{type}/{id}', 'destroy')->name('masters.destroy');
         });
 
         // 釣り場所の登録
@@ -61,7 +63,6 @@ Route::prefix('/')->as('user.')->group(function () {
             ->group(function () {
                 Route::post('/store', 'store')->name('fish-name.store');
             });
-
 
         //タグ管理画面
         Route::controller(TagController::class)->prefix('tag')->group(function () {
