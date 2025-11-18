@@ -4,115 +4,123 @@
          {{-- マスター管理ページのタイトル --}}
          <h1 class="heading heading_bg">マスター管理</h1>
          <div class="p-3 h-[85vh] overflow-y-scroll overscroll-none">
-            {{-- 検索エリア --}}
-            <div class="my-3">
-               <form method="get" action="{{ route('user.masters.index') }}">
-                  <select class="px-2 py-1.5 mr-2 w-24 border rounded" name="tab">
-                     <option value="spots" {{ $tab === 'spots' ? 'selected' : '' }}>場所</option>
-                     <option value="baits" {{ $tab === 'baits' ? 'selected' : '' }}>エサ</option>
-                     <option value="fishNames" {{ $tab === 'fishNames' ? 'selected' : '' }}>魚種</option>
-                  </select>
-                  <input class="px-2 py-1.5 mr-2 w-48 border rounded" type="text" name="q"
-                     value="{{ $q ?? '' }}" placeholder="検索キーワード">
-                  <button class="btn bg-blue-800 text-white px-3 py-1">検索</button>
-               </form>
-            </div>
-
-            <div>
+            {{-- タブ表示と検索エリア --}}
+            <div class="mb-5 sm:flex sm:items-end sm:flex-row">
                {{-- タブ表示 --}}
-               <div class="mb-3">
-                  <a href="?tab=spots"
-                     class="px-3 py-1 mr-2 {{ $tab === 'spots' ? 'bg-blue-600 text-white rounded' : 'bg-gray-100 rounded' }}">場所</a>
-                  <a href="?tab=baits"
-                     class="px-3 py-1 mr-2 {{ $tab === 'baits' ? 'bg-blue-600 text-white rounded' : 'bg-gray-100 rounded' }}">エサ</a>
-                  <a href="?tab=fishNames"
-                     class="px-3 py-1 mr-2 {{ $tab === 'fishNames' ? 'bg-blue-600 text-white rounded' : 'bg-gray-100 rounded' }}">魚種</a>
+               <div class="mr-10">
+                  <p class="mb-2 text-sm text-gray-500">クリックでカテゴリを選択してください。</p>
+                  <div class="flex items-center">
+                     <button type="submit" form="searchForm" name="tab" value="spots"
+                        class="btn-3 {{ $tab === 'spots' ? 'active' : '' }}" title="場所の一覧を表示">
+                        場所
+                     </button>
+                     <button type="submit" form="searchForm" name="tab" value="baits"
+                        class="btn-3 {{ $tab === 'baits' ? 'active' : '' }}" title="エサの一覧を表示">
+                        エサ
+                     </button>
+                     <button type="submit" form="searchForm" name="tab" value="fishNames"
+                        class="btn-3 {{ $tab === 'fishNames' ? 'active' : '' }}" title="魚種の一覧を表示">
+                        魚種
+                     </button>
+                  </div>
                </div>
-
-               {{-- 各タブの内容 --}}
-               @if ($tab === 'spots' || $tab === 'spots')
-                  <div>
-                     <table class="w-full">
-                        <thead>
-                           <tr class="text-left">
-                              <th class="p-2">ID</th>
-                              <th class="p-2">名前</th>
-                              <th class="p-2">操作</th>
-                           </tr>
-                        </thead>
-                        <tbody>
-                           @foreach ($spots as $spot)
-                              <tr class="border-t">
-                                 <td class="p-2">{{ $spot->id }}</td>
-                                 <td class="p-2">{{ $spot->name }}</td>
-                                 <td class="p-2">
-                                    <button class="btn bg-red-600 text-white px-3 py-1 master-delete" data-type="spot"
-                                       data-id="{{ $spot->id }}">削除</button>
-                                 </td>
-                              </tr>
-                           @endforeach
-                        </tbody>
-                     </table>
-                     <div class="mt-3">{{ $spots->links() }}</div>
-                  </div>
-               @endif
-
-               @if ($tab === 'baits' || $tab === 'baits')
-                  <div>
-                     <table class="w-full">
-                        <thead>
-                           <tr class="text-left">
-                              <th class="p-2">ID</th>
-                              <th class="p-2">名前</th>
-                              <th class="p-2">操作</th>
-                           </tr>
-                        </thead>
-                        <tbody>
-                           @foreach ($baits as $bait)
-                              <tr class="border-t">
-                                 <td class="p-2">{{ $bait->id }}</td>
-                                 <td class="p-2">{{ $bait->name }}</td>
-                                 <td class="p-2">
-                                    <button class="btn bg-red-600 text-white px-3 py-1 master-delete" data-type="bait"
-                                       data-id="{{ $bait->id }}">削除</button>
-                                 </td>
-                              </tr>
-                           @endforeach
-                        </tbody>
-                     </table>
-                     <div class="mt-3">{{ $baits->links() }}</div>
-                  </div>
-               @endif
-
-               @if ($tab === 'fishNames' || $tab === 'fishNames')
-                  <div>
-                     <table class="w-full">
-                        <thead>
-                           <tr class="text-left">
-                              <th class="p-2">ID</th>
-                              <th class="p-2">名前</th>
-                              <th class="p-2">操作</th>
-                           </tr>
-                        </thead>
-                        <tbody>
-                           @foreach ($fishNames as $fish)
-                              <tr class="border-t">
-                                 <td class="p-2">{{ $fish->id }}</td>
-                                 <td class="p-2">{{ $fish->name }}</td>
-                                 <td class="p-2">
-                                    <button class="btn bg-red-600 text-white px-3 py-1 master-delete"
-                                       data-type="fish-name" data-id="{{ $fish->id }}">削除</button>
-                                 </td>
-                              </tr>
-                           @endforeach
-                        </tbody>
-                     </table>
-                     <div class="mt-3">{{ $fishNames->links() }}</div>
-                  </div>
-               @endif
+               {{-- 検索フォーム --}}
+               <div class=" mt-6 sm:mt-0">
+                  <p class="mb-2 text-sm text-gray-500">カテゴリごとに検索します。</p>
+                  <form id="searchForm" method="get" action="{{ route('user.masters.index') }}">
+                     <input class="px-2 py-1.5 mr-2 w-48 border rounded" type="text" name="q"
+                        value="{{ $q ?? '' }}" placeholder="検索キーワード">
+                     <button class="btn px-3 py-1 text-white bg-blue-800 ">
+                        検索
+                     </button>
+                  </form>
+               </div>
             </div>
+
+            {{-- 各タブの内容 --}}
+            @if ($tab === 'spots' || $tab === 'spots')
+               <div>
+                  <table class="w-full">
+                     <thead>
+                        <tr class="text-left">
+                           <th class="p-2">ID</th>
+                           <th class="p-2">名前</th>
+                           <th class="p-2">操作</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        @foreach ($spots as $spot)
+                           <tr class="border-t">
+                              <td class="p-2">{{ $spot->id }}</td>
+                              <td class="p-2">{{ $spot->name }}</td>
+                              <td class="p-2">
+                                 <button class="btn bg-red-600 text-white px-3 py-1 master-delete" data-type="spot"
+                                    data-id="{{ $spot->id }}">削除</button>
+                              </td>
+                           </tr>
+                        @endforeach
+                     </tbody>
+                  </table>
+                  <div class="mt-3">{{ $spots->links() }}</div>
+               </div>
+            @endif
+
+            @if ($tab === 'baits' || $tab === 'baits')
+               <div>
+                  <table class="w-full">
+                     <thead>
+                        <tr class="text-left">
+                           <th class="p-2">ID</th>
+                           <th class="p-2">名前</th>
+                           <th class="p-2">操作</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        @foreach ($baits as $bait)
+                           <tr class="border-t">
+                              <td class="p-2">{{ $bait->id }}</td>
+                              <td class="p-2">{{ $bait->name }}</td>
+                              <td class="p-2">
+                                 <button class="btn bg-red-600 text-white px-3 py-1 master-delete" data-type="bait"
+                                    data-id="{{ $bait->id }}">削除</button>
+                              </td>
+                           </tr>
+                        @endforeach
+                     </tbody>
+                  </table>
+                  <div class="mt-3">{{ $baits->links() }}</div>
+               </div>
+            @endif
+
+            @if ($tab === 'fishNames' || $tab === 'fishNames')
+               <div>
+                  <table class="w-full">
+                     <thead>
+                        <tr class="text-left">
+                           <th class="p-2">ID</th>
+                           <th class="p-2">名前</th>
+                           <th class="p-2">操作</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        @foreach ($fishNames as $fish)
+                           <tr class="border-t">
+                              <td class="p-2">{{ $fish->id }}</td>
+                              <td class="p-2">{{ $fish->name }}</td>
+                              <td class="p-2">
+                                 <button class="btn bg-red-600 text-white px-3 py-1 master-delete" data-type="fish-name"
+                                    data-id="{{ $fish->id }}">削除</button>
+                              </td>
+                           </tr>
+                        @endforeach
+                     </tbody>
+                  </table>
+                  <div class="mt-3">{{ $fishNames->links() }}</div>
+               </div>
+            @endif
          </div>
-      </section>
+   </div>
+   </section>
    </div>
 
    <script>
