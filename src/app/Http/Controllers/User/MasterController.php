@@ -24,28 +24,28 @@ class MasterController extends Controller
       // ブラウザバック対策（値を削除する）
       SessionService::resetBrowserBackSession();
 
+
       $tab = $request->get('tab', 'spots');
-
-      $q = $request->get('q', '');
-
+      $keyword = $request->get('keyword', '');
       // helper to build query with optional user_id filter and search
-      $build = function ($class) use ($q) {
+      $build = function ($class) use ($keyword) {
          $model = new $class;
          $query = $class::query();
          if (Schema::hasColumn($model->getTable(), 'user_id')) {
             $query->where('user_id', Auth::id());
          }
-         if ($q !== '') {
-            $query->where('name', 'like', "%{$q}%");
+         if ($keyword !== '') {
+            $query->where('name', 'like', "%{$keyword}%");
          }
          return $query->orderBy('id', 'desc')->paginate(15)->withQueryString();
       };
 
+      
       $spots = $build(Spot::class);
       $baits = $build(Bait::class);
       $fishNames = $build(FishName::class);
 
-      return view('user.masters.index', compact('tab', 'spots', 'baits', 'fishNames', 'q'));
+      return view('user.masters.index', compact('tab', 'spots', 'baits', 'fishNames', 'keyword'));
    }
 
    /**

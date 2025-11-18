@@ -22,7 +22,7 @@
    <div class=" mt-6 sm:mt-0">
       <p class="mb-2 text-sm text-gray-500">カテゴリごとに検索します。</p>
       <form id="searchForm" method="get" action="{{ route('user.masters.index') }}">
-         <input class="px-2 py-1.5 mr-2 w-48 border rounded" type="text" name="q" value="{{ $q ?? '' }}"
+         <input class="px-2 py-1.5 mr-2 w-48 border rounded" type="text" name="keyword" value="{{ $keyword ?? '' }}"
             placeholder="検索キーワード">
          <button class="btn px-3 py-1 text-white bg-blue-800 ">
             検索
