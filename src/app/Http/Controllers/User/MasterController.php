@@ -7,6 +7,7 @@ use App\Models\Bait;
 use App\Models\FishName;
 use App\Models\Spot;
 use App\Services\SessionService;
+use App\Services\MasterSearchService;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,31 +20,18 @@ class MasterController extends Controller
    /**
     * マスター管理画面（スポット / エサ / 魚種）
     */
-   public function index(Request $request)
+   public function index(Request $request, MasterSearchService $searchService)
    {
       // ブラウザバック対策（値を削除する）
       SessionService::resetBrowserBackSession();
 
-
       $tab = $request->get('tab', 'spots');
       $keyword = $request->get('keyword', '');
-      // helper to build query with optional user_id filter and search
-      $build = function ($class) use ($keyword) {
-         $model = new $class;
-         $query = $class::query();
-         if (Schema::hasColumn($model->getTable(), 'user_id')) {
-            $query->where('user_id', Auth::id());
-         }
-         if ($keyword !== '') {
-            $query->where('name', 'like', "%{$keyword}%");
-         }
-         return $query->orderBy('id', 'desc')->paginate(15)->withQueryString();
-      };
 
-      
-      $spots = $build(Spot::class);
-      $baits = $build(Bait::class);
-      $fishNames = $build(FishName::class);
+      // Use MasterSearchService to build paginated results (action injection)
+      $spots = $searchService->search(Spot::class, $keyword);
+      $baits = $searchService->search(Bait::class, $keyword);
+      $fishNames = $searchService->search(FishName::class, $keyword);
 
       return view('user.masters.index', compact('tab', 'spots', 'baits', 'fishNames', 'keyword'));
    }

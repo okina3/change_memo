@@ -13,8 +13,8 @@
             エサ
          </button>
          <button type="submit" form="searchForm" name="tab" value="fishNames"
-            class="btn-3 {{ $tab === 'fishNames' ? 'active' : '' }}" title="魚種の一覧を表示">
-            魚種
+            class="btn-3 {{ $tab === 'fishNames' ? 'active' : '' }}" title="魚名の一覧を表示">
+            魚名
          </button>
       </div>
    </div>
@@ -24,7 +24,7 @@
       <form id="searchForm" method="get" action="{{ route('user.masters.index') }}">
          <input class="px-2 py-1.5 mr-2 w-48 border rounded" type="text" name="keyword" value="{{ $keyword ?? '' }}"
             placeholder="検索キーワード">
-         <button class="btn px-3 py-1 text-white bg-blue-800 ">
+         <button class="btn px-3 py-1 text-white bg-blue-800">
             検索
          </button>
       </form>

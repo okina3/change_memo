@@ -7,14 +7,12 @@
             {{-- タブ表示と検索エリア --}}
             @include('user.masters.partials.index.tab-list-search')
 
-
-            {{-- 各タブの内容 --}}
+            {{-- 場所のタブ内容 --}}
             @if ($tab === 'spots' || $tab === 'spots')
                <div>
                   <table class="w-full">
                      <thead>
                         <tr class="text-left">
-                           <th class="p-2">ID</th>
                            <th class="p-2">名前</th>
                            <th class="p-2">操作</th>
                         </tr>
@@ -22,7 +20,6 @@
                      <tbody>
                         @foreach ($spots as $spot)
                            <tr class="border-t">
-                              <td class="p-2">{{ $spot->id }}</td>
                               <td class="p-2">{{ $spot->name }}</td>
                               <td class="p-2">
                                  <button class="btn bg-red-600 text-white px-3 py-1 master-delete" data-type="spot"
@@ -32,16 +29,15 @@
                         @endforeach
                      </tbody>
                   </table>
-                  <div class="mt-3">{{ $spots->links() }}</div>
                </div>
             @endif
 
+            {{-- エサのタブ内容 --}}
             @if ($tab === 'baits' || $tab === 'baits')
                <div>
                   <table class="w-full">
                      <thead>
                         <tr class="text-left">
-                           <th class="p-2">ID</th>
                            <th class="p-2">名前</th>
                            <th class="p-2">操作</th>
                         </tr>
@@ -49,7 +45,6 @@
                      <tbody>
                         @foreach ($baits as $bait)
                            <tr class="border-t">
-                              <td class="p-2">{{ $bait->id }}</td>
                               <td class="p-2">{{ $bait->name }}</td>
                               <td class="p-2">
                                  <button class="btn bg-red-600 text-white px-3 py-1 master-delete" data-type="bait"
@@ -59,16 +54,15 @@
                         @endforeach
                      </tbody>
                   </table>
-                  <div class="mt-3">{{ $baits->links() }}</div>
                </div>
             @endif
 
+            {{-- 魚名のタブ内容 --}}
             @if ($tab === 'fishNames' || $tab === 'fishNames')
                <div>
                   <table class="w-full">
                      <thead>
                         <tr class="text-left">
-                           <th class="p-2">ID</th>
                            <th class="p-2">名前</th>
                            <th class="p-2">操作</th>
                         </tr>
@@ -76,7 +70,6 @@
                      <tbody>
                         @foreach ($fishNames as $fish)
                            <tr class="border-t">
-                              <td class="p-2">{{ $fish->id }}</td>
                               <td class="p-2">{{ $fish->name }}</td>
                               <td class="p-2">
                                  <button class="btn bg-red-600 text-white px-3 py-1 master-delete" data-type="fish-name"
@@ -86,7 +79,6 @@
                         @endforeach
                      </tbody>
                   </table>
-                  <div class="mt-3">{{ $fishNames->links() }}</div>
                </div>
             @endif
          </div>
