@@ -15,6 +15,7 @@ class FishNameController extends Controller
     * 新規魚種を保存するメソッド
     * @param StoreFishRequest $request
     * @return JsonResponse
+    * @throws Throwable
     */
    public function store(StoreFishRequest $request): JsonResponse
    {

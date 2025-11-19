@@ -13,12 +13,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\View\View;
 use Throwable;
 
 class MasterController extends Controller
 {
    /**
     * マスター管理画面（スポット / エサ / 魚名）
+   * @return View
     */
    public function index(Request $request, MasterSearchService $searchService)
    {

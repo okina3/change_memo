@@ -15,6 +15,7 @@ class SpotController extends Controller
      * 釣り場所を保存するメソッド。
      * @param StoreSpotRequest $request
      * @return JsonResponse
+     * @throws Throwable
      */
     public function store(StoreSpotRequest $request): JsonResponse
     {

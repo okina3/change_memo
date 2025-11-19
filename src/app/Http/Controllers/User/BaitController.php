@@ -15,6 +15,7 @@ class BaitController extends Controller
     * 新規エサを保存するメソッド。
     * @param StoreBaitRequest $request
     * @return JsonResponse
+    * @throws Throwable
     */
    public function store(StoreBaitRequest $request): JsonResponse
    {
