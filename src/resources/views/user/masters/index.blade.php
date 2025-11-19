@@ -4,61 +4,18 @@
          {{-- マスター管理ページのタイトル --}}
          <h1 class="heading heading_bg">マスター管理</h1>
          <div class="p-3 h-[85vh] overflow-y-scroll overscroll-none">
+            {{-- フラッシュメッセージ --}}
+            <x-common.flash-message status="session('status')" />
             {{-- タブ表示と検索エリア --}}
             @include('user.masters.partials.index.tab-list-search')
             {{-- 場所のタブ内容 --}}
             @include('user.masters.partials.index.spots-tab-content')
-
             {{-- エサのタブ内容 --}}
-            @if ($tab === 'baits' || $tab === 'baits')
-               <table class="w-full">
-                  <thead>
-                     <tr class="text-left">
-                        <th class="p-2">名前</th>
-                        <th class="p-2">操作</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     @foreach ($baits as $bait)
-                        <tr class="border-t">
-                           <td class="p-2">{{ $bait->name }}</td>
-                           <td class="p-2">
-                              <button class="btn bg-red-600 text-white px-3 py-1 master-delete" data-type="bait"
-                                 data-id="{{ $bait->id }}">削除</button>
-                           </td>
-                        </tr>
-                     @endforeach
-                  </tbody>
-               </table>
-            @endif
-
+            @include('user.masters.partials.index.baits-tab-content')
             {{-- 魚名のタブ内容 --}}
-            @if ($tab === 'fishNames' || $tab === 'fishNames')
-               <div>
-                  <table class="w-full">
-                     <thead>
-                        <tr class="text-left">
-                           <th class="p-2">名前</th>
-                           <th class="p-2">操作</th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        @foreach ($fishNames as $fish)
-                           <tr class="border-t">
-                              <td class="p-2">{{ $fish->name }}</td>
-                              <td class="p-2">
-                                 <button class="btn bg-red-600 text-white px-3 py-1 master-delete" data-type="fish-name"
-                                    data-id="{{ $fish->id }}">削除</button>
-                              </td>
-                           </tr>
-                        @endforeach
-                     </tbody>
-                  </table>
-               </div>
-            @endif
+            @include('user.masters.partials.index.fish-names-tab-content')
          </div>
-   </div>
-   </section>
+      </section>
    </div>
 
    <script>

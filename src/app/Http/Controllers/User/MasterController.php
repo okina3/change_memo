@@ -45,35 +45,45 @@ class MasterController extends Controller
     */
    public function destroy($type, $id)
    {
+      /**
+       * 受け取るタイプに応じてモデルクラスを決定するマップ
+       * 将来的にモデルを追加する場合はここに追記する
+       */
       $map = [
          'spot' => Spot::class,
          'bait' => Bait::class,
          'fish-name' => FishName::class,
       ];
 
+      // 不正なタイプの場合は早期に 404 を返す
       if (!isset($map[$type])) {
          return response()->json(['message' => '不正なタイプです'], 404);
       }
 
       $class = $map[$type];
+
+      // 指定 ID のレコードを取得（存在しない場合は 404）
       $model = $class::find($id);
       if (!$model) {
          return response()->json(['message' => '該当データが見つかりません'], 404);
       }
 
-      // 所有チェック（user_id カラムがある場合のみ）
+      // 所有チェック: テーブルに user_id カラムが存在する場合のみ現在ユーザーと照合
       if (Schema::hasColumn($model->getTable(), 'user_id') && $model->user_id !== Auth::id()) {
          return response()->json(['message' => '権限がありません'], 403);
       }
 
       try {
+         // 削除を実行
          $model->delete();
          return response()->json(['ok' => true]);
       } catch (QueryException $e) {
-         Log::error($e->getMessage());
+         // 外部キー制約など関連データによる削除失敗
+         Log::error('MasterController@destroy QueryException: ' . $e->getMessage());
          return response()->json(['message' => '関連データのため削除できません'], 409);
       } catch (Throwable $e) {
-         Log::error($e->getMessage());
+         // その他の予期せぬ例外
+         Log::error('MasterController@destroy Throwable: ' . $e->getMessage());
          return response()->json(['message' => 'サーバーエラー'], 500);
       }
    }
