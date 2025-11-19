@@ -2,41 +2,44 @@
 
 namespace App\Services;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 
 class MasterSearchService
 {
    /**
-    * モデルを `name` カラムで検索して、結果のコレクションを返します。
-    *
-    * 処理の流れ:
-    * 1. 指定されたモデルクラスの新しいインスタンスを作成し、クエリビルダを取得します。
-    * 2. モデルテーブルに `user_id` カラムが存在する場合は、現在ログイン中のユーザーで絞り込みます。
-    * 3. `$keyword` が空でなければ `name` カラムに対して部分一致 (LIKE) 検索を行います。
-    * 4. `id` 降順でソートして全件取得したコレクションを返します。
-    *
-    * @param string $class Eloquent モデルのクラス名（例: App\Models\Spot::class）
-    * @param string|null $keyword 検索キーワード（部分一致）。null または空文字の場合は検索条件を適用しません。
-    * @return \Illuminate\Database\Eloquent\Collection 検索結果のコレクション
+    * 検索した各項目の名前を表示する為のメソッド。
+    * @param string $class 
+    * @param string|null $keyword 
+    * @return Collection 
     */
-   public function search(string $class, ?string $keyword = null)
+   public function searchKeyword(string $class, ?string $keyword = null)
    {
-      // モデルインスタンスとクエリビルダの取得
+      // 各指定モデルのインスタンスを生成、クエリビルダの取得
       $model = new $class;
       $query = $class::query();
 
-      // user_id カラムがあるモデルの場合、ログインユーザーで絞り込む
+      // 現在ログイン中ユーザーのデータに絞り込む
       if (Schema::hasColumn($model->getTable(), 'user_id')) {
          $query->where('user_id', Auth::id());
       }
 
-      // キーワードが指定されていれば name カラムに対して部分一致検索を追加
+      // キーワードが指定されていれば検索をする
       if ($keyword !== null && $keyword !== '') {
-         $query->where('name', 'like', "%{$keyword}%");
+         // 全角スペースを半角に変換
+         $spaceConvert = mb_convert_kana($keyword, 's');
+         // 空白で分割して単語配列にする
+         $keywords = preg_split('/\s+/', $spaceConvert, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+         // 各単語ごとに OR 条件で、各name カラムを部分一致検索
+         $query->where(function ($q) use ($keywords) {
+            foreach ($keywords as $word) {
+               $q->orWhere('name', 'like', '%' . $word . '%');
+            }
+         });
       }
 
-      // 結果を id 降順で並び替え、全件を取得してコレクションで返す（ページネーションを行わない）
+      // 結果を id 降順で並び替え、全件を取得してコレクションで返す
       return $query->orderBy('id', 'desc')->get();
    }
 }

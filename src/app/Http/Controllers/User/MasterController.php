@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Bait;
 use App\Models\FishName;
 use App\Models\Spot;
-use App\Services\SessionService;
 use App\Services\MasterSearchService;
+use App\Services\SessionService;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,20 +18,21 @@ use Throwable;
 class MasterController extends Controller
 {
    /**
-    * マスター管理画面（スポット / エサ / 魚種）
+    * マスター管理画面（スポット / エサ / 魚名）
     */
    public function index(Request $request, MasterSearchService $searchService)
    {
       // ブラウザバック対策（値を削除する）
       SessionService::resetBrowserBackSession();
 
+      // 表示するタブを取得
       $tab = $request->get('tab', 'spots');
+      // 検索キーワードを取得
       $keyword = $request->get('keyword', '');
-
-      // Use MasterSearchService to build paginated results (action injection)
-      $spots = $searchService->search(Spot::class, $keyword);
-      $baits = $searchService->search(Bait::class, $keyword);
-      $fishNames = $searchService->search(FishName::class, $keyword);
+      // 各マスターデータを検索する
+      $spots = $searchService->searchKeyword(Spot::class, $keyword);
+      $baits = $searchService->searchKeyword(Bait::class, $keyword);
+      $fishNames = $searchService->searchKeyword(FishName::class, $keyword);
 
       return view('user.masters.index', compact('tab', 'spots', 'baits', 'fishNames', 'keyword'));
    }
