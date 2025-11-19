@@ -12,10 +12,12 @@
             <tr class="border-t">
                <td class="p-2">{{ $spot->name }}</td>
                <td class="p-2">
-                  <button class="btn bg-red-600 text-white px-3 py-1 master-delete" data-type="spot"
-                     data-id="{{ $spot->id }}">
-                     削除
-                  </button>
+                  <form onsubmit="return deleteCheck()"
+                     action="{{ route('user.masters.destroy', ['type' => 'spot', 'id' => $spot->id]) }}" method="POST">
+                     @csrf
+                     @method('delete')
+                     <button type="submit" class="btn px-3 py-1 bg-red-600 text-white">削除</button>
+                  </form>
                </td>
             </tr>
          @endforeach

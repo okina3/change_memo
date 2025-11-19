@@ -19,29 +19,13 @@
    </div>
 
    <script>
-      document.addEventListener('click', function(e) {
-         if (!e.target.classList.contains('master-delete')) return;
-         const type = e.target.dataset.type;
-         const id = e.target.dataset.id;
-         if (!confirm('本当に削除しますか？ 完全に削除されます。')) return;
-         const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-         fetch(`/masters/${type}/${id}`, {
-            method: 'DELETE',
-            headers: {
-               'X-CSRF-TOKEN': token,
-               'Accept': 'application/json',
-               'Content-Type': 'application/json'
-            }
-         }).then(res => res.json()).then(data => {
-            if (data.ok) {
-               // 削除成功: ページを再読み込みして一覧を更新
-               location.reload();
-            } else {
-               alert(data.message || '削除に失敗しました');
-            }
-         }).catch(err => {
-            alert('サーバーエラー');
-         });
-      });
+      'use strict'
+
+      //削除のアラート
+      function deleteCheck() {
+         const RESULT = confirm('本当に削除してもいいですか? 完全に削除されます。');
+         if (!RESULT) alert("削除をキャンセルしました");
+         return RESULT;
+      }
    </script>
 </x-app-layout>

@@ -43,65 +43,45 @@ class MasterController extends Controller
     * マスターデータの完全削除。
     * type: spot | bait | fish-name
     */
-   public function destroy($type, $id)
+   public function destroy(Request $request, $type, $id)
    {
-      /**
-       * 受け取るタイプに応じてモデルクラスを決定するマップ
-       * 将来的にモデルを追加する場合はここに追記する
-       */
+
+      // 受け取るタイプに応じてモデルクラスを決定するマップ
       $map = [
          'spot' => Spot::class,
          'bait' => Bait::class,
          'fish-name' => FishName::class,
       ];
 
-      // 不正なタイプの場合は早期に 404 を返す
+      // 不正なタイプはリダイレクトで通知
       if (!isset($map[$type])) {
-         // フラッシュにも残しておく（ページ再読み込みで表示される）
-         session()->flash('message', '不正なタイプです');
-         session()->flash('status', 'alert');
-         return response()->json(['message' => '不正なタイプです'], 404);
+         return redirect()->back()->with('message', '不正なタイプです')->with('status', 'alert');
       }
 
       $class = $map[$type];
 
-      // 指定 ID のレコードを取得（存在しない場合は 404）
+      // 指定 ID のレコードを取得（存在しない場合はメッセージを返す）
       $model = $class::find($id);
       if (!$model) {
-         session()->flash('message', '該当データが見つかりません');
-         session()->flash('status', 'alert');
-         return response()->json(['message' => '該当データが見つかりません'], 404);
+         return redirect()->back()->with('message', '該当データが見つかりません')->with('status', 'alert');
       }
 
-      // 所有チェック: テーブルに user_id カラムが存在する場合のみ現在ユーザーと照合
+      // 所有チェック（user_id カラムがある場合のみ）
       if (Schema::hasColumn($model->getTable(), 'user_id') && $model->user_id !== Auth::id()) {
-         session()->flash('message', '権限がありません');
-         session()->flash('status', 'alert');
-         return response()->json(['message' => '権限がありません'], 403);
+         return redirect()->back()->with('message', '権限がありません')->with('status', 'alert');
       }
 
       try {
-         // 削除を実行
          $model->delete();
-
-         // 削除成功のメッセージをセッションにフラッシュする
-         // ページ再読み込み時に `resources/views/components/common/flash-message.blade.php` が表示する
-         session()->flash('message', '削除しました');
-         session()->flash('status', 'alert');
-
-         return response()->json(['ok' => true]);
+         return redirect()->back()->with('message', '削除しました')->with('status', 'alert');
       } catch (QueryException $e) {
          // 外部キー制約など関連データによる削除失敗
          Log::error('MasterController@destroy QueryException: ' . $e->getMessage());
-         session()->flash('message', '関連データのため削除できません');
-         session()->flash('status', 'alert');
-         return response()->json(['message' => '関連データのため削除できません'], 409);
+         return redirect()->back()->with('message', '関連データのため削除できません')->with('status', 'alert');
       } catch (Throwable $e) {
          // その他の予期せぬ例外
          Log::error('MasterController@destroy Throwable: ' . $e->getMessage());
-         session()->flash('message', 'サーバーエラーが発生しました');
-         session()->flash('status', 'alert');
-         return response()->json(['message' => 'サーバーエラー'], 500);
+         return redirect()->back()->with('message', 'サーバーエラーが発生しました')->with('status', 'alert');
       }
    }
 }
