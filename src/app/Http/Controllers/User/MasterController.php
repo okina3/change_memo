@@ -20,7 +20,7 @@ class MasterController extends Controller
 {
    /**
     * マスター管理画面（スポット / エサ / 魚名）
-   * @return View
+    * @return View
     */
    public function index(Request $request, MasterSearchService $searchService)
    {
@@ -40,7 +40,7 @@ class MasterController extends Controller
    }
 
    /**
-    * 削除処理（完全削除）
+    * マスターデータの完全削除。
     * type: spot | bait | fish-name
     */
    public function destroy($type, $id)
