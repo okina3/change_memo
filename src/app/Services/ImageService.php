@@ -35,7 +35,7 @@ class ImageService
      * @param string $filename
      * @return Image
      */
-    public static function storeImage(string $filename): Image
+    public static function createImage(string $filename): Image
     {
         return Image::create([
             'user_id' => Auth::id(),

@@ -74,7 +74,7 @@ class ImageController extends Controller
                         // 画像をリサイズして、Laravelのフォルダ内に保存
                         $only_one_file_name = ImageService::afterResizingImage($image_file, $manager);
                         // リサイズした画像をDBに保存
-                        ImageService::storeImage($only_one_file_name);
+                        ImageService::createImage($only_one_file_name);
                     }
                 }
             }, 10);

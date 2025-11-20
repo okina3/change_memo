@@ -26,7 +26,7 @@ class BaitController extends Controller
    public function store(StoreBaitRequest $request): JsonResponse
    {
       try {
-         $bait = BaitService::storeBait($request->input('new_bait'));
+         $bait = BaitService::createBait($request->input('new_bait'));
 
          return response()->json([
             'id' => $bait->id,

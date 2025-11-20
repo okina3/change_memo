@@ -52,7 +52,7 @@ class ShareSettingService
      * @param int $shared_user_id
      * @return ShareSetting
      */
-    public static function storeSetting(ShareStartRequest $request, int $shared_user_id): ShareSetting
+    public static function createSetting(ShareStartRequest $request, int $shared_user_id): ShareSetting
     {
         return ShareSetting::create([
             'sharing_user_id' => $shared_user_id,

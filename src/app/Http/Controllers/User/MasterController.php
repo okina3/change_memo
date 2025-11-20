@@ -47,7 +47,7 @@ class MasterController extends Controller
    public function storeSpot(StoreSpotRequest $request)
    {
       try {
-         $spot = SpotService::storeSpot($request->input('new_spot'));
+         $spot = SpotService::createSpot($request->input('new_spot'));
          return to_route('user.masters.index')->with('message', '場所を追加しました')->with('status', 'info');
       } catch (\Throwable $e) {
          Log::error('MasterController@storeSpot Throwable: ' . $e->getMessage());

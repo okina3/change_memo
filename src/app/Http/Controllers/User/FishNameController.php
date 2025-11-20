@@ -26,7 +26,7 @@ class FishNameController extends Controller
    public function store(StoreFishRequest $request): JsonResponse
    {
       try {
-         $fish = FishNameService::storeFishName($request->input('new_fish_name'));
+         $fish = FishNameService::createFishName($request->input('new_fish_name'));
 
          return response()->json([
             'id' => $fish->id,

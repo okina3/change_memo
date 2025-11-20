@@ -14,7 +14,7 @@ class ContactService
     * @param ContactRequest $request
     * @return Contact
     */
-   public static function storeContact(ContactRequest $request): Contact
+   public static function createContact(ContactRequest $request): Contact
    {
       return Contact::create([
          'subject' => $request->subject,

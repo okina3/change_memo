@@ -26,7 +26,7 @@ class SpotController extends Controller
     public function store(StoreSpotRequest $request): JsonResponse
     {
         try {
-            $spot = SpotService::storeSpot($request->input('new_spot'));
+            $spot = SpotService::createSpot($request->input('new_spot'));
 
             return response()->json([
                 'id' => $spot->id,
