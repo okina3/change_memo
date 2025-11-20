@@ -9,6 +9,7 @@ use App\Services\FishNameService;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -39,11 +40,14 @@ class FishNameController extends Controller
 
    /**
     * 指定の魚種を削除する。
-    * @param FishName $fishName
+    * @param Request $request
     * @return RedirectResponse
     */
-   public function destroy(FishName $fishName): RedirectResponse
+   public function destroy(Request $request): RedirectResponse
    {
+      $fishNameId = $request->input('fishNameId');
+      $fishName = FishName::findOrFail($fishNameId);
+
       // 所有チェック
       if (Schema::hasColumn($fishName->getTable(), 'user_id') && $fishName->user_id !== Auth::id()) {
          return redirect()->back()->with('message', '権限がありません')->with('status', 'alert');
@@ -51,7 +55,7 @@ class FishNameController extends Controller
 
       try {
          $fishName->delete();
-         return redirect()->back()->with('message', '削除しました')->with('status', 'alert');
+         return redirect()->back()->with('message', '魚名を削除しました')->with('status', 'alert');
       } catch (QueryException $e) {
          Log::error('FishNameController@destroy QueryException: ' . $e->getMessage());
          return redirect()->back()->with('message', '関連データのため削除できません')->with('status', 'alert');

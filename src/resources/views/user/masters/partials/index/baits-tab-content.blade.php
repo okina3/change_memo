@@ -10,10 +10,10 @@
          </p>
          {{-- ボタンエリア --}}
          <div class="mt-2 md:w-[30%]">
-            <form onsubmit="return deleteCheck()"
-               action="{{ route('user.bait.destroy', $bait->id) }}" method="POST">
+            <form onsubmit="return deleteCheck()" action="{{ route('user.bait.destroy') }}" method="POST">
                @csrf
                @method('delete')
+               <input type="hidden" name="baitId" value="{{ $bait->id }}">
                <button type="submit" class="btn bg-red-600 hover:bg-red-500">
                   削除
                </button>
