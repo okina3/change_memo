@@ -52,10 +52,10 @@ class MasterController extends Controller
    public function storeSpot(StoreSpotRequest $request): RedirectResponse
    {
       try {
-         $spot = SpotService::createSpot($request->input('new_spot'));
+         SpotService::createSpot($request->input('new_spot'));
          return to_route('user.masters.index')->with('message', '場所を追加しました')->with('status', 'info');
       } catch (\Throwable $e) {
-         Log::error('MasterController@storeSpot Throwable: ' . $e->getMessage());
+         Log::error($e);
          return back()->with('message', '場所の追加に失敗しました')->with('status', 'alert');
       }
    }
@@ -68,10 +68,10 @@ class MasterController extends Controller
    public function storeBait(StoreBaitRequest $request): RedirectResponse
    {
       try {
-         $spot = BaitService::createBait($request->input('new_bait'));
+         BaitService::createBait($request->input('new_bait'));
          return to_route('user.masters.index')->with('message', 'エサを追加しました')->with('status', 'info');
       } catch (\Throwable $e) {
-         Log::error('MasterController@storeSpot Throwable: ' . $e->getMessage());
+         Log::error($e);
          return back()->with('message', 'エサの追加に失敗しました')->with('status', 'alert');
       }
    }
@@ -84,10 +84,10 @@ class MasterController extends Controller
    public function storeFishName(StoreFishRequest $request): RedirectResponse
    {
       try {
-         $spot = FishNameService::createFishName($request->input('new_fish_name'));
+         FishNameService::createFishName($request->input('new_fish_name'));
          return to_route('user.masters.index')->with('message', '魚名を追加しました')->with('status', 'info');
       } catch (\Throwable $e) {
-         Log::error('MasterController@storeSpot Throwable: ' . $e->getMessage());
+         Log::error($e);
          return back()->with('message', '魚名の追加に失敗しました')->with('status', 'alert');
       }
    }
