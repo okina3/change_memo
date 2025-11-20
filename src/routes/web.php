@@ -40,6 +40,8 @@ Route::prefix('/')->as('user.')->group(function () {
         // マスター管理画面（釣り場・エサ・魚種）
         Route::controller(MasterController::class)->prefix('masters')->group(function () {
             Route::get('/', 'index')->name('masters.index');
+            // マスター管理画面から場所を追加するフォーム用のルート
+            Route::post('/spot/store', 'storeSpot')->name('masters.spot.store');
         });
 
         // 釣り場所の登録
