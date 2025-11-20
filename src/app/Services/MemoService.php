@@ -17,8 +17,9 @@ class MemoService
     {
         // パラメーターを取得
         $id_memo = $request->route()->parameter('memo');
-        // 自分自身のメモなのかチェック
+        // パラメーターが無ければチェック不要
         if (!is_null($id_memo)) {
+            // 自分自身のメモなのかチェック
             $memo = Memo::select('user_id')->findOrFail($id_memo);
             if ($memo->user_id !== Auth::id()) {
                 abort(404);

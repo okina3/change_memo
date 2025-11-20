@@ -2,12 +2,50 @@
 
 namespace App\Services;
 
+use App\Models\Bait;
+use App\Models\FishName;
+use App\Models\Spot;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 
 class MasterSearchService
 {
+   /**
+    * 別のユーザーのデータ（場所、エサ、魚名）を見られなくする為のメソッド。
+    * @param mixed $request
+    * @return void
+    */
+   public static function checkUserMaster($request): void
+   {
+      // パラメーターを取得
+      $id = $request->route()->parameter('id');
+      $type = $request->route()->parameter('type');
+
+      // パラメーターが無ければチェック不要
+      if (!is_null($id) && !is_null($type)) {
+         // type をモデルクラスにマッピング
+         $map = [
+            'spot' => Spot::class,
+            'bait' => Bait::class,
+            'fish-name' => FishName::class,
+         ];
+
+         // マップからモデルクラスを取得（無効な `type` の場合は abort(404)）
+         $class = $map[$type] ?? abort(404);
+         // モデルクラスから、自分自身のレコードを取得
+         $model = $class::select('user_id')->findOrFail($id);
+
+         // 自分自身のデータ（場所、エサ、魚名）なのかチェック
+         if (Schema::hasColumn($model->getTable(), 'user_id')) {
+            // 認証ユーザーとレコードの所有者が異なる場合はアクセス拒否（404）
+            if ($model->user_id !== Auth::id()) {
+               abort(404);
+            }
+         }
+      }
+   }
+
    /**
     * 検索した各項目の名前を表示する為のメソッド。
     * @param string $class 

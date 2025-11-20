@@ -8,6 +8,7 @@ use App\Models\FishName;
 use App\Models\Spot;
 use App\Services\MasterSearchService;
 use App\Services\SessionService;
+use Closure;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,14 @@ use Throwable;
 
 class MasterController extends Controller
 {
+   public function __construct()
+   {
+      // 別のユーザーのデータ（場所、エサ、魚名）を見られなくする認証。
+      $this->middleware(function (Request $request, Closure $next) {
+         MasterSearchService::checkUserMaster($request);
+         return $next($request);
+      });
+   }
    /**
     * マスター管理画面（スポット/エサ/魚名）
     * @return View
@@ -45,31 +54,17 @@ class MasterController extends Controller
     */
    public function destroy(Request $request, $type, $id)
    {
-
-      // 受け取るタイプに応じてモデルクラスを決定する
+      // type をモデルクラスにマッピング
       $map = [
          'spot' => Spot::class,
          'bait' => Bait::class,
          'fish-name' => FishName::class,
       ];
 
-      // 不正なタイプはリダイレクトで通知
-      if (!isset($map[$type])) {
-         return redirect()->back()->with('message', '不正なタイプです')->with('status', 'alert');
-      }
-
-      $class = $map[$type];
-
-      // 指定 ID のレコードを取得（存在しない場合はメッセージを返す）
-      $model = $class::find($id);
-      if (!$model) {
-         return redirect()->back()->with('message', '該当データが見つかりません')->with('status', 'alert');
-      }
-
-      // 所有チェック
-      if (Schema::hasColumn($model->getTable(), 'user_id') && $model->user_id !== Auth::id()) {
-         return redirect()->back()->with('message', '権限がありません')->with('status', 'alert');
-      }
+      // マップからモデルクラスを取得（無効な `type` の場合は abort(404)）
+      $class = $map[$type] ?? abort(404);
+      // モデルクラスから、レコードを取得
+      $model = $class::findOrFail($id);
 
       try {
          $model->delete();
