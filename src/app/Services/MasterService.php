@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 
-class MasterSearchService
+class MasterService
 {
    /**
     * 検索した各項目の名前を表示する為のメソッド。
