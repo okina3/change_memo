@@ -39,7 +39,7 @@ class BaitController extends Controller
    }
 
    /**
-    * 指定のエサを削除する。
+    * 指定のエサを削除するメソッド。
     * @param Request $request
     * @return RedirectResponse
     */

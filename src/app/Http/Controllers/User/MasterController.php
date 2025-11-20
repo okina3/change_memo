@@ -17,7 +17,9 @@ use Illuminate\View\View;
 class MasterController extends Controller
 {
    /**
-    * マスター管理画面（スポット/エサ/魚名）
+    * スポット/エサ/魚名（マスター管理画面）を一覧表示するメソッド。
+    * @param Request $request
+    * @param MasterService $searchService
     * @return View
     */
    public function index(Request $request, MasterService $searchService)
@@ -38,8 +40,7 @@ class MasterController extends Controller
    }
 
    /**
-    * マスター管理画面（場所）からスポットを保存するハンドラ。
-    * Ajaxではなく通常のフォーム送信を想定し、保存後はマスター一覧へリダイレクトする。
+    * マスター管理画面から場所を保存するメソッド。
     * @param StoreSpotRequest $request
     * @return \Illuminate\Http\RedirectResponse
     */

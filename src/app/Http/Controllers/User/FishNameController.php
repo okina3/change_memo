@@ -39,7 +39,7 @@ class FishNameController extends Controller
    }
 
    /**
-    * 指定の魚種を削除する。
+    * 指定の魚種を削除するメソッド。
     * @param Request $request
     * @return RedirectResponse
     */

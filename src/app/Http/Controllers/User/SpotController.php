@@ -39,7 +39,7 @@ class SpotController extends Controller
     }
 
     /**
-     * 指定の釣り場を削除する。
+     * 指定の釣り場を削除するメソッド。
      * @param Request $request
      * @return RedirectResponse
      */
