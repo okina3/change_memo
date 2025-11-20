@@ -20,8 +20,36 @@
                         保存
                      </button>
                   </div>
-                  {{-- エラーメッセージ（釣り場の登録） --}}
+                  {{-- エラーメッセージ（新規釣り場の登録） --}}
                   <x-input-error class="mt-2" :messages="$errors->get('new_spot')" />
+               </form>
+               {{-- 新規エサの登録 --}}
+               <form action="{{ route('user.masters.bait.store') }}" method="POST">
+                  @csrf
+                  <h2 class="sub_heading mb-1">新規エサの登録</h2>
+                  <div class="flex gap-2 items-center">
+                     <input id="new_bait_input" class="w-60 rounded" type="text" name="new_bait"
+                        value="{{ old('new_bait') }}" placeholder="例: アオイソメ">
+                     <button type="submit" class="btn bg-blue-800 hover:bg-blue-700" type="submit">
+                        保存
+                     </button>
+                  </div>
+                  {{-- エラーメッセージ（新規エサの登録） --}}
+                  <x-input-error class="mt-2" :messages="$errors->get('new_bait')" />
+               </form>
+               {{-- 新規魚名の登録 --}}
+               <form action="{{ route('user.masters.fish-name.store') }}" method="POST">
+                  @csrf
+                  <h2 class="sub_heading mb-1">新規魚名の登録</h2>
+                  <div class="flex gap-2 items-center">
+                     <input id="new_fish_input" class="w-60 rounded" type="text" name="new_fish_name"
+                        value="{{ old('new_fish_name') }}" placeholder="例: ヤマメ">
+                     <button class="btn bg-blue-800 hover:bg-blue-700" type="submit">
+                        保存
+                     </button>
+                  </div>
+                  {{-- エラーメッセージ（新規魚名の登録） --}}
+                  <x-input-error class="mt-2" :messages="$errors->get('new_fish_name')" />
                </form>
             </div>
 

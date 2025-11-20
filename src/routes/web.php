@@ -41,6 +41,8 @@ Route::prefix('/')->as('user.')->group(function () {
         Route::controller(MasterController::class)->prefix('masters')->group(function () {
             Route::get('/', 'index')->name('masters.index');
             Route::post('/spot/store', 'storeSpot')->name('masters.spot.store');
+            Route::post('/bait/store', 'storeBait')->name('masters.bait.store');
+            Route::post('/fish-name/store', 'storeFishName')->name('masters.fish-name.store');
         });
 
         // 釣り場所の登録
