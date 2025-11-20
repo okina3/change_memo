@@ -40,7 +40,6 @@ Route::prefix('/')->as('user.')->group(function () {
         // マスター管理画面（釣り場・エサ・魚種）
         Route::controller(MasterController::class)->prefix('masters')->group(function () {
             Route::get('/', 'index')->name('masters.index');
-            Route::delete('/{type}/{id}', 'destroy')->name('masters.destroy');
         });
 
         // 釣り場所の登録
@@ -48,6 +47,8 @@ Route::prefix('/')->as('user.')->group(function () {
             ->middleware(['auth:users', KeepBackFlashForAjax::class])
             ->group(function () {
                 Route::post('/store', 'store')->name('spot.store');
+                // 個別削除ルート
+                Route::delete('/{spot}', 'destroy')->name('spot.destroy');
             });
 
         // エサの登録
@@ -55,6 +56,8 @@ Route::prefix('/')->as('user.')->group(function () {
             ->middleware(['auth:users', KeepBackFlashForAjax::class])
             ->group(function () {
                 Route::post('/store', 'store')->name('bait.store');
+                // 個別削除ルート
+                Route::delete('/{bait}', 'destroy')->name('bait.destroy');
             });
 
         // 魚種の登録
@@ -62,6 +65,8 @@ Route::prefix('/')->as('user.')->group(function () {
             ->middleware(['auth:users', KeepBackFlashForAjax::class])
             ->group(function () {
                 Route::post('/store', 'store')->name('fish-name.store');
+                // 個別削除ルート
+                Route::delete('/{fishName}', 'destroy')->name('fish-name.destroy');
             });
 
         //タグ管理画面

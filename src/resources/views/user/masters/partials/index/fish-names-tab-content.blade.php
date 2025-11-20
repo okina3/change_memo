@@ -11,7 +11,7 @@
          {{-- ボタンエリア --}}
          <div class="mt-2 md:w-[30%]">
             <form onsubmit="return deleteCheck()"
-               action="{{ route('user.masters.destroy', ['type' => 'fish-name', 'id' => $fish->id]) }}" method="POST">
+               action="{{ route('user.fish-name.destroy', $fish->id) }}" method="POST">
                @csrf
                @method('delete')
                <button type="submit" class="btn bg-red-600 hover:bg-red-500">
