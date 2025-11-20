@@ -19,7 +19,7 @@ use Throwable;
 class MasterController extends Controller
 {
    /**
-    * マスター管理画面（スポット / エサ / 魚名）
+    * マスター管理画面（スポット/エサ/魚名）
     * @return View
     */
    public function index(Request $request, MasterSearchService $searchService)
@@ -46,7 +46,7 @@ class MasterController extends Controller
    public function destroy(Request $request, $type, $id)
    {
 
-      // 受け取るタイプに応じてモデルクラスを決定するマップ
+      // 受け取るタイプに応じてモデルクラスを決定する
       $map = [
          'spot' => Spot::class,
          'bait' => Bait::class,
@@ -66,7 +66,7 @@ class MasterController extends Controller
          return redirect()->back()->with('message', '該当データが見つかりません')->with('status', 'alert');
       }
 
-      // 所有チェック（user_id カラムがある場合のみ）
+      // 所有チェック
       if (Schema::hasColumn($model->getTable(), 'user_id') && $model->user_id !== Auth::id()) {
          return redirect()->back()->with('message', '権限がありません')->with('status', 'alert');
       }

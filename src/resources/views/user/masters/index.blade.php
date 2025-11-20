@@ -1,9 +1,9 @@
 <x-app-layout>
    <div class="px-2 py-2 bg-slate-200">
-      <section class="text-gray-600 border border-gray-400 rounded-lg bg-white overflow-hidden">
+      <section class="text-gray-600 border border-gray-400 rounded-lg  overflow-hidden">
          {{-- マスター管理ページのタイトル --}}
          <h1 class="heading heading_bg">マスター管理</h1>
-         <div class="p-3 h-[85vh] overflow-y-scroll overscroll-none">
+         <div class="p-3 h-[85vh] overflow-y-scroll overscroll-none bg-white">
             {{-- フラッシュメッセージ --}}
             <x-common.flash-message status="session('status')" />
             {{-- タブ表示と検索エリア --}}
