@@ -45,4 +45,16 @@ class Bait extends Model
         $query->where('user_id', Auth::id())
             ->orderBy('created_at', 'desc');
     }
+
+    /**
+     * 自分自身の、選択したエサを取得する為のスコープ。
+     * @param Builder $query
+     * @param int $id
+     * @return void
+     */
+    public function scopeAvailableSelectBait(Builder $query, int $id): void
+    {
+        $query->where('id', $id)
+            ->where('user_id', Auth::id());
+    }
 }

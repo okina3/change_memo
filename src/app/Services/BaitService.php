@@ -5,10 +5,28 @@ namespace App\Services;
 use App\Models\Bait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class BaitService
 {
+   /**
+    * 別のユーザーのエサを見られなくする為のメソッド。
+    * @param $request
+    * @return void
+    */
+   public static function checkUserBait($request): void
+   {
+      // パラメーターを取得
+      $id_bait = $request->route()->parameter('bait');
+      // パラメーターが無ければチェック不要
+      if (!is_null($id_bait)) {
+         // 自分自身のエサなのかチェック
+         $bait = Bait::select('user_id')->findOrFail($id_bait);
+         if ($bait->user_id !== Auth::id()) {
+            abort(404);
+         }
+      }
+   }
+
    /**
     * 新しいエサを保存するメソッド。
     * @param string $new_bait
@@ -16,12 +34,10 @@ class BaitService
     */
    public static function createBait(string $new_bait): Bait
    {
-      return DB::transaction(function () use ($new_bait) {
-         return Bait::create([
-            'name' => $new_bait,
-            'user_id' => Auth::id(),
-         ]);
-      }, 10);
+      return Bait::create([
+         'name' => $new_bait,
+         'user_id' => Auth::id(),
+      ]);
    }
 
    /**

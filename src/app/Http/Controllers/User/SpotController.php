@@ -6,17 +6,24 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreSpotRequest;
 use App\Models\Spot;
 use App\Services\SpotService;
-use Illuminate\Database\QueryException;
+use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Schema;
 use Throwable;
 
 class SpotController extends Controller
 {
+    public function __construct()
+    {
+        // 別のユーザーの釣り場を見られなくする認証。
+        $this->middleware(function (Request $request, Closure $next) {
+            SpotService::checkUserSpot($request);
+            return $next($request);
+        });
+    }
+
     /**
      * 釣り場所を保存するメソッド。
      * @param StoreSpotRequest $request
@@ -48,25 +55,13 @@ class SpotController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        // 削除対象のIDを取得し、IDを元にデータを取得
-        $spotId = $request->input('spotId');
-        $spot = Spot::findOrFail($spotId);
-
-        // 所有チェック（user_idカラムがあり、かつ、ログインユーザーと所有者が異なる場合は権限エラー）
-        if (Schema::hasColumn($spot->getTable(), 'user_id') && $spot->user_id !== Auth::id()) {
-            return redirect()->back()->with('message', '権限がありません')->with('status', 'alert');
-        }
-
-        // 削除処理を実行
         try {
-            $spot->delete();
+            // 選択した釣り場を削除
+            Spot::availableSelectSpot($request->spotId)->delete();
             return redirect()->back()->with('message', '場所を削除しました')->with('status', 'alert');
-        } catch (QueryException $e) {
-            Log::error($e);
-            return redirect()->back()->with('message', '関連データのため削除できません')->with('status', 'alert');
         } catch (Throwable $e) {
             Log::error($e);
-            return redirect()->back()->with('message', 'サーバーエラーが発生しました')->with('status', 'alert');
+            return redirect()->back()->with('message', '場所の削除に失敗しました。')->with('status', 'alert');
         }
     }
 }

@@ -5,10 +5,28 @@ namespace App\Services;
 use App\Models\FishName;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class FishNameService
 {
+   /**
+    * 別のユーザーの魚名を見られなくする為のメソッド。
+    * @param $request
+    * @return void
+    */
+   public static function checkUserFishName($request): void
+   {
+      // パラメーターを取得
+      $id_fish_name = $request->route()->parameter('fishName');
+      // パラメーターが無ければチェック不要
+      if (!is_null($id_fish_name)) {
+         // 自分自身の魚名なのかチェック
+         $fish_name = FishName::select('user_id')->findOrFail($id_fish_name);
+         if ($fish_name->user_id !== Auth::id()) {
+            abort(404);
+         }
+      }
+   }
+
    /**
     * 新しい魚種を保存するメソッド。
     * @param string $new_fish_name
@@ -16,12 +34,10 @@ class FishNameService
     */
    public static function createFishName(string $new_fish_name): FishName
    {
-      return DB::transaction(function () use ($new_fish_name) {
-         return FishName::create([
-            'name' => $new_fish_name,
-            'user_id' => Auth::id(),
-         ]);
-      }, 10);
+      return FishName::create([
+         'name' => $new_fish_name,
+         'user_id' => Auth::id(),
+      ]);
    }
 
    /**

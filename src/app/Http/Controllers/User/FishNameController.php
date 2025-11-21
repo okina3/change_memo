@@ -6,17 +6,24 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreFishRequest;
 use App\Models\FishName;
 use App\Services\FishNameService;
-use Illuminate\Database\QueryException;
+use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Schema;
 use Throwable;
 
 class FishNameController extends Controller
 {
+   public function __construct()
+   {
+      // 別のユーザーの魚名を見られなくする認証。
+      $this->middleware(function (Request $request, Closure $next) {
+         FishNameService::checkUserFishName($request);
+         return $next($request);
+      });
+   }
+
    /**
     * 新規魚種を保存するメソッド
     * @param StoreFishRequest $request
@@ -48,23 +55,20 @@ class FishNameController extends Controller
     */
    public function destroy(Request $request): RedirectResponse
    {
-      $fishNameId = $request->input('fishNameId');
-      $fishName = FishName::findOrFail($fishNameId);
-
-      // 所有チェック
-      if (Schema::hasColumn($fishName->getTable(), 'user_id') && $fishName->user_id !== Auth::id()) {
-         return redirect()->back()->with('message', '権限がありません')->with('status', 'alert');
-      }
-
       try {
-         $fishName->delete();
-         return redirect()->back()->with('message', '魚名を削除しました')->with('status', 'alert');
-      } catch (QueryException $e) {
-         Log::error($e);
-         return redirect()->back()->with('message', '関連データのため削除できません')->with('status', 'alert');
+         // 指定のエサを取得
+         $fish_name = FishName::availableSelectFishName($request->fishNameId)->first();
+
+         // 多対多との関連がある場合
+         if ($fish_name->memos()->exists()) {
+            return redirect()->back()->with(['message' => '関連データのため削除できません。', 'status' => 'alert']);
+         }
+         // 選択した魚名を削除
+         $fish_name->delete();
+         return redirect()->back()->with('message', '魚名を削除しました。')->with('status', 'alert');
       } catch (Throwable $e) {
          Log::error($e);
-         return redirect()->back()->with('message', 'サーバーエラーが発生しました')->with('status', 'alert');
+         return redirect()->back()->with('message', '魚名の削除に失敗しました。')->with('status', 'alert');
       }
    }
 }
