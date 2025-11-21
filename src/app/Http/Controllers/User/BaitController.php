@@ -48,14 +48,16 @@ class BaitController extends Controller
     */
    public function destroy(Request $request): RedirectResponse
    {
+      // 削除対象のIDを取得し、IDを元にデータを取得
       $baitId = $request->input('baitId');
       $bait = Bait::findOrFail($baitId);
 
-      // 所有チェック
+      // 所有チェック（user_idカラムがあり、かつ、ログインユーザーと所有者が異なる場合は権限エラー）
       if (Schema::hasColumn($bait->getTable(), 'user_id') && $bait->user_id !== Auth::id()) {
          return redirect()->back()->with('message', '権限がありません')->with('status', 'alert');
       }
 
+      // 削除処理を実行
       try {
          $bait->delete();
          return redirect()->back()->with('message', 'エサを削除しました')->with('status', 'alert');

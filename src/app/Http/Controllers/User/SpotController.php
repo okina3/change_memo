@@ -48,14 +48,16 @@ class SpotController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // 削除対象のIDを取得し、IDを元にデータを取得
         $spotId = $request->input('spotId');
         $spot = Spot::findOrFail($spotId);
 
-        // 所有チェック
+        // 所有チェック（user_idカラムがあり、かつ、ログインユーザーと所有者が異なる場合は権限エラー）
         if (Schema::hasColumn($spot->getTable(), 'user_id') && $spot->user_id !== Auth::id()) {
             return redirect()->back()->with('message', '権限がありません')->with('status', 'alert');
         }
 
+        // 削除処理を実行
         try {
             $spot->delete();
             return redirect()->back()->with('message', '場所を削除しました')->with('status', 'alert');
