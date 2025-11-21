@@ -14,7 +14,7 @@ class BaitService
     * @param string $new_bait
     * @return Bait
     */
-   public static function storeBait(string $new_bait): Bait
+   public static function createBait(string $new_bait): Bait
    {
       return DB::transaction(function () use ($new_bait) {
          return Bait::create([

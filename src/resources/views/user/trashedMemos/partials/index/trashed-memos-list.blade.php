@@ -3,7 +3,7 @@
    <div class="py-3 md:flex justify-between items-center border-b border-slate-300">
 
       {{-- 釣行日、備考エリア --}}
-      <div class="md:w-[70%] mr-5">
+      <div class="mr-5 md:w-[70%]">
          {{-- 釣行日 --}}
          <p class="sub_heading mb-1 truncate">
             {{ optional(optional($trashed_memo)->fishing_date)->format('Y-m-d') ?? '-' }}

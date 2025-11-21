@@ -20,8 +20,9 @@ class ImageService
     {
         // パラメーターを取得
         $id_image = $request->route()->parameter('image');
-        // 自分自身の画像なのかチェック
+        // パラメーターが無ければチェック不要
         if (!is_null($id_image)) {
+            // 自分自身の画像なのかチェック
             $image = Image::select('user_id')->findOrFail($id_image);
             if ($image->user_id !== Auth::id()) {
                 abort(404);
@@ -34,7 +35,7 @@ class ImageService
      * @param string $filename
      * @return Image
      */
-    public static function storeImage(string $filename): Image
+    public static function createImage(string $filename): Image
     {
         return Image::create([
             'user_id' => Auth::id(),

@@ -13,7 +13,7 @@ class SpotService
     * @param string $new_spot
     * @return Spot
     */
-   public static function storeSpot(string $new_spot): Spot
+   public static function createSpot(string $new_spot): Spot
    {
       return DB::transaction(function () use ($new_spot) {
          return Spot::create([

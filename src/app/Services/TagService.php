@@ -13,7 +13,7 @@ class TagService
      * @param string $new_tag
      * @return Tag
      */
-    public static function storeTag(string $new_tag): Tag
+    public static function createTag(string $new_tag): Tag
     {
         return Tag::firstOrCreate([
             'name' => $new_tag,
@@ -27,11 +27,11 @@ class TagService
      * @param int $memo_id
      * @return void
      */
-    public static function storeNewTag($request_new_tag, int $memo_id): void
+    public static function createNewTag($request_new_tag, int $memo_id): void
     {
         if (!empty($request_new_tag)) {
             // タグを保存または取得
-            $tag = self::storeTag($request_new_tag);
+            $tag = self::createTag($request_new_tag);
             // メモとタグの中間テーブルに値を保存
             Tag::findOrFail($tag->id)->memos()->attach($memo_id);
         }

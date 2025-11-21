@@ -1,13 +1,14 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\User\BaitController;
 use App\Http\Controllers\User\ContactController;
+use App\Http\Controllers\User\FishNameController;
 use App\Http\Controllers\User\ImageController;
+use App\Http\Controllers\User\MasterController;
 use App\Http\Controllers\User\MemoController;
 use App\Http\Controllers\User\ShareSettingController;
 use App\Http\Controllers\User\SpotController;
-use App\Http\Controllers\User\BaitController;
-use App\Http\Controllers\User\FishNameController;
 use App\Http\Controllers\User\TagController;
 use App\Http\Controllers\User\TrashedMemoController;
 use App\Http\Middleware\KeepBackFlashForAjax;
@@ -25,11 +26,6 @@ Route::get('/dashboard', function () {
 // ユーザー用ルーティング
 Route::prefix('/')->as('user.')->group(function () {
     Route::middleware('auth:users')->group(function () {
-        // メモ管理画面
-        // Route::controller(MemoController::class)->group(function () {
-        //     Route::get('/index', 'index')->name('index');
-        // });
-
         //メモ管理画面
         Route::controller(MemoController::class)->group(function () {
             Route::get('/', 'index')->name('index');
@@ -41,11 +37,20 @@ Route::prefix('/')->as('user.')->group(function () {
             Route::delete('destroy', 'destroy')->name('destroy');
         });
 
+        // マスター管理画面（釣り場・エサ・魚種）
+        Route::controller(MasterController::class)->prefix('masters')->group(function () {
+            Route::get('/', 'index')->name('masters.index');
+            Route::post('/spot/store', 'storeSpot')->name('masters.spot.store');
+            Route::post('/bait/store', 'storeBait')->name('masters.bait.store');
+            Route::post('/fish-name/store', 'storeFishName')->name('masters.fish-name.store');
+        });
+
         // 釣り場所の登録
         Route::controller(SpotController::class)->prefix('spot')
             ->middleware(['auth:users', KeepBackFlashForAjax::class])
             ->group(function () {
                 Route::post('/store', 'store')->name('spot.store');
+                Route::delete('/destroy', 'destroy')->name('spot.destroy');
             });
 
         // エサの登録
@@ -53,6 +58,7 @@ Route::prefix('/')->as('user.')->group(function () {
             ->middleware(['auth:users', KeepBackFlashForAjax::class])
             ->group(function () {
                 Route::post('/store', 'store')->name('bait.store');
+                Route::delete('/destroy', 'destroy')->name('bait.destroy');
             });
 
         // 魚種の登録
@@ -60,8 +66,8 @@ Route::prefix('/')->as('user.')->group(function () {
             ->middleware(['auth:users', KeepBackFlashForAjax::class])
             ->group(function () {
                 Route::post('/store', 'store')->name('fish-name.store');
+                Route::delete('/destroy', 'destroy')->name('fish-name.destroy');
             });
-
 
         //タグ管理画面
         Route::controller(TagController::class)->prefix('tag')->group(function () {

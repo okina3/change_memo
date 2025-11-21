@@ -108,20 +108,20 @@ class User extends Authenticatable
      * @param string|null $keyword
      * @return void
      */
-    public function scopeSearchKeyword(Builder $query, ?string $keyword): void
+    public function scopeSearchKeyword(Builder $query, ?string $keyword = null): void
     {
-        // もしメールアドレスの検索がなければ何もしない
-        if ($keyword === null || $keyword === '') {
-            return;
-        }
-
-        // 全角スペースを半角に変換
-        $spaceConvert = mb_convert_kana($keyword, 's');
-        // 空白で区切る
-        $keywords = preg_split('/\s+/', $spaceConvert, -1, PREG_SPLIT_NO_EMPTY) ?: [];
-        // 単語をループで回す（AND検索）
-        foreach ($keywords as $word) {
-            $query->where('users.email', 'like', '%' . $word . '%');
+        // キーワードが指定されていれば検索をする
+        if ($keyword !== null && $keyword !== '') {
+            // 全角スペースを半角に変換
+            $spaceConvert = mb_convert_kana($keyword, 's');
+            // 空白で分割して単語配列にする
+            $keywords = preg_split('/\s+/', $spaceConvert, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+            // 単語ごとに OR 条件でメールアドレスを部分一致検索
+            $query->where(function (Builder $q) use ($keywords) {
+                foreach ($keywords as $word) {
+                    $q->orWhere('users.email', 'like', '%' . $word . '%');
+                }
+            });
         }
     }
 }

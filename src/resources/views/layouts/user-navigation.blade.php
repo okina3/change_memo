@@ -1,6 +1,6 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
    <!-- Primary Navigation Menu -->
-   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   <div class="max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
          <div class="flex">
             <!-- Logo -->
@@ -11,32 +11,37 @@
             </div>
 
             <!-- Navigation Links -->
-            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+            <div class="hidden space-x-8 sm:-my-px sm:ml-8 sm:flex">
                <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.index')">
-                  メモ管理画面
+                  メモ一覧
                </x-nav-link>
             </div>
-            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+            <div class="hidden space-x-8 sm:-my-px sm:ml-8 sm:flex">
+               <x-nav-link :href="route('user.masters.index')" :active="request()->routeIs('user.masters.index')">
+                  マスター管理
+               </x-nav-link>
+            </div>
+            <div class="hidden space-x-8 sm:-my-px sm:ml-8 sm:flex">
                <x-nav-link :href="route('user.tag.index')" :active="request()->routeIs('user.tag.index')">
-                  タグ管理画面
+                  タグ管理
                </x-nav-link>
             </div>
-            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+            <div class="hidden space-x-8 sm:-my-px sm:ml-8 sm:flex">
                <x-nav-link :href="route('user.image.index')" :active="request()->routeIs('user.image.index')">
-                  画像管理画面
+                  画像管理
                </x-nav-link>
             </div>
-            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+            <div class="hidden space-x-8 sm:-my-px sm:ml-8 sm:flex">
                <x-nav-link :href="route('user.share-setting.index')" :active="request()->routeIs('user.share-setting.index')">
-                  共有メモ画面
+                  共有メモ
                </x-nav-link>
             </div>
-            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+            <div class="hidden space-x-8 sm:-my-px sm:ml-8 sm:flex">
                <x-nav-link :href="route('user.trashed-memo.index')" :active="request()->routeIs('user.trashed-memo.index')">
                   ゴミ箱
                </x-nav-link>
             </div>
-            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+            <div class="hidden space-x-8 sm:-my-px sm:ml-8 sm:flex">
                <x-nav-link :href="route('user.contact.create')" :active="request()->routeIs('user.contact.create')">
                   管理人に連絡
                </x-nav-link>
@@ -99,16 +104,19 @@
    <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
       <div class="pt-2 pb-3 space-y-1">
          <x-responsive-nav-link :href="route('user.index')" :active="request()->routeIs('user.index')">
-            メモ管理画面
+            メモ一覧
+         </x-responsive-nav-link>
+         <x-responsive-nav-link :href="route('user.masters.index')" :active="request()->routeIs('user.masters.index')">
+            マスター管理
          </x-responsive-nav-link>
          <x-responsive-nav-link :href="route('user.tag.index')" :active="request()->routeIs('user.tag.index')">
-            タグ管理画面
+            タグ管理
          </x-responsive-nav-link>
          <x-responsive-nav-link :href="route('user.image.index')" :active="request()->routeIs('user.image.index')">
-            画像管理画面
+            画像管理
          </x-responsive-nav-link>
          <x-responsive-nav-link :href="route('user.share-setting.index')" :active="request()->routeIs('user.share-setting.index')">
-            共有メモ画面
+            共有メモ
          </x-responsive-nav-link>
          <x-responsive-nav-link :href="route('user.trashed-memo.index')" :active="request()->routeIs('user.trashed-memo.index')">
             ゴミ箱

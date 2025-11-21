@@ -35,7 +35,7 @@ class TagController extends Controller
     public function store(StoreTagRequest $request): RedirectResponse
     {
         //タグを保存
-        TagService::storeTag($request->new_tag);
+        TagService::createTag($request->new_tag);
 
         return to_route('user.tag.index')->with(['message' => 'タグを登録しました。', 'status' => 'info']);
     }

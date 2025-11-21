@@ -34,7 +34,7 @@ class ContactController extends Controller
         // ブラウザバック対策（値を確認）
         SessionService::clickBrowserBackSession();
         // 問い合わせ情報を保存
-        ContactService::storeContact($request);
+        ContactService::createContact($request);
 
         return to_route('user.index')->with(['message' => '管理人にメッセージを送りました。', 'status' => 'info']);
     }

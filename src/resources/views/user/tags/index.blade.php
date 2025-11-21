@@ -4,7 +4,7 @@
          {{-- タグの管理ページのタイトル --}}
          <h1 class="heading heading_bg">タグ一覧</h1>
          {{-- タグを管理するエリア --}}
-         <div class="p-3 h-[85vh]">
+         <div class="p-3 h-[85vh] overflow-y-scroll overscroll-none">
             {{-- フラッシュメッセージ --}}
             <x-common.flash-message status="session('status')" />
             {{-- タグを新規作成するエリア --}}

@@ -11,7 +11,7 @@
             </button>
          </div>
          {{-- 登録した画像の表示エリア --}}
-         <div class="mb:p-3  h-[85vh]">
+         <div class="md:p-3 h-[85vh] overflow-y-scroll overscroll-none">
             {{-- フラッシュメッセージ --}}
             <x-common.flash-message status="session('status')" />
             <div class="flex flex-wrap">

@@ -14,7 +14,7 @@ class FishNameService
     * @param string $new_fish_name
     * @return FishName
     */
-   public static function storeFishName(string $new_fish_name): FishName
+   public static function createFishName(string $new_fish_name): FishName
    {
       return DB::transaction(function () use ($new_fish_name) {
          return FishName::create([
