@@ -107,7 +107,7 @@ class MemoController extends Controller
             return to_route('user.index')->with(['message' => 'メモを登録しました。', 'status' => 'info']);
         } catch (Throwable $e) {
             Log::error($e);
-            throw $e;
+            return back()->with(['message' => 'メモの登録に失敗しました。', 'status' => 'alert']);
         }
     }
 
@@ -209,7 +209,7 @@ class MemoController extends Controller
             return to_route('user.index')->with(['message' => 'メモを更新しました。', 'status' => 'info']);
         } catch (Throwable $e) {
             Log::error($e);
-            throw $e;
+            return back()->with(['message' => 'メモの更新に失敗しました。', 'status' => 'alert']);
         }
     }
 
@@ -232,7 +232,7 @@ class MemoController extends Controller
             return to_route('user.index')->with(['message' => 'メモをゴミ箱に移動しました。', 'status' => 'alert']);
         } catch (Throwable $e) {
             Log::error($e);
-            throw $e;
+            return back()->with(['message' => 'メモの削除に失敗しました。', 'status' => 'alert']);
         }
     }
 }

@@ -34,7 +34,10 @@ class SpotController extends Controller
             ], 201);
         } catch (Throwable $e) {
             Log::error($e);
-            throw $e;
+            return response()->json([
+                'message' => '場所の登録に失敗しました。',
+                'status' => 'alert'
+            ], 500);
         }
     }
 
@@ -57,10 +60,10 @@ class SpotController extends Controller
             $spot->delete();
             return redirect()->back()->with('message', '場所を削除しました')->with('status', 'alert');
         } catch (QueryException $e) {
-            Log::error('SpotController@destroy QueryException: ' . $e->getMessage());
+            Log::error($e);
             return redirect()->back()->with('message', '関連データのため削除できません')->with('status', 'alert');
         } catch (Throwable $e) {
-            Log::error('SpotController@destroy Throwable: ' . $e->getMessage());
+            Log::error($e);
             return redirect()->back()->with('message', 'サーバーエラーが発生しました')->with('status', 'alert');
         }
     }

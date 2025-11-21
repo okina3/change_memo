@@ -18,6 +18,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+use Throwable;
 
 class MasterController extends Controller
 {
@@ -54,7 +55,7 @@ class MasterController extends Controller
       try {
          SpotService::createSpot($request->input('new_spot'));
          return to_route('user.masters.index')->with('message', '場所を追加しました')->with('status', 'info');
-      } catch (\Throwable $e) {
+      } catch (Throwable $e) {
          Log::error($e);
          return back()->with('message', '場所の追加に失敗しました')->with('status', 'alert');
       }
@@ -70,7 +71,7 @@ class MasterController extends Controller
       try {
          BaitService::createBait($request->input('new_bait'));
          return to_route('user.masters.index')->with('message', 'エサを追加しました')->with('status', 'info');
-      } catch (\Throwable $e) {
+      } catch (Throwable $e) {
          Log::error($e);
          return back()->with('message', 'エサの追加に失敗しました')->with('status', 'alert');
       }
@@ -86,7 +87,7 @@ class MasterController extends Controller
       try {
          FishNameService::createFishName($request->input('new_fish_name'));
          return to_route('user.masters.index')->with('message', '魚名を追加しました')->with('status', 'info');
-      } catch (\Throwable $e) {
+      } catch (Throwable $e) {
          Log::error($e);
          return back()->with('message', '魚名の追加に失敗しました')->with('status', 'alert');
       }

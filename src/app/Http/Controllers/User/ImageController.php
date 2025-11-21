@@ -82,7 +82,7 @@ class ImageController extends Controller
             return to_route('user.image.index')->with(['message' => '画像を登録しました。', 'status' => 'info']);
         } catch (Throwable $e) {
             Log::error($e);
-            throw $e;
+            return back()->with(['message' => '画像の登録に失敗しました。', 'status' => 'alert']);
         }
     }
 
@@ -120,7 +120,7 @@ class ImageController extends Controller
             return to_route('user.image.index')->with(['message' => '画像を削除しました。', 'status' => 'alert']);
         } catch (Throwable $e) {
             Log::error($e);
-            throw $e;
+            return back()->with(['message' => '画像の削除に失敗しました。', 'status' => 'alert']);
         }
     }
 }

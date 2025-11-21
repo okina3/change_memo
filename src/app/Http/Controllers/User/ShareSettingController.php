@@ -63,7 +63,7 @@ class ShareSettingController extends Controller
             return to_route('user.index')->with(['message' => 'メモを共有しました。', 'status' => 'info']);
         } catch (Throwable $e) {
             Log::error($e);
-            throw $e;
+            return back()->with(['message' => '共有の登録に失敗しました。', 'status' => 'alert']);
         }
     }
 

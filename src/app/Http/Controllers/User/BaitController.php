@@ -34,7 +34,10 @@ class BaitController extends Controller
          ], 201);
       } catch (Throwable $e) {
          Log::error($e);
-         throw $e;
+         return response()->json([
+            'message' => 'エサの登録に失敗しました。',
+            'status' => 'alert'
+         ], 500);
       }
    }
 
@@ -57,10 +60,10 @@ class BaitController extends Controller
          $bait->delete();
          return redirect()->back()->with('message', 'エサを削除しました')->with('status', 'alert');
       } catch (QueryException $e) {
-         Log::error('BaitController@destroy QueryException: ' . $e->getMessage());
+         Log::error($e);
          return redirect()->back()->with('message', '関連データのため削除できません')->with('status', 'alert');
       } catch (Throwable $e) {
-         Log::error('BaitController@destroy Throwable: ' . $e->getMessage());
+         Log::error($e);
          return redirect()->back()->with('message', 'サーバーエラーが発生しました')->with('status', 'alert');
       }
    }

@@ -48,7 +48,7 @@ class UsersController extends Controller
             return to_route('admin.index')->with(['message' => 'ユーザーのサービス利用を停止しました。', 'status' => 'alert']);
         } catch (Throwable $e) {
             Log::error($e);
-            throw $e;
+            return back()->with(['message' => 'ユーザーのサービス利用停止に失敗しました。', 'status' => 'alert']);
         }
     }
 }
