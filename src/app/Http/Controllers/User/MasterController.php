@@ -28,7 +28,7 @@ class MasterController extends Controller
     * @param MasterService $searchService
     * @return View
     */
-   public function index(Request $request, MasterService $searchService)
+   public function index(Request $request, MasterService $searchService): View
    {
       // ブラウザバック対策（値を削除する）
       SessionService::resetBrowserBackSession();
@@ -36,11 +36,15 @@ class MasterController extends Controller
       // 表示するタブを取得
       $tab = $request->get('tab', 'spots');
       // 検索キーワードを取得
-      $keyword = $request->get('keyword', '');
+      $searchKeyword = $request->get('keyword', '');
+
       // 各マスターデータを検索する
-      $spots = $searchService->searchKeyword(Spot::class, $keyword);
-      $baits = $searchService->searchKeyword(Bait::class, $keyword);
-      $fishNames = $searchService->searchKeyword(FishName::class, $keyword);
+      $spots = $searchService->searchKeyword(Spot::class, $searchKeyword);
+      $baits = $searchService->searchKeyword(Bait::class, $searchKeyword);
+      $fishNames = $searchService->searchKeyword(FishName::class, $searchKeyword);
+
+      // 検索後に入力欄がクリア
+      $keyword = '';
 
       return view('user.masters.index', compact('tab', 'spots', 'baits', 'fishNames', 'keyword'));
    }

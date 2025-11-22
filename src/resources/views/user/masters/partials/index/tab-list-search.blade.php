@@ -24,7 +24,7 @@
       <form id="searchForm" method="get" action="{{ route('user.masters.index') }}">
          <input class="px-2 py-1.5 mr-2 w-48 border rounded" type="text" name="keyword" value="{{ $keyword ?? '' }}"
             placeholder="検索キーワード">
-         <button class="btn bg-blue-800 hover:bg-blue-700">
+         <button class="btn bg-blue-800 hover:bg-blue-700" type="submit" name="tab" value="{{ $tab ?? 'spots' }}">
             検索
          </button>
       </form>
