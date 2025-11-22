@@ -25,7 +25,7 @@ class BaitController extends Controller
    }
 
    /**
-    * 新規エサを保存するメソッド。
+    * 新規メモ作成から新規エサを保存するメソッド。
     * @param StoreBaitRequest $request
     * @return JsonResponse
     * @throws Throwable

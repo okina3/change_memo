@@ -50,6 +50,7 @@ Route::prefix('/')->as('user.')->group(function () {
             ->middleware(['auth:users', KeepBackFlashForAjax::class])
             ->group(function () {
                 Route::post('/store', 'store')->name('spot.store');
+                Route::get('/edit/{spot}', 'edit')->name('spot.edit');
                 Route::delete('/destroy', 'destroy')->name('spot.destroy');
             });
 
@@ -58,6 +59,7 @@ Route::prefix('/')->as('user.')->group(function () {
             ->middleware(['auth:users', KeepBackFlashForAjax::class])
             ->group(function () {
                 Route::post('/store', 'store')->name('bait.store');
+                Route::get('/edit/{bait}', 'edit')->name('bait.edit');
                 Route::delete('/destroy', 'destroy')->name('bait.destroy');
             });
 
@@ -66,6 +68,7 @@ Route::prefix('/')->as('user.')->group(function () {
             ->middleware(['auth:users', KeepBackFlashForAjax::class])
             ->group(function () {
                 Route::post('/store', 'store')->name('fish-name.store');
+                Route::get('/edit/{fishName}', 'edit')->name('fish-name.edit');
                 Route::delete('/destroy', 'destroy')->name('fish-name.destroy');
             });
 

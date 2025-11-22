@@ -25,7 +25,7 @@ class SpotController extends Controller
     }
 
     /**
-     * 釣り場所を保存するメソッド。
+     * 新規メモ作成から釣り場所を保存するメソッド。
      * @param StoreSpotRequest $request
      * @return JsonResponse
      * @throws Throwable

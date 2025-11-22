@@ -25,7 +25,7 @@ class FishNameController extends Controller
    }
 
    /**
-    * 新規魚種を保存するメソッド
+    * 新規メモ作成から新規魚名を保存するメソッド
     * @param StoreFishRequest $request
     * @return JsonResponse
     * @throws Throwable
