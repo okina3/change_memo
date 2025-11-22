@@ -58,7 +58,7 @@ class SpotController extends Controller
         try {
             // 選択した釣り場を削除
             Spot::availableSelectSpot($request->spotId)->delete();
-            return redirect()->back()->with('message', '場所を削除しました')->with('status', 'alert');
+            return redirect()->back()->with('message', '正常に場所を削除しました')->with('status', 'info');
         } catch (Throwable $e) {
             Log::error($e);
             return redirect()->back()->with('message', '場所の削除に失敗しました。')->with('status', 'alert');

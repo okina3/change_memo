@@ -65,7 +65,7 @@ class FishNameController extends Controller
          }
          // 選択した魚名を削除
          $fish_name->delete();
-         return redirect()->back()->with('message', '魚名を削除しました。')->with('status', 'alert');
+         return redirect()->back()->with('message', '正常に魚名を削除しました。')->with('status', 'info');
       } catch (Throwable $e) {
          Log::error($e);
          return redirect()->back()->with('message', '魚名の削除に失敗しました。')->with('status', 'alert');

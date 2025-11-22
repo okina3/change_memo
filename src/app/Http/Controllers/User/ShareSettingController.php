@@ -154,6 +154,6 @@ class ShareSettingController extends Controller
         //ユーザーを特定できたら、共有を解除する
         ShareSetting::availableSelectSetting($shared_user->id, $request->memoId)->delete();
 
-        return to_route('user.index')->with(['message' => '共有を解除しました。', 'status' => 'alert']);
+        return to_route('user.index')->with(['message' => '共有を解除しました。', 'status' => 'info']);
     }
 }

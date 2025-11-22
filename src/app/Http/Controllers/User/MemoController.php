@@ -229,7 +229,7 @@ class MemoController extends Controller
                 ShareSettingService::deleteShareSettingAll($request->memoId);
             }, 10);
 
-            return to_route('user.index')->with(['message' => 'メモをゴミ箱に移動しました。', 'status' => 'alert']);
+            return to_route('user.index')->with(['message' => 'メモをゴミ箱に移動しました。', 'status' => 'info']);
         } catch (Throwable $e) {
             Log::error($e);
             return back()->with(['message' => 'メモの削除に失敗しました。', 'status' => 'alert']);

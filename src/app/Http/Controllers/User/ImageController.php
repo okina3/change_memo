@@ -117,7 +117,7 @@ class ImageController extends Controller
                 Image::availableSelectImage($request->imageId)->delete();
             }, 10);
 
-            return to_route('user.image.index')->with(['message' => '画像を削除しました。', 'status' => 'alert']);
+            return to_route('user.image.index')->with(['message' => '正常に画像を削除しました。', 'status' => 'info']);
         } catch (Throwable $e) {
             Log::error($e);
             return back()->with(['message' => '画像の削除に失敗しました。', 'status' => 'alert']);

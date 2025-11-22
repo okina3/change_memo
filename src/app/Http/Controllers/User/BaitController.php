@@ -65,7 +65,7 @@ class BaitController extends Controller
          }
          // 選択したエサを削除
          $bait->delete();
-         return redirect()->back()->with(['message' => 'エサを削除しました。', 'status' => 'alert']);
+         return redirect()->back()->with(['message' => '正常にエサを削除しました。', 'status' => 'info']);
       } catch (Throwable $e) {
          Log::error($e);
          return redirect()->back()->with(['message' => 'エサの削除に失敗しました。', 'status' => 'alert']);
