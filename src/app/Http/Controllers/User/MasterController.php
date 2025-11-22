@@ -18,6 +18,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+use Throwable;
 
 class MasterController extends Controller
 {
@@ -27,7 +28,7 @@ class MasterController extends Controller
     * @param MasterService $searchService
     * @return View
     */
-   public function index(Request $request, MasterService $searchService)
+   public function index(Request $request, MasterService $searchService): View
    {
       // ブラウザバック対策（値を削除する）
       SessionService::resetBrowserBackSession();
@@ -35,11 +36,15 @@ class MasterController extends Controller
       // 表示するタブを取得
       $tab = $request->get('tab', 'spots');
       // 検索キーワードを取得
-      $keyword = $request->get('keyword', '');
+      $searchKeyword = $request->get('keyword', '');
+
       // 各マスターデータを検索する
-      $spots = $searchService->searchKeyword(Spot::class, $keyword);
-      $baits = $searchService->searchKeyword(Bait::class, $keyword);
-      $fishNames = $searchService->searchKeyword(FishName::class, $keyword);
+      $spots = $searchService->searchKeyword(Spot::class, $searchKeyword);
+      $baits = $searchService->searchKeyword(Bait::class, $searchKeyword);
+      $fishNames = $searchService->searchKeyword(FishName::class, $searchKeyword);
+
+      // 検索後に入力欄がクリア
+      $keyword = '';
 
       return view('user.masters.index', compact('tab', 'spots', 'baits', 'fishNames', 'keyword'));
    }
@@ -53,8 +58,8 @@ class MasterController extends Controller
    {
       try {
          SpotService::createSpot($request->input('new_spot'));
-         return to_route('user.masters.index')->with('message', '場所を追加しました')->with('status', 'info');
-      } catch (\Throwable $e) {
+         return to_route('user.masters.index', ['tab' => 'spots'])->with('message', '場所を追加しました')->with('status', 'info');
+      } catch (Throwable $e) {
          Log::error($e);
          return back()->with('message', '場所の追加に失敗しました')->with('status', 'alert');
       }
@@ -69,8 +74,8 @@ class MasterController extends Controller
    {
       try {
          BaitService::createBait($request->input('new_bait'));
-         return to_route('user.masters.index')->with('message', 'エサを追加しました')->with('status', 'info');
-      } catch (\Throwable $e) {
+         return to_route('user.masters.index', ['tab' => 'baits'])->with('message', 'エサを追加しました')->with('status', 'info');
+      } catch (Throwable $e) {
          Log::error($e);
          return back()->with('message', 'エサの追加に失敗しました')->with('status', 'alert');
       }
@@ -85,8 +90,8 @@ class MasterController extends Controller
    {
       try {
          FishNameService::createFishName($request->input('new_fish_name'));
-         return to_route('user.masters.index')->with('message', '魚名を追加しました')->with('status', 'info');
-      } catch (\Throwable $e) {
+         return to_route('user.masters.index', ['tab' => 'fishNames'])->with('message', '魚名を追加しました')->with('status', 'info');
+      } catch (Throwable $e) {
          Log::error($e);
          return back()->with('message', '魚名の追加に失敗しました')->with('status', 'alert');
       }

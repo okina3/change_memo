@@ -46,4 +46,16 @@ class Spot extends Model
         $query->where('user_id', Auth::id())
             ->orderBy('created_at', 'desc');
     }
+
+    /**
+     * 自分自身の、選択した釣り場を取得する為のスコープ。
+     * @param Builder $query
+     * @param int $id
+     * @return void
+     */
+    public function scopeAvailableSelectSpot(Builder $query, int $id): void
+    {
+        $query->where('id', $id)
+            ->where('user_id', Auth::id());
+    }
 }
