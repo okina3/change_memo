@@ -11,7 +11,6 @@ use App\Models\FishName;
 use App\Models\Spot;
 use App\Services\BaitService;
 use App\Services\FishNameService;
-use App\Services\MasterService;
 use App\Services\SessionService;
 use App\Services\SpotService;
 use Illuminate\Http\RedirectResponse;
@@ -25,24 +24,22 @@ class MasterController extends Controller
    /**
     * スポット/エサ/魚名（マスター管理画面）を一覧表示するメソッド。
     * @param Request $request
-    * @param MasterService $searchService
     * @return View
     */
-   public function index(Request $request, MasterService $searchService): View
+   public function index(Request $request): View
    {
       // ブラウザバック対策（値を削除する）
       SessionService::resetBrowserBackSession();
 
       // 表示するタブを取得
       $tab = $request->get('tab', 'spots');
-      // 検索キーワードを取得
-      $searchKeyword = $request->get('keyword', '');
-
       // 各マスターデータを検索する
-      $spots = $searchService->searchKeyword(Spot::class, $searchKeyword);
-      $baits = $searchService->searchKeyword(Bait::class, $searchKeyword);
-      $fishNames = $searchService->searchKeyword(FishName::class, $searchKeyword);
-
+      $spots = Spot::with('user')
+         ->searchKeyword($request->keyword)->availableAllSpots()->get();
+      $baits = Bait::with('user')
+         ->searchKeyword($request->keyword)->availableAllBaits()->get();
+      $fishNames = FishName::with('user')
+         ->searchKeyword($request->keyword)->availableAllFishNames()->get();
       // 検索後に入力欄がクリア
       $keyword = '';
 

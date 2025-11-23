@@ -56,12 +56,20 @@ class SpotController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
         try {
+            // 指定の釣り場を取得
+            $spot = Spot::availableSelectSpot($request->spotId)->first();
+
+            // 関連がある場合は削除不可
+            if ($spot->memos()->exists()) {
+                return redirect()->back()->with(['message' => '関連データのため削除できません。', 'status' => 'alert']);
+            }
+
             // 選択した釣り場を削除
-            Spot::availableSelectSpot($request->spotId)->delete();
-            return redirect()->back()->with('message', '正常に場所を削除しました')->with('status', 'info');
+            $spot->delete();
+            return redirect()->back()->with(['message' => '正常に場所を削除しました。', 'status' => 'info']);
         } catch (Throwable $e) {
             Log::error($e);
-            return redirect()->back()->with('message', '場所の削除に失敗しました。')->with('status', 'alert');
+            return redirect()->back()->with(['message' => '場所の削除に失敗しました。', 'status' => 'alert']);
         }
     }
 }

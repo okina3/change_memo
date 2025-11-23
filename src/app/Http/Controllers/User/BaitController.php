@@ -59,7 +59,7 @@ class BaitController extends Controller
          // 指定のエサを取得
          $bait = Bait::availableSelectBait($request->baitId)->first();
 
-         // 多対多との関連がある場合
+         // 関連がある場合は削除不可
          if ($bait->memos()->exists()) {
             return redirect()->back()->with(['message' => '関連データのため削除できません。', 'status' => 'alert']);
          }

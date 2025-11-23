@@ -56,10 +56,10 @@ class FishNameController extends Controller
    public function destroy(Request $request): RedirectResponse
    {
       try {
-         // 指定のエサを取得
+         // 指定の魚名を取得
          $fish_name = FishName::availableSelectFishName($request->fishNameId)->first();
 
-         // 多対多との関連がある場合
+         // 関連がある場合は削除不可
          if ($fish_name->memos()->exists()) {
             return redirect()->back()->with(['message' => '関連データのため削除できません。', 'status' => 'alert']);
          }
