@@ -11,22 +11,17 @@
             <form action="{{ route('user.spot.update') }}" method="POST">
                @csrf
                @method('patch')
-               <input type="hidden" name="spotId" value="{{ $spot->id }}">
-
                <label class="block mb-2">場所名</label>
-               <input name="name" type="text" value="{{ old('name', $spot->name) }}" class="input w-full mb-3"
-                  required>
-
-               {{-- ボタンエリア --}}
-               <div class="flex gap-2">
-                  {{-- 更新ボタン --}}
-                  <div class="mb-5">
-                     <button class="btn bg-blue-800 hover:bg-blue-700" type="submit">更新する</button>
-                  </div>
-                  {{-- <button type="submit" class="btn bg-violet-700 hover:bg-violet-500">更新する</button> --}}
-                  <a href="{{ route('user.masters.index', ['tab' => 'spots']) }}" class="btn bg-gray-400">キャンセル</a>
+               <input class="input w-full mb-3 required" name="name" type="text"
+                  value="{{ old('name', $spot->name) }}">
+               <input type="hidden" name="spotId" value="{{ $spot->id }}">
+               {{-- 更新ボタン --}}
+               <div class="mb-5">
+                  <button class="btn bg-blue-800 hover:bg-blue-700" type="submit">更新する</button>
                </div>
             </form>
+            {{-- 戻るボタン --}}
+            <x-user.button.back-button-masters :tab="'spots'" />
          </div>
       </section>
    </div>
