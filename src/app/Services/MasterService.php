@@ -14,7 +14,7 @@ class MasterService
     * @param string|null $keyword 
     * @return Collection 
     */
-   public function searchKeyword(string $class, ?string $keyword = null)
+   public function searchKeyword(string $class, ?string $keyword = null): Collection
    {
       // 各指定モデルのインスタンスを生成、クエリビルダの取得
       $model = new $class;
@@ -25,18 +25,11 @@ class MasterService
          $query->where('user_id', Auth::id());
       }
 
-      // キーワードが指定されていれば検索をする
+      // キーワードが指定されていれば、モデル側のスコープを使って検索する
       if ($keyword !== null && $keyword !== '') {
-         // 全角スペースを半角に変換
-         $spaceConvert = mb_convert_kana($keyword, 's');
-         // 空白で分割して単語配列にする
-         $keywords = preg_split('/\s+/', $spaceConvert, -1, PREG_SPLIT_NO_EMPTY) ?: [];
-         // 各単語ごとに OR 条件で、各name カラムを部分一致検索
-         $query->where(function ($q) use ($keywords) {
-            foreach ($keywords as $word) {
-               $q->orWhere('name', 'like', '%' . $word . '%');
-            }
-         });
+         if (method_exists($model, 'scopeSearchKeyword')) {
+            $query->searchKeyword($keyword);
+         }
       }
 
       // 結果を id 降順で並び替え、全件を取得してコレクションで返す
