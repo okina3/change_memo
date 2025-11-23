@@ -18,7 +18,7 @@
             </div>
             <div class="hidden space-x-8 sm:-my-px sm:ml-8 sm:flex">
                <x-nav-link :href="route('user.masters.index')" :active="request()->routeIs('user.masters.index')">
-                  マスター管理
+                  マスターズ管理
                </x-nav-link>
             </div>
             <div class="hidden space-x-8 sm:-my-px sm:ml-8 sm:flex">
@@ -107,7 +107,7 @@
             メモ一覧
          </x-responsive-nav-link>
          <x-responsive-nav-link :href="route('user.masters.index')" :active="request()->routeIs('user.masters.index')">
-            マスター管理
+            マスターズ管理
          </x-responsive-nav-link>
          <x-responsive-nav-link :href="route('user.tag.index')" :active="request()->routeIs('user.tag.index')">
             タグ管理

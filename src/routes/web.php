@@ -5,7 +5,7 @@ use App\Http\Controllers\User\BaitController;
 use App\Http\Controllers\User\ContactController;
 use App\Http\Controllers\User\FishNameController;
 use App\Http\Controllers\User\ImageController;
-use App\Http\Controllers\User\MasterController;
+use App\Http\Controllers\User\MastersController;
 use App\Http\Controllers\User\MemoController;
 use App\Http\Controllers\User\ShareSettingController;
 use App\Http\Controllers\User\SpotController;
@@ -37,8 +37,8 @@ Route::prefix('/')->as('user.')->group(function () {
             Route::delete('destroy', 'destroy')->name('destroy');
         });
 
-        // マスター管理画面（釣り場・エサ・魚種）
-        Route::controller(MasterController::class)->prefix('masters')->group(function () {
+        // マスターズ管理画面（釣り場・エサ・魚種）
+        Route::controller(MastersController::class)->prefix('masters')->group(function () {
             Route::get('/', 'index')->name('masters.index');
             Route::post('/spot/store', 'storeSpot')->name('masters.spot.store');
             Route::post('/bait/store', 'storeBait')->name('masters.bait.store');
