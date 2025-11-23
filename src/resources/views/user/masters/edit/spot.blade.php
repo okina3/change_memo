@@ -7,13 +7,18 @@
          <div class="p-3">
             {{-- フラッシュメッセージ --}}
             <x-common.flash-message status="session('status')" />
-            {{-- 選択したメモを編集するエリア --}}
+            {{-- 選択した場所を編集するエリア --}}
             <form action="{{ route('user.spot.update') }}" method="POST">
                @csrf
                @method('patch')
-               <label class="block mb-2">場所名</label>
-               <input class="input w-full mb-3 required" name="name" type="text"
-                  value="{{ old('name', $spot->name) }}">
+               {{-- 現在の場所名の表示 --}}
+               <h2 class="sub_heading mb-2 block">現在の場所名</h2>
+               <div class="mb-6 p-2 w-full border border-gray-500 rounded">
+                  {{ $spot->name }}
+               </div>
+               {{-- 新しい場所名（上書き） --}}
+               <label class="sub_heading mb-2 block">新しい場所名（上書き）</label>
+               <input class="mb-10 w-full rounded" name="name" type="text" value="{{ old('name', $spot->name) }}">
                <input type="hidden" name="spotId" value="{{ $spot->id }}">
                {{-- 更新ボタン --}}
                <div class="mb-5">
