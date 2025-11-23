@@ -1,5 +1,5 @@
 {{-- エサのタブ内容 --}}
-@if ($tab === 'baits' || $tab === 'baits')
+@if ($tab === 'baits')
    {{-- タイトル --}}
    <h2 class="sub_heading mb-1">エサ名</h2>
    @foreach ($baits as $bait)

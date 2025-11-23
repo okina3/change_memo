@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreFishRequest;
 use App\Models\FishName;
 use App\Services\FishNameService;
+use App\Services\SessionService;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use Throwable;
 
 class FishNameController extends Controller
@@ -49,7 +51,47 @@ class FishNameController extends Controller
    }
 
    /**
-    * 指定の魚種を削除するメソッド。
+    * 魚名の編集画面を表示するメソッド。
+    * @param int $id
+    * @return View
+    */
+   public function edit(int $id): View
+   {
+      // 選択した魚名を、一件取得。
+      $fish_name = FishName::availableSelectFishName($id)->firstOrFail();
+      // ブラウザバック対策（値を持たせる）
+      SessionService::setBrowserBackSession();
+
+      return view('user.masters.edit.fish-name', compact('fish_name'));
+   }
+
+   /**
+    * 魚名を更新するメソッド。
+    * @param Request $request
+    * @return RedirectResponse
+    */
+   public function update(Request $request): RedirectResponse
+   {
+      $validated = $request->validate([
+         'fishNameId' => 'required|integer',
+         'name' => 'required|string|max:255',
+      ]);
+
+      try {
+         $fish_name = FishName::availableSelectFishName($validated['fishNameId'])->firstOrFail();
+         $fish_name->name = $validated['name'];
+         $fish_name->save();
+
+         return to_route('user.masters.index', ['tab' => 'fishNames'])
+            ->with(['message' => '魚名を更新しました。', 'status' => 'info']);
+      } catch (Throwable $e) {
+         Log::error($e);
+         return back()->with(['message' => '魚名の更新に失敗しました。', 'status' => 'alert']);
+      }
+   }
+
+   /**
+    * 魚種を削除するメソッド。
     * @param Request $request
     * @return RedirectResponse
     */

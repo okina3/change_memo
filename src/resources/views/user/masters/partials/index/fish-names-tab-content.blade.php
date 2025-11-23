@@ -1,5 +1,5 @@
 {{-- 魚名のタブ内容 --}}
-@if ($tab === 'fishNames' || $tab === 'fishNames')
+@if ($tab === 'fishNames')
    {{-- タイトル --}}
    <h2 class="sub_heading mb-1">魚名</h2>
    @foreach ($fishNames as $fish)

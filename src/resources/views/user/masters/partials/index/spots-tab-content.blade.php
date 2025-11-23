@@ -1,5 +1,5 @@
 {{-- 場所のタブ内容 --}}
-@if ($tab === 'spots' || $tab === 'spots')
+@if ($tab === 'spots')
    {{-- タイトル --}}
    <h2 class="sub_heading mb-1">場所名</h2>
    @foreach ($spots as $spot)

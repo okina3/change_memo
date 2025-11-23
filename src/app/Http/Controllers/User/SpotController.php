@@ -5,12 +5,14 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreSpotRequest;
 use App\Models\Spot;
+use App\Services\SessionService;
 use App\Services\SpotService;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use Throwable;
 
 class SpotController extends Controller
@@ -49,7 +51,47 @@ class SpotController extends Controller
     }
 
     /**
-     * 指定の釣り場を削除するメソッド。
+     * 釣り場の編集画面を表示するメソッド。
+     * @param int $id
+     * @return View
+     */
+    public function edit(int $id): View
+    {
+        // 選択した釣り場を、一件取得。
+        $spot = Spot::availableSelectSpot($id)->firstOrFail();
+        // ブラウザバック対策（値を持たせる）
+        SessionService::setBrowserBackSession();
+
+        return view('user.masters.edit.spot', compact('spot'));
+    }
+
+    /**
+     * 釣り場名を更新するメソッド。
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function update(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'spotId' => 'required|integer',
+            'name' => 'required|string|max:255',
+        ]);
+
+        try {
+            $spot = Spot::availableSelectSpot($validated['spotId'])->firstOrFail();
+            $spot->name = $validated['name'];
+            $spot->save();
+
+            return to_route('user.masters.index', ['tab' => 'spots'])
+                ->with(['message' => '場所名を更新しました。', 'status' => 'info']);
+        } catch (Throwable $e) {
+            Log::error($e);
+            return back()->with(['message' => '場所名の更新に失敗しました。', 'status' => 'alert']);
+        }
+    }
+
+    /**
+     * 釣り場を削除するメソッド。
      * @param Request $request
      * @return RedirectResponse
      */

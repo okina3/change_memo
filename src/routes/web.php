@@ -51,6 +51,7 @@ Route::prefix('/')->as('user.')->group(function () {
             ->group(function () {
                 Route::post('/store', 'store')->name('spot.store');
                 Route::get('/edit/{spot}', 'edit')->name('spot.edit');
+                Route::patch('/update', 'update')->name('spot.update');
                 Route::delete('/destroy', 'destroy')->name('spot.destroy');
             });
 
@@ -60,6 +61,7 @@ Route::prefix('/')->as('user.')->group(function () {
             ->group(function () {
                 Route::post('/store', 'store')->name('bait.store');
                 Route::get('/edit/{bait}', 'edit')->name('bait.edit');
+                Route::patch('/update', 'update')->name('bait.update');
                 Route::delete('/destroy', 'destroy')->name('bait.destroy');
             });
 
@@ -69,6 +71,7 @@ Route::prefix('/')->as('user.')->group(function () {
             ->group(function () {
                 Route::post('/store', 'store')->name('fish-name.store');
                 Route::get('/edit/{fishName}', 'edit')->name('fish-name.edit');
+                Route::patch('/update', 'update')->name('fish-name.update');
                 Route::delete('/destroy', 'destroy')->name('fish-name.destroy');
             });
 
