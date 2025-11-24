@@ -23,7 +23,7 @@
                {{-- エサの入力 --}}
                @include('user.memos.partials.edit.baits')
                {{-- 釣果の入力 --}}
-               @include('user.memos.partials.edit.fishing_results')
+               @include('user.memos.partials.edit.fishing-results')
                {{-- 選択したメモの備考の表示 --}}
                <x-user.edit.content :selectMemo='$select_memo' />
                {{-- 選択したメモに紐づいた既存タグを表示 --}}
