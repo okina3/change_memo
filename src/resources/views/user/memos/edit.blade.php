@@ -14,7 +14,7 @@
                      <p class="mark">{{ $select_memo->status }}</p>
                   </div>
                @endif
-               {{-- 釣行日・釣行時間・釣り場所 --}}
+               {{-- 釣行日・釣行時間・釣り場 --}}
                @include('user.memos.partials.edit.basic-info')
                {{-- 気象状態 --}}
                @include('user.memos.partials.edit.weather-state')

@@ -1,23 +1,23 @@
 <x-app-layout>
-   {{-- 場所名の編集 --}}
+   {{-- 釣り場名の編集 --}}
    <div class="px-2 py-2 bg-slate-200">
       <section class="text-gray-600 border border-gray-400 rounded-lg bg-white overflow-hidden">
          {{-- タイトル --}}
-         <h1 class="heading heading_bg">場所の編集</h1>
+         <h1 class="heading heading_bg">釣り場の編集</h1>
          <div class="p-3">
             {{-- フラッシュメッセージ --}}
             <x-common.flash-message status="session('status')" />
-            {{-- 選択した場所を編集するエリア --}}
+            {{-- 選択した釣り場を編集するエリア --}}
             <form action="{{ route('user.spot.update') }}" method="POST">
                @csrf
                @method('patch')
-               {{-- 現在の場所名の表示 --}}
-               <h2 class="sub_heading mb-2 block">現在の場所名</h2>
+               {{-- 現在の釣り場名の表示 --}}
+               <h2 class="sub_heading mb-2 block">現在の釣り場名</h2>
                <div class="mb-6 p-2 w-full border border-gray-500 rounded">
                   {{ $spot->name }}
                </div>
-               {{-- 新しい場所名（上書き） --}}
-               <label class="sub_heading mb-2 block">新しい場所名（上書き）</label>
+               {{-- 新しい釣り場名（上書き） --}}
+               <label class="sub_heading mb-2 block">新しい釣り場名（上書き）</label>
                <input class="mb-10 w-full rounded" name="name" type="text" value="{{ old('name', $spot->name) }}">
                <input type="hidden" name="spotId" value="{{ $spot->id }}">
                {{-- 更新ボタン --}}

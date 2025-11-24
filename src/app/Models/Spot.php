@@ -60,7 +60,7 @@ class Spot extends Model
     }
 
     /**
-     * 検索した場所の名前を表示するの為のスコープ。
+     * 検索した釣り場の名前を表示するの為のスコープ。
      * @param Builder $query
      * @param string|null $keyword
      * @return void

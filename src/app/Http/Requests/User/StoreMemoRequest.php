@@ -77,9 +77,9 @@ class StoreMemoRequest extends FormRequest
             'end_time.required' => '終了時間を指定してください。',
             'end_time.date_format' => '終了時間の形式は HH:MM で指定してください。',
             'end_time.after_or_equal' => '終了時間は開始時間以降を指定してください。',
-            'fishing_spot.required' => '場所を選択してください。',
-            'fishing_spot.integer' => '場所は整数で指定してください。',
-            'fishing_spot.exists' => '選択された場所は存在しません。',
+            'fishing_spot.required' => '釣り場を選択してください。',
+            'fishing_spot.integer' => '釣り場は整数で指定してください。',
+            'fishing_spot.exists' => '選択された釣り場は存在しません。',
             // 気象状態
             'weather.required' => '天気を指定してください。',
             'weather.in' => '天気の値が不正です。',

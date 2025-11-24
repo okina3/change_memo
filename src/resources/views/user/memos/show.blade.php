@@ -18,7 +18,7 @@
                      <p class="mark">{{ $select_memo->status }}</p>
                   </div>
                @endif
-               {{-- 釣行日・釣行時間・釣り場所 --}}
+               {{-- 釣行日・釣行時間・釣り場 --}}
                <x-user.show.basic-info :selectMemo='$select_memo' />
                {{-- 気象状態 --}}
                <x-user.show.weather-state :selectMemo='$select_memo' />

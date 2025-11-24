@@ -5,8 +5,8 @@
       <p class="mb-2 text-sm text-gray-500">クリックでカテゴリを選択してください。</p>
       <div class="flex items-center">
          <button type="submit" form="searchForm" name="tab" value="spots"
-            class="btn-3 {{ $tab === 'spots' ? 'active' : '' }}" title="場所の一覧を表示">
-            場所
+            class="btn-3 {{ $tab === 'spots' ? 'active' : '' }}" title="釣り場の一覧を表示">
+            釣り場
          </button>
          <button type="submit" form="searchForm" name="tab" value="baits"
             class="btn-3 {{ $tab === 'baits' ? 'active' : '' }}" title="エサの一覧を表示">

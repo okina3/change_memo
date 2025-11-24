@@ -10,7 +10,7 @@
             @include('user.masters.partials.index.create-forms')
             {{-- タブ表示と検索エリア --}}
             @include('user.masters.partials.index.tab-list-search')
-            {{-- 場所のタブ内容 --}}
+            {{-- 釣り場のタブ内容 --}}
             @include('user.masters.partials.index.spots-tab-content')
             {{-- エサのタブ内容 --}}
             @include('user.masters.partials.index.baits-tab-content')

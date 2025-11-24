@@ -47,7 +47,7 @@ class MastersController extends Controller
    }
 
    /**
-    * マスターズ管理画面から場所を保存するメソッド。
+    * マスターズ管理画面から釣り場を保存するメソッド。
     * @param StoreSpotRequest $request
     * @return RedirectResponse
     */
@@ -55,10 +55,10 @@ class MastersController extends Controller
    {
       try {
          SpotService::createSpot($request->input('new_spot'));
-         return to_route('user.masters.index', ['tab' => 'spots'])->with('message', '場所を追加しました')->with('status', 'info');
+         return to_route('user.masters.index', ['tab' => 'spots'])->with('message', '釣り場を追加しました')->with('status', 'info');
       } catch (Throwable $e) {
          Log::error($e);
-         return back()->with('message', '場所の追加に失敗しました')->with('status', 'alert');
+         return back()->with('message', '釣り場の追加に失敗しました')->with('status', 'alert');
       }
    }
 

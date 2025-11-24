@@ -73,9 +73,8 @@ class BaitController extends Controller
    public function update(Request $request): RedirectResponse
    {
       try {
-         $bait = Bait::availableSelectBait($request->baitId)->first();
-         $bait->name = $request->input('name');
-         $bait->save();
+         // エサを更新
+         BaitService::updateBait((int) $request->baitId, (string) $request->input('name'));
 
          return to_route('user.masters.index', ['tab' => 'baits'])
             ->with(['message' => 'エサ名を更新しました。', 'status' => 'info']);

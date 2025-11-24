@@ -30,12 +30,12 @@
          </div>
       </div>
       <div class="sm:flex-row flex flex-col items-start gap-4">
-         {{-- 釣り場所 --}}
+         {{-- 釣り場 --}}
          <div>
-            <label class="mb-1 block text-sm text-gray-700">場所</label>
+            <label class="mb-1 block text-sm text-gray-700">釣り場</label>
             <select name="fishing_spot" id="fishing_spot_select" class="w-60 rounded">
                <option value="" @selected(old('fishing_spot', '') == '')>
-                  場所を選択してください
+                  釣り場を選択してください
                </option>
                @foreach ($all_spots as $spot)
                   <option value="{{ $spot->id }}" @selected(old('fishing_spot', optional($select_memo)->spot_id) == $spot->id)>
@@ -43,7 +43,7 @@
                   </option>
                @endforeach
             </select>
-            {{-- エラーメッセージ（場所） --}}
+            {{-- エラーメッセージ（釣り場） --}}
             <x-input-error class="mt-2" :messages="$errors->get('fishing_spot')" />
          </div>
          {{-- 釣り場の追加 --}}

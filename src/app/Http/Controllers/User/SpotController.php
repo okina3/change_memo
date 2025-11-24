@@ -27,7 +27,7 @@ class SpotController extends Controller
     }
 
     /**
-     * 新規メモ作成から釣り場所を保存するメソッド。
+     * 新規メモ作成から釣り場を保存するメソッド。
      * @param StoreSpotRequest $request
      * @return JsonResponse
      * @throws Throwable
@@ -44,7 +44,7 @@ class SpotController extends Controller
         } catch (Throwable $e) {
             Log::error($e);
             return response()->json([
-                'message' => '場所の登録に失敗しました。',
+                'message' => '釣り場の登録に失敗しました。',
                 'status' => 'alert'
             ], 500);
         }
@@ -73,15 +73,14 @@ class SpotController extends Controller
     public function update(Request $request): RedirectResponse
     {
         try {
-            $spot = Spot::availableSelectSpot($request->spotId)->first();
-            $spot->name = $request->input('name');
-            $spot->save();
+            // 釣り場を更新
+            SpotService::updateSpot((int) $request->spotId, (string) $request->input('name'));
 
             return to_route('user.masters.index', ['tab' => 'spots'])
-                ->with(['message' => '場所名を更新しました。', 'status' => 'info']);
+                ->with(['message' => '釣り場名を更新しました。', 'status' => 'info']);
         } catch (Throwable $e) {
             Log::error($e);
-            return back()->with(['message' => '場所名の更新に失敗しました。', 'status' => 'alert']);
+            return back()->with(['message' => '釣り場名の更新に失敗しました。', 'status' => 'alert']);
         }
     }
 
@@ -101,10 +100,10 @@ class SpotController extends Controller
             }
             // 選択した釣り場を削除
             $spot->delete();
-            return redirect()->back()->with(['message' => '正常に場所を削除しました。', 'status' => 'info']);
+            return redirect()->back()->with(['message' => '正常に釣り場を削除しました。', 'status' => 'info']);
         } catch (Throwable $e) {
             Log::error($e);
-            return redirect()->back()->with(['message' => '場所の削除に失敗しました。', 'status' => 'alert']);
+            return redirect()->back()->with(['message' => '釣り場の削除に失敗しました。', 'status' => 'alert']);
         }
     }
 }

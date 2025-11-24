@@ -73,9 +73,8 @@ class FishNameController extends Controller
    public function update(Request $request): RedirectResponse
    {
       try {
-         $fish_name = FishName::availableSelectFishName($request->fishNameId)->first();
-         $fish_name->name = $request->input('name');
-         $fish_name->save();
+         // 魚名を更新
+         FishNameService::updateFishName((int) $request->fishNameId, (string) $request->input('name'));
 
          return to_route('user.masters.index', ['tab' => 'fishNames'])
             ->with(['message' => '魚名を更新しました。', 'status' => 'info']);
@@ -86,7 +85,7 @@ class FishNameController extends Controller
    }
 
    /**
-    * 魚種を削除するメソッド。
+    * 魚名を削除するメソッド。
     * @param Request $request
     * @return RedirectResponse
     */

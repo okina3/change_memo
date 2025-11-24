@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }),
          });
 
-         // 成功: 場所選択欄に新しい option を追加
+         // 成功: 釣り場選択欄に新しい option を追加
          if (res.status === 201) {
             const data = await res.json();
             const opt = document.createElement('option');
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             opt.textContent = data.name;
             select.appendChild(opt);
             input.value = '';
-            showMessage('場所の選択肢に追加しました', 'success');
+            showMessage('釣り場の選択肢に追加しました', 'success');
             setTimeout(clearMessage, 6000);
             return;
          }
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
       clearMessage();
       const newSpot = input.value.trim();
       if (!newSpot) {
-         showMessage('場所名を入力してください。', 'error');
+         showMessage('釣り場名を入力してください。', 'error');
          return;
       }
       addSpot(newSpot);

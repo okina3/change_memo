@@ -82,7 +82,7 @@ class ImageService
         // 画像をJPEG形式でエンコード
         $encoded_image = $resized_image->toJpeg();
 
-        // 保存場所とファイル名を指定して、Laravel内に保存
+        // 保存釣り場とファイル名を指定して、Laravel内に保存
         Storage::disk('public')->put($only_one_file_name, $encoded_image);
 
         return $only_one_file_name;

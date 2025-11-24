@@ -22,9 +22,9 @@
             </div>
          </div>
       </div>
-      {{-- 釣り場所 --}}
+      {{-- 釣り場 --}}
       <div class="">
-         <h2 class="mb-1 block text-sm text-gray-700">場所</h2>
+         <h2 class="mb-1 block text-sm text-gray-700">釣り場</h2>
          <div class="p-2 w-60 border border-gray-500 rounded">
             {{ optional($selectMemo->spot)->name ?? '-' }}
          </div>

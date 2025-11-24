@@ -12,7 +12,7 @@
                </p>
                <p class="ml-1">さん のメモ</p>
             </div>
-            {{-- 選択した共有メモの釣行日・釣行時間・釣り場所を表示 --}}
+            {{-- 選択した共有メモの釣行日・釣行時間・釣り場を表示 --}}
             <x-user.show.basic-info :selectMemo='$select_memo' />
             {{-- 選択した共有メモの気象状態を表示 --}}
             <x-user.show.weather-state :selectMemo='$select_memo' />

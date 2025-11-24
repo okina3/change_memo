@@ -28,7 +28,7 @@ class FishNameService
    }
 
    /**
-    * 新しい魚種を保存するメソッド。
+    * 新しい魚名を保存するメソッド。
     * @param string $new_fish_name
     * @return FishName
     */
@@ -38,6 +38,21 @@ class FishNameService
          'name' => $new_fish_name,
          'user_id' => Auth::id(),
       ]);
+   }
+
+   /**
+    * 既存の魚名を更新するメソッド。
+    * @param int $fishNameId
+    * @param string $name
+    * @return FishName
+    */
+   public static function updateFishName(int $fishNameId, string $name): FishName
+   {
+      $fish = FishName::availableSelectFishName($fishNameId)->firstOrFail();
+      $fish->name = $name;
+      $fish->save();
+
+      return $fish;
    }
 
    /**

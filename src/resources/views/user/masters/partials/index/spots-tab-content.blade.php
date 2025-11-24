@@ -1,10 +1,10 @@
-{{-- 場所のタブ内容 --}}
+{{-- 釣り場のタブ内容 --}}
 @if ($tab === 'spots')
    {{-- タイトル --}}
-   <h2 class="sub_heading mb-1">場所名</h2>
+   <h2 class="sub_heading mb-1">釣り場名</h2>
    @foreach ($spots as $spot)
       <div class="py-3 flex justify-between items-center border-b border-slate-300">
-         {{-- 場所名の表示 --}}
+         {{-- 釣り場名の表示 --}}
          <p class="mr-5 md:w-[70%] truncate">
             {{ $spot->name }}
          </p>
