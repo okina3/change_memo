@@ -62,7 +62,7 @@ class SpotController extends Controller
         // ブラウザバック対策（値を持たせる）
         SessionService::setBrowserBackSession();
 
-        return view('user.masters.edit.spot', compact('spot'));
+        return view('user.masters.edit-spot', compact('spot'));
     }
 
     /**
