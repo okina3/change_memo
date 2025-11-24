@@ -3,7 +3,7 @@
    <h2 class="sub_heading mb-1">気象状態</h2>
    <div class="sm:flex-row sm:flex-wrap sm:gap-6 md:gap-8 flex flex-col items-start gap-6">
       {{-- 天気 --}}
-      <div class="">
+      <div>
          <label class="mb-1 block text-sm text-gray-700">天気</label>
          <select name="weather" class="w-28 rounded">
             <option value="" @selected(old('weather', optional($select_memo)->weather ?? '') === '')>未選択</option>
@@ -28,7 +28,7 @@
          <x-input-error class="mt-2" :messages="$errors->get('air_temp')" />
       </div>
       {{-- 最大風速 --}}
-      <div class="">
+      <div>
          <label class="mb-1 block text-sm text-gray-700">最大風速</label>
          <div class="flex items-center gap-2">
             <input class="w-24 rounded text-right" type="number" name="max_wind"
@@ -40,7 +40,7 @@
          <x-input-error class="mt-2" :messages="$errors->get('max_wind')" />
       </div>
       {{-- 風向 --}}
-      <div class="">
+      <div>
          <label class="mb-1 block text-sm text-gray-700">風向</label>
          <select name="wind_dir" class="w-28 rounded">
             <option value="" @selected(old('wind_dir', optional($select_memo)->wind_dir ?? '') === '')>未選択</option>

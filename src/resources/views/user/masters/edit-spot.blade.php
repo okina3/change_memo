@@ -12,17 +12,21 @@
                @csrf
                @method('patch')
                {{-- 現在の釣り場名の表示 --}}
-               <h2 class="sub_heading mb-2 block">現在の釣り場名</h2>
-               <div class="mb-6 p-2 w-full border border-gray-500 rounded">
-                  {{ $spot->name }}
+               <div>
+                  <h2 class="sub_heading mb-2 block">現在の釣り場名</h2>
+                  <div class="mb-6 p-2 w-full border border-gray-500 rounded">
+                     {{ $spot->name }}
+                  </div>
                </div>
-               {{-- 新しい釣り場名（上書き） --}}
-               <label class="sub_heading mb-2 block">新しい釣り場名（上書き）</label>
-               <input class="mb-10 w-full rounded" name="spot_name" type="text"
-                  value="{{ old('spot_name', $spot->name) }}">
-               {{-- エラーメッセージ（釣り場の更新） --}}
-               <x-input-error class="mt-2" :messages="$errors->get('spot_name')" />
-               <input type="hidden" name="spotId" value="{{ $spot->id }}">
+               <div class="mb-10">
+                  {{-- 新しい釣り場名（上書き） --}}
+                  <label class="sub_heading mb-2 block">新しい釣り場名（上書き）</label>
+                  <input class="w-full rounded" name="spot_name" type="text"
+                     value="{{ old('spot_name', $spot->name) }}">
+                  {{-- エラーメッセージ（釣り場の更新） --}}
+                  <x-input-error class="mt-2" :messages="$errors->get('spot_name')" />
+                  <input type="hidden" name="spotId" value="{{ $spot->id }}">
+               </div>
                {{-- 更新ボタン --}}
                <div class="mb-5">
                   <button class="btn bg-blue-800 hover:bg-blue-700" type="submit">更新する</button>

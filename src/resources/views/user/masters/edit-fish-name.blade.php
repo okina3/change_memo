@@ -11,18 +11,22 @@
             <form action="{{ route('user.fish-name.update') }}" method="POST">
                @csrf
                @method('patch')
-               {{-- 現在の魚名の表示 --}}
-               <h2 class="sub_heading mb-2 block">現在の魚名</h2>
-               <div class="mb-6 p-2 w-full border border-gray-500 rounded">
-                  {{ $fish_name->name }}
+               <div>
+                  {{-- 現在の魚名の表示 --}}
+                  <h2 class="sub_heading mb-2 block">現在の魚名</h2>
+                  <div class="mb-6 p-2 w-full border border-gray-500 rounded">
+                     {{ $fish_name->name }}
+                  </div>
                </div>
-               {{-- 新しい魚名（上書き） --}}
-               <label class="sub_heading mb-2 block">新しい魚名（上書き）</label>
-               <input class="mb-10 w-full rounded" name="fish_name" type="text"
-                  value="{{ old('fish_name', $fish_name->name) }}">
-               {{-- エラーメッセージ（魚名の更新） --}}
-               <x-input-error class="mt-2" :messages="$errors->get('fish_name')" />
-               <input type="hidden" name="fishNameId" value="{{ $fish_name->id }}">
+               <div class="mb-10">
+                  {{-- 新しい魚名（上書き） --}}
+                  <label class="sub_heading mb-2 block">新しい魚名（上書き）</label>
+                  <input class="w-full rounded" name="fish_name" type="text"
+                     value="{{ old('fish_name', $fish_name->name) }}">
+                  {{-- エラーメッセージ（魚名の更新） --}}
+                  <x-input-error class="mt-2" :messages="$errors->get('fish_name')" />
+                  <input type="hidden" name="fishNameId" value="{{ $fish_name->id }}">
+               </div>
                {{-- 更新ボタン --}}
                <div class="mb-5">
                   <button class="btn bg-blue-800 hover:bg-blue-700" type="submit">更新する</button>

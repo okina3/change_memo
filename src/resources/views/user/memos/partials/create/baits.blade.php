@@ -1,7 +1,7 @@
 <div class="mb-8">
    {{-- エサの入力 --}}
    <div class="md:flex-row flex flex-col items-start gap-4">
-      <div class="">
+      <div>
          <h2 class="sub_heading mb-1">エサ</h2>
          @php
             // 初期表示行数（最低1、最大5）

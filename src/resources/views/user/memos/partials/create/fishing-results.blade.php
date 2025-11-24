@@ -1,7 +1,7 @@
 <div class="mb-8">
    <div class="md:gap-8 md:flex-row md:flex-wrap lg:gap-12 flex flex-col items-start gap-6">
       {{-- 釣果の入力 --}}
-      <div class="">
+      <div>
          <h2 class="sub_heading mb-1">釣果</h2>
          @php
             // 初期表示行数（最低1、最大5）

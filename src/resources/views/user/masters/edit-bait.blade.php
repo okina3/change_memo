@@ -11,18 +11,22 @@
             <form action="{{ route('user.bait.update') }}" method="POST" class="max-w-lg">
                @csrf
                @method('patch')
-               {{-- 現在のエサ名の表示 --}}
-               <h2 class="sub_heading mb-2 block">現在のエサ名</h2>
-               <div class="mb-6 p-2 w-full border border-gray-500 rounded">
-                  {{ $bait->name }}
+               <div>
+                  {{-- 現在のエサ名の表示 --}}
+                  <h2 class="sub_heading mb-2 block">現在のエサ名</h2>
+                  <div class="mb-6 p-2 w-full border border-gray-500 rounded">
+                     {{ $bait->name }}
+                  </div>
                </div>
-               {{-- 新しいエサ名（上書き） --}}
-               <label class="sub_heading mb-2 block">新しいエサ名（上書き）</label>
-               <input class="mb-10 w-full rounded" name="bait_name" type="text"
-                  value="{{ old('bait_name', $bait->name) }}">
-               {{-- エラーメッセージ（エサの更新） --}}
-               <x-input-error class="mt-2" :messages="$errors->get('bait_name')" />
-               <input type="hidden" name="baitId" value="{{ $bait->id }}">
+               <div class="mb-10">
+                  {{-- 新しいエサ名（上書き） --}}
+                  <label class="sub_heading mb-2 block">新しいエサ名（上書き）</label>
+                  <input class="w-full rounded" name="bait_name" type="text"
+                     value="{{ old('bait_name', $bait->name) }}">
+                  {{-- エラーメッセージ（エサの更新） --}}
+                  <x-input-error class="mt-2" :messages="$errors->get('bait_name')" />
+                  <input type="hidden" name="baitId" value="{{ $bait->id }}">
+               </div>
                {{-- 更新ボタン --}}
                <div class="mb-5">
                   <button class="btn bg-blue-800 hover:bg-blue-700" type="submit">更新する</button>
