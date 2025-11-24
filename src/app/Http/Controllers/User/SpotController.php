@@ -35,7 +35,7 @@ class SpotController extends Controller
     public function store(StoreSpotRequest $request): JsonResponse
     {
         try {
-            $spot = SpotService::createSpot($request->input('new_spot'));
+            $spot = SpotService::createSpot($request->input('spot_name'));
 
             return response()->json([
                 'id' => $spot->id,
@@ -72,14 +72,9 @@ class SpotController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'spotId' => 'required|integer',
-            'name' => 'required|string|max:255',
-        ]);
-
         try {
-            $spot = Spot::availableSelectSpot($validated['spotId'])->firstOrFail();
-            $spot->name = $validated['name'];
+            $spot = Spot::availableSelectSpot($request->spotId)->first();
+            $spot->name = $request->input('name');
             $spot->save();
 
             return to_route('user.masters.index', ['tab' => 'spots'])
@@ -100,12 +95,10 @@ class SpotController extends Controller
         try {
             // 指定の釣り場を取得
             $spot = Spot::availableSelectSpot($request->spotId)->first();
-
             // 関連がある場合は削除不可
             if ($spot->memos()->exists()) {
                 return redirect()->back()->with(['message' => '関連データのため削除できません。', 'status' => 'alert']);
             }
-
             // 選択した釣り場を削除
             $spot->delete();
             return redirect()->back()->with(['message' => '正常に場所を削除しました。', 'status' => 'info']);

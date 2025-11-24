@@ -35,7 +35,7 @@ class BaitController extends Controller
    public function store(StoreBaitRequest $request): JsonResponse
    {
       try {
-         $bait = BaitService::createBait($request->input('new_bait'));
+         $bait = BaitService::createBait($request->input('bait_name'));
 
          return response()->json([
             'id' => $bait->id,
@@ -72,14 +72,9 @@ class BaitController extends Controller
     */
    public function update(Request $request): RedirectResponse
    {
-      $validated = $request->validate([
-         'baitId' => 'required|integer',
-         'name' => 'required|string|max:255',
-      ]);
-
       try {
-         $bait = Bait::availableSelectBait($validated['baitId'])->firstOrFail();
-         $bait->name = $validated['name'];
+         $bait = Bait::availableSelectBait($request->baitId)->first();
+         $bait->name = $request->input('name');
          $bait->save();
 
          return to_route('user.masters.index', ['tab' => 'baits'])
@@ -100,7 +95,6 @@ class BaitController extends Controller
       try {
          // 指定のエサを取得
          $bait = Bait::availableSelectBait($request->baitId)->first();
-
          // 関連がある場合は削除不可
          if ($bait->memos()->exists()) {
             return redirect()->back()->with(['message' => '関連データのため削除できません。', 'status' => 'alert']);
