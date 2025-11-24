@@ -18,8 +18,10 @@
                </div>
                {{-- 新しい魚名（上書き） --}}
                <label class="sub_heading mb-2 block">新しい魚名（上書き）</label>
-               <input class="mb-10 w-full rounded" name="name" type="text"
-                  value="{{ old('name', $fish_name->name) }}">
+               <input class="mb-10 w-full rounded" name="fish_name" type="text"
+                  value="{{ old('fish_name', $fish_name->name) }}">
+               {{-- エラーメッセージ（魚名の更新） --}}
+               <x-input-error class="mt-2" :messages="$errors->get('fish_name')" />
                <input type="hidden" name="fishNameId" value="{{ $fish_name->id }}">
                {{-- 更新ボタン --}}
                <div class="mb-5">

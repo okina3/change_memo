@@ -43,13 +43,13 @@ class BaitService
    /**
     * 既存のエサ名を更新するメソッド。
     * @param int $baitId
-    * @param string $name
+    * @param string $bait_name
     * @return Bait
     */
-   public static function updateBait(int $baitId, string $name): Bait
+   public static function updateBait(int $baitId, string $bait_name): Bait
    {
       $bait = Bait::availableSelectBait($baitId)->firstOrFail();
-      $bait->name = $name;
+      $bait->name = $bait_name;
       $bait->save();
 
       return $bait;

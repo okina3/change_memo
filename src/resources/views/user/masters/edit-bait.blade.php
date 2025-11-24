@@ -18,7 +18,10 @@
                </div>
                {{-- 新しいエサ名（上書き） --}}
                <label class="sub_heading mb-2 block">新しいエサ名（上書き）</label>
-               <input class="mb-10 w-full rounded" name="name" type="text" value="{{ old('name', $bait->name) }}">
+               <input class="mb-10 w-full rounded" name="bait_name" type="text"
+                  value="{{ old('bait_name', $bait->name) }}">
+               {{-- エラーメッセージ（エサの更新） --}}
+               <x-input-error class="mt-2" :messages="$errors->get('bait_name')" />
                <input type="hidden" name="baitId" value="{{ $bait->id }}">
                {{-- 更新ボタン --}}
                <div class="mb-5">

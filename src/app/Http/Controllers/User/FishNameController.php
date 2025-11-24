@@ -67,14 +67,14 @@ class FishNameController extends Controller
 
    /**
     * 魚名を更新するメソッド。
-    * @param Request $request
+    * @param StoreFishRequest $request
     * @return RedirectResponse
     */
-   public function update(Request $request): RedirectResponse
+   public function update(StoreFishRequest $request): RedirectResponse
    {
       try {
          // 魚名を更新
-         FishNameService::updateFishName((int) $request->fishNameId, (string) $request->input('name'));
+         FishNameService::updateFishName((int) $request->fishNameId, (string) $request->input('fish_name'));
 
          return to_route('user.masters.index', ['tab' => 'fishNames'])
             ->with(['message' => '魚名を更新しました。', 'status' => 'info']);

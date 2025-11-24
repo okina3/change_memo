@@ -42,13 +42,13 @@ class SpotService
    /**
     * 既存の釣り場を更新するメソッド。
     * @param int $spotId
-    * @param string $name
+    * @param string $spot_name
     * @return Spot
     */
-   public static function updateSpot(int $spotId, string $name): Spot
+   public static function updateSpot(int $spotId, string $spot_name): Spot
    {
       $spot = Spot::availableSelectSpot($spotId)->firstOrFail();
-      $spot->name = $name;
+      $spot->name = $spot_name;
       $spot->save();
 
       return $spot;

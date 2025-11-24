@@ -67,14 +67,14 @@ class SpotController extends Controller
 
     /**
      * 釣り場名を更新するメソッド。
-     * @param Request $request
+     * @param StoreSpotRequest $request
      * @return RedirectResponse
      */
-    public function update(Request $request): RedirectResponse
+    public function update(StoreSpotRequest $request): RedirectResponse
     {
         try {
             // 釣り場を更新
-            SpotService::updateSpot((int) $request->spotId, (string) $request->input('name'));
+            SpotService::updateSpot((int) $request->spotId, (string) $request->input('spot_name'));
 
             return to_route('user.masters.index', ['tab' => 'spots'])
                 ->with(['message' => '釣り場名を更新しました。', 'status' => 'info']);

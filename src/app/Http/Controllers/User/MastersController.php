@@ -54,7 +54,7 @@ class MastersController extends Controller
    public function storeSpot(StoreSpotRequest $request): RedirectResponse
    {
       try {
-         SpotService::createSpot($request->input('new_spot'));
+         SpotService::createSpot($request->input('spot_name'));
          return to_route('user.masters.index', ['tab' => 'spots'])->with('message', '釣り場を追加しました')->with('status', 'info');
       } catch (Throwable $e) {
          Log::error($e);
@@ -70,7 +70,7 @@ class MastersController extends Controller
    public function storeBait(StoreBaitRequest $request): RedirectResponse
    {
       try {
-         BaitService::createBait($request->input('new_bait'));
+         BaitService::createBait($request->input('bait_name'));
          return to_route('user.masters.index', ['tab' => 'baits'])->with('message', 'エサを追加しました')->with('status', 'info');
       } catch (Throwable $e) {
          Log::error($e);
@@ -86,7 +86,7 @@ class MastersController extends Controller
    public function storeFishName(StoreFishRequest $request): RedirectResponse
    {
       try {
-         FishNameService::createFishName($request->input('new_fish_name'));
+         FishNameService::createFishName($request->input('fish_name'));
          return to_route('user.masters.index', ['tab' => 'fishNames'])->with('message', '魚名を追加しました')->with('status', 'info');
       } catch (Throwable $e) {
          Log::error($e);

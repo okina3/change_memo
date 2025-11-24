@@ -18,7 +18,10 @@
                </div>
                {{-- 新しい釣り場名（上書き） --}}
                <label class="sub_heading mb-2 block">新しい釣り場名（上書き）</label>
-               <input class="mb-10 w-full rounded" name="name" type="text" value="{{ old('name', $spot->name) }}">
+               <input class="mb-10 w-full rounded" name="spot_name" type="text"
+                  value="{{ old('spot_name', $spot->name) }}">
+               {{-- エラーメッセージ（釣り場の更新） --}}
+               <x-input-error class="mt-2" :messages="$errors->get('spot_name')" />
                <input type="hidden" name="spotId" value="{{ $spot->id }}">
                {{-- 更新ボタン --}}
                <div class="mb-5">

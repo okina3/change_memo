@@ -43,13 +43,13 @@ class FishNameService
    /**
     * 既存の魚名を更新するメソッド。
     * @param int $fishNameId
-    * @param string $name
+    * @param string $fish_name
     * @return FishName
     */
-   public static function updateFishName(int $fishNameId, string $name): FishName
+   public static function updateFishName(int $fishNameId, string $fish_name): FishName
    {
       $fish = FishName::availableSelectFishName($fishNameId)->firstOrFail();
-      $fish->name = $name;
+      $fish->name = $fish_name;
       $fish->save();
 
       return $fish;

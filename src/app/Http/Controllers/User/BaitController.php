@@ -67,15 +67,15 @@ class BaitController extends Controller
 
    /**
     * エサ名を更新するメソッド。
-    * @param Request $request
+    * @param StoreBaitRequest $request
     * @return RedirectResponse
     */
-   public function update(Request $request): RedirectResponse
+   public function update(StoreBaitRequest $request): RedirectResponse
    {
       try {
          // エサを更新
-         BaitService::updateBait((int) $request->baitId, (string) $request->input('name'));
-
+         BaitService::updateBait((int) $request->baitId, (string) $request->input('bait_name'));
+         
          return to_route('user.masters.index', ['tab' => 'baits'])
             ->with(['message' => 'エサ名を更新しました。', 'status' => 'info']);
       } catch (Throwable $e) {
