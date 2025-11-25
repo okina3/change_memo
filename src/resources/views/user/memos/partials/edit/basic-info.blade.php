@@ -50,15 +50,15 @@
          <div>
             <h2 class="mb-1 block text-sm text-gray-700">（釣り場を選択肢に追加）</h2>
             <div class="flex gap-2 items-center">
-               <input id="new_spot_input" class="w-60 rounded" type="text" name="new_spot"
-                  value="{{ old('new_spot') }}" placeholder="例:相模川上流">
+               <input id="new_spot_input" class="w-60 rounded" type="text" name="spot_name"
+                  value="{{ old('spot_name') }}" placeholder="例:相模川上流">
                <button type="button" id="add_spot_btn" data-url="{{ route('user.spot.store') }}"
                   class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
                   追加
                </button>
             </div>
             {{-- エラーメッセージ（釣り場の追加） --}}
-            <x-input-error class="mt-2" :messages="$errors->get('new_spot')" />
+            <x-input-error class="mt-2" :messages="$errors->get('spot_name')" />
             {{-- AJAX 用メッセージ表示領域 --}}
             <div id="spot_message" class="mt-2 text-sm" aria-live="polite"></div>
          </div>
