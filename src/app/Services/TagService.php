@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class TagService
 {
     /**
-     * タグをDBに保存するメソッド。
+     * タグを保存するメソッド。
      * @param string $new_tag
      * @return Tag
      */

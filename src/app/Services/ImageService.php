@@ -31,7 +31,7 @@ class ImageService
     }
 
     /**
-     * 画像を DB に保存するメソッド。
+     * 画像を保存するメソッド。
      * @param string $filename
      * @return Image
      */
