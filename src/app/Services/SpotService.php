@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 class SpotService
 {
    /**
-    * 別のユーザーの場所を見られなくする為のメソッド。
+    * 別のユーザーの釣り場を見られなくする為のメソッド。
     * @param $request
     * @return void
     */
@@ -18,7 +18,7 @@ class SpotService
       $id_spot = $request->route()->parameter('spot');
       // パラメーターが無ければチェック不要
       if (!is_null($id_spot)) {
-         // 自分自身の場所なのかチェック
+         // 自分自身の釣り場なのかチェック
          $spot = Spot::select('user_id')->findOrFail($id_spot);
          if ($spot->user_id !== Auth::id()) {
             abort(404);
@@ -27,7 +27,7 @@ class SpotService
    }
 
    /**
-    * 新しいスポットを保存するメソッド。
+    * 新しい釣り場を保存するメソッド。
     * @param string $new_spot
     * @return Spot
     */
@@ -37,5 +37,20 @@ class SpotService
          'name' => $new_spot,
          'user_id' => Auth::id(),
       ]);
+   }
+
+   /**
+    * 既存の釣り場を更新するメソッド。
+    * @param int $spotId
+    * @param string $spot_name
+    * @return Spot
+    */
+   public static function updateSpot(int $spotId, string $spot_name): Spot
+   {
+      $spot = Spot::availableSelectSpot($spotId)->firstOrFail();
+      $spot->name = $spot_name;
+      $spot->save();
+
+      return $spot;
    }
 }

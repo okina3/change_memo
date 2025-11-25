@@ -30,12 +30,12 @@
          </div>
       </div>
       <div class="sm:flex-row flex flex-col items-start gap-4">
-         {{-- 釣り場所 --}}
+         {{-- 釣り場 --}}
          <div>
-            <label class="mb-1 block text-sm text-gray-700">場所</label>
+            <label class="mb-1 block text-sm text-gray-700">釣り場</label>
             <select name="fishing_spot" id="fishing_spot_select" class="w-60 rounded">
                <option value="" @selected(old('fishing_spot', '') == '')>
-                  場所を選択してください
+                  釣り場を選択してください
                </option>
                @foreach ($all_spots as $spot)
                   <option value="{{ $spot->id }}" @selected(old('fishing_spot', optional($select_memo)->spot_id) == $spot->id)>
@@ -43,22 +43,22 @@
                   </option>
                @endforeach
             </select>
-            {{-- エラーメッセージ（場所） --}}
+            {{-- エラーメッセージ（釣り場） --}}
             <x-input-error class="mt-2" :messages="$errors->get('fishing_spot')" />
          </div>
          {{-- 釣り場の追加 --}}
          <div>
             <h2 class="mb-1 block text-sm text-gray-700">（釣り場を選択肢に追加）</h2>
             <div class="flex gap-2 items-center">
-               <input id="new_spot_input" class="w-60 rounded" type="text" name="new_spot"
-                  value="{{ old('new_spot') }}" placeholder="例:相模川上流">
+               <input id="new_spot_input" class="w-60 rounded" type="text" name="spot_name"
+                  value="{{ old('spot_name') }}" placeholder="例:相模川上流">
                <button type="button" id="add_spot_btn" data-url="{{ route('user.spot.store') }}"
                   class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
                   追加
                </button>
             </div>
             {{-- エラーメッセージ（釣り場の追加） --}}
-            <x-input-error class="mt-2" :messages="$errors->get('new_spot')" />
+            <x-input-error class="mt-2" :messages="$errors->get('spot_name')" />
             {{-- AJAX 用メッセージ表示領域 --}}
             <div id="spot_message" class="mt-2 text-sm" aria-live="polite"></div>
          </div>

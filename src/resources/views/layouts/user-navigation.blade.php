@@ -4,9 +4,9 @@
       <div class="flex justify-between h-16">
          <div class="flex">
             <!-- Logo -->
-            <div class="shrink-0 flex items-center">
-               <a href="{{ route('dashboard') }}">
-                  <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+            <div class="w-10 sm:w-12 shrink-0 flex items-center">
+               <a href="{{ route('user.index') }}">
+                  <x-application-logo />
                </a>
             </div>
 
@@ -18,7 +18,7 @@
             </div>
             <div class="hidden space-x-8 sm:-my-px sm:ml-8 sm:flex">
                <x-nav-link :href="route('user.masters.index')" :active="request()->routeIs('user.masters.index')">
-                  マスター管理
+                  マスターズ管理
                </x-nav-link>
             </div>
             <div class="hidden space-x-8 sm:-my-px sm:ml-8 sm:flex">
@@ -107,7 +107,7 @@
             メモ一覧
          </x-responsive-nav-link>
          <x-responsive-nav-link :href="route('user.masters.index')" :active="request()->routeIs('user.masters.index')">
-            マスター管理
+            マスターズ管理
          </x-responsive-nav-link>
          <x-responsive-nav-link :href="route('user.tag.index')" :active="request()->routeIs('user.tag.index')">
             タグ管理

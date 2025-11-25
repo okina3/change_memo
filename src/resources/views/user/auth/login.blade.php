@@ -1,7 +1,9 @@
 <x-guest-layout>
    <!-- Session Status -->
    <x-auth-session-status class="mb-4" :status="session('status')" />
-   ユーザー用
+   <div class="mb-2 text-lg">
+      ユーザー専用
+   </div>
    <form method="POST" action="{{ route('login') }}">
       @csrf
 
@@ -32,14 +34,22 @@
          </label>
       </div>
 
-      <div class="flex items-center justify-end mt-4">
-         @if (Route::has('password.request'))
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-               href="{{ route('password.request') }}">
-               {{ __('Forgot your password?') }}
-            </a>
-         @endif
-
+      <div class="flex justify-between items-center">
+         {{-- 新規ユーザー登録画面の追加 --}}
+         <div class="mt-4">
+            @if (Route::has('register'))
+               <a href="{{ route('register') }}"
+                  class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">新規登録する</a>
+            @endif
+         </div>
+         <div class="flex items-center justify-end mt-4">
+            @if (Route::has('password.request'))
+               <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  href="{{ route('password.request') }}">
+                  {{ __('Forgot your password?') }}
+               </a>
+            @endif
+         </div>
          <x-primary-button class="ms-3">
             {{ __('Log in') }}
          </x-primary-button>

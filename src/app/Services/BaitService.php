@@ -41,6 +41,21 @@ class BaitService
    }
 
    /**
+    * 既存のエサ名を更新するメソッド。
+    * @param int $baitId
+    * @param string $bait_name
+    * @return Bait
+    */
+   public static function updateBait(int $baitId, string $bait_name): Bait
+   {
+      $bait = Bait::availableSelectBait($baitId)->firstOrFail();
+      $bait->name = $bait_name;
+      $bait->save();
+
+      return $bait;
+   }
+
+   /**
     * 選択したメモに紐づいた、エサのNameを、配列で取得するメソッド。
     * @param Collection $select_memo_baits
     * @return array

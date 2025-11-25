@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreBaitRequest;
 use App\Models\Bait;
 use App\Services\BaitService;
+use App\Services\SessionService;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use Throwable;
 
 class BaitController extends Controller
@@ -25,7 +27,7 @@ class BaitController extends Controller
    }
 
    /**
-    * 新規エサを保存するメソッド。
+    * 新規メモ作成から新規エサを保存するメソッド。
     * @param StoreBaitRequest $request
     * @return JsonResponse
     * @throws Throwable
@@ -33,7 +35,7 @@ class BaitController extends Controller
    public function store(StoreBaitRequest $request): JsonResponse
    {
       try {
-         $bait = BaitService::createBait($request->input('new_bait'));
+         $bait = BaitService::createBait($request->input('bait_name'));
 
          return response()->json([
             'id' => $bait->id,
@@ -49,7 +51,41 @@ class BaitController extends Controller
    }
 
    /**
-    * 指定のエサを削除するメソッド。
+    * エサの編集画面を表示するメソッド。
+    * @param int $id
+    * @return View
+    */
+   public function edit(int $id): View
+   {
+      // 選択したエサを、一件取得。
+      $bait = Bait::availableSelectBait($id)->firstOrFail();
+      // ブラウザバック対策（値を持たせる）
+      SessionService::setBrowserBackSession();
+
+      return view('user.masters.edit-bait', compact('bait'));
+   }
+
+   /**
+    * エサ名を更新するメソッド。
+    * @param StoreBaitRequest $request
+    * @return RedirectResponse
+    */
+   public function update(StoreBaitRequest $request): RedirectResponse
+   {
+      try {
+         // エサを更新
+         BaitService::updateBait((int) $request->baitId, (string) $request->input('bait_name'));
+         
+         return to_route('user.masters.index', ['tab' => 'baits'])
+            ->with(['message' => 'エサ名を更新しました。', 'status' => 'info']);
+      } catch (Throwable $e) {
+         Log::error($e);
+         return back()->with(['message' => 'エサ名の更新に失敗しました。', 'status' => 'alert']);
+      }
+   }
+
+   /**
+    * エサを削除するメソッド。
     * @param Request $request
     * @return RedirectResponse
     */
@@ -58,8 +94,7 @@ class BaitController extends Controller
       try {
          // 指定のエサを取得
          $bait = Bait::availableSelectBait($request->baitId)->first();
-
-         // 多対多との関連がある場合
+         // 関連がある場合は削除不可
          if ($bait->memos()->exists()) {
             return redirect()->back()->with(['message' => '関連データのため削除できません。', 'status' => 'alert']);
          }

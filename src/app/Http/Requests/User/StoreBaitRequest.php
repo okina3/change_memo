@@ -23,7 +23,7 @@ class StoreBaitRequest extends FormRequest
    public function rules(): array
    {
       return [
-         'new_bait' => [
+         'bait_name' => [
             'required',
             'string',
             'max:25',
@@ -41,10 +41,10 @@ class StoreBaitRequest extends FormRequest
    public function messages(): array
    {
       return [
-         'new_bait.required' => '新規エサを入力してください。',
-         'new_bait.string' => '新規エサ名は文字列で入力してください。',
-         'new_bait.max' => '新規エサは、25文字以内で入力してください。',
-         'new_bait.unique' => 'このエサはすでに登録されています。',
+         'bait_name.required' => 'エサを入力してください。',
+         'bait_name.string' => 'エサ名は文字列で入力してください。',
+         'bait_name.max' => 'エサは、25文字以内で入力してください。',
+         'bait_name.unique' => 'このエサはすでに登録されています。',
       ];
    }
 }

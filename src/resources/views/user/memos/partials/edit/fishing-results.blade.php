@@ -1,7 +1,7 @@
 <div class="mb-8">
    <div class="md:gap-8 md:flex-row md:flex-wrap lg:gap-12 flex flex-col items-start gap-6">
       {{-- 釣果の入力 --}}
-      <div class="">
+      <div>
          <h2 class="sub_heading mb-1">釣果</h2>
          @php
             // 初期表示行数（最低1、最大5）
@@ -76,15 +76,15 @@
       <div>
          <h2 class="mt-2 mb-1 block text-sm text-gray-700">（魚名を選択肢に追加）</h2>
          <div class="flex gap-2 items-center">
-            <input id="new_fish_input" class="w-60 rounded" type="text" name="new_fish_name"
-               value="{{ old('new_fish_name') }}" placeholder="例: ヤマメ">
+            <input id="new_fish_input" class="w-60 rounded" type="text" name="fish_name"
+               value="{{ old('fish_name') }}" placeholder="例: ヤマメ">
             <button type="button" id="add_fish_btn" data-url="{{ route('user.fish-name.store') }}"
                class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
                追加
             </button>
          </div>
          {{-- エラーメッセージ（魚名の追加） --}}
-         <x-input-error class="mt-2" :messages="$errors->get('new_fish_name')" />
+         <x-input-error class="mt-2" :messages="$errors->get('fish_name')" />
          {{-- AJAX 用メッセージ表示領域 --}}
          <div id="fish_message" class="mt-2 text-sm" aria-live="polite"></div>
       </div>

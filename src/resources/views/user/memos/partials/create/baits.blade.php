@@ -1,7 +1,7 @@
 <div class="mb-8">
    {{-- エサの入力 --}}
    <div class="md:flex-row flex flex-col items-start gap-4">
-      <div class="">
+      <div>
          <h2 class="sub_heading mb-1">エサ</h2>
          @php
             // 初期表示行数（最低1、最大5）
@@ -39,15 +39,15 @@
       <div>
          <h2 class="mt-2 mb-1 block text-sm text-gray-700">（エサを選択肢に追加）</h2>
          <div class="flex gap-2 items-center">
-            <input id="new_bait_input" class="w-60 rounded" type="text" name="new_bait" value="{{ old('new_bait') }}"
-               placeholder="例: アオイソメ">
+            <input id="new_bait_input" class="w-60 rounded" type="text" name="bait_name"
+               value="{{ old('bait_name') }}" placeholder="例: アオイソメ">
             <button type="button" id="add_bait_btn" data-url="{{ route('user.bait.store') }}"
                class="btn-2 btn-bk bg-yellow-500 hover:bg-yellow-400">
                追加
             </button>
          </div>
          {{-- エラーメッセージ（エサの追加） --}}
-         <x-input-error class="mt-2" :messages="$errors->get('new_bait')" />
+         <x-input-error class="mt-2" :messages="$errors->get('bait_name')" />
          {{-- AJAX 用メッセージ表示領域 --}}
          <div id="bait_message" class="mt-2 text-sm" aria-live="polite"></div>
       </div>

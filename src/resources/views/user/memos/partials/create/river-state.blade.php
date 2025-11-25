@@ -3,7 +3,7 @@
    <h2 class="sub_heading mb-1">川の状態</h2>
    <div class="sm:flex-row sm:flex-wrap sm:gap-6 md:gap-8 flex flex-col items-start gap-6">
       {{-- 川の流れ --}}
-      <div class="">
+      <div>
          <label class="mb-1 block text-sm text-gray-700">川の流れ</label>
          <select name="river_flow" class="w-32 rounded">
             <option value="" @selected(old('river_flow', '') === '')>
@@ -20,7 +20,7 @@
          <x-input-error class="mt-2" :messages="$errors->get('river_flow')" />
       </div>
       {{-- 濁り --}}
-      <div class="">
+      <div>
          <label class="mb-1 block text-sm text-gray-700">濁り</label>
          <select name="turbidity" class="w-32 rounded">
             <option value="" @selected(old('turbidity', '') === '')>
@@ -43,7 +43,7 @@
          <x-input-error class="mt-2" :messages="$errors->get('turbidity')" />
       </div>
       {{-- 水中のゴミ --}}
-      <div class="">
+      <div>
          <label class="mb-1 block text-sm text-gray-700">水中のゴミ</label>
          <select name="debris" class="w-32 rounded">
             <option value="" @selected(old('debris', '') === '')>
@@ -63,7 +63,7 @@
          <x-input-error class="mt-2" :messages="$errors->get('debris')" />
       </div>
       {{-- 水位 --}}
-      <div class="">
+      <div>
          <label class="mb-1 block text-sm text-gray-700">水位</label>
          <div class="flex items-center gap-2">
             <input class="w-24 rounded text-right" type="number" name="water_level" value="{{ old('water_level') }}"
@@ -74,7 +74,7 @@
          <x-input-error class="mt-2" :messages="$errors->get('water_level')" />
       </div>
       {{-- 水温 --}}
-      <div class="">
+      <div>
          <label class="mb-1 block text-sm text-gray-700">水温</label>
          <div class="flex items-center gap-2">
             <input class="w-24 rounded text-right" type="number" name="water_temp" value="{{ old('water_temp') }}"

@@ -14,7 +14,7 @@
                      <p class="mark">{{ $select_memo->status }}</p>
                   </div>
                @endif
-               {{-- 釣行日・釣行時間・釣り場所 --}}
+               {{-- 釣行日・釣行時間・釣り場 --}}
                @include('user.memos.partials.edit.basic-info')
                {{-- 気象状態 --}}
                @include('user.memos.partials.edit.weather-state')
@@ -23,7 +23,7 @@
                {{-- エサの入力 --}}
                @include('user.memos.partials.edit.baits')
                {{-- 釣果の入力 --}}
-               @include('user.memos.partials.edit.fishing_results')
+               @include('user.memos.partials.edit.fishing-results')
                {{-- 選択したメモの備考の表示 --}}
                <x-user.edit.content :selectMemo='$select_memo' />
                {{-- 選択したメモに紐づいた既存タグを表示 --}}

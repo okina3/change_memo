@@ -7,7 +7,7 @@
          <div class="p-3">
             <form action="{{ route('user.store') }}" method="post">
                @csrf
-               {{-- 釣行日・釣行時間・釣り場所 --}}
+               {{-- 釣行日・釣行時間・釣り場 --}}
                @include('user.memos.partials.create.basic-info')
                {{-- 気象状態 --}}
                @include('user.memos.partials.create.weather-state')
@@ -16,7 +16,7 @@
                {{-- エサの入力 --}}
                @include('user.memos.partials.create.baits')
                {{-- 釣果の入力 --}}
-               @include('user.memos.partials.create.fishing_results')
+               @include('user.memos.partials.create.fishing-results')
                {{-- メモの備考入力 --}}
                @include('user.memos.partials.create.content')
                {{-- タグの選択 --}}

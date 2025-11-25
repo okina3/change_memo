@@ -29,8 +29,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        // ユーザー側で保存された intended URL に引っ張られないよう、強制的に管理者ダッシュボードへ
-        return redirect()->route('admin.dashboard');
+        // 管理者でログイン後はユーザー一覧ページへリダイレクト
+        return redirect()->intended(route('admin.index', absolute: false));
     }
 
     /**

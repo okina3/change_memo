@@ -5,12 +5,14 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreSpotRequest;
 use App\Models\Spot;
+use App\Services\SessionService;
 use App\Services\SpotService;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use Throwable;
 
 class SpotController extends Controller
@@ -25,7 +27,7 @@ class SpotController extends Controller
     }
 
     /**
-     * 釣り場所を保存するメソッド。
+     * 新規メモ作成から釣り場を保存するメソッド。
      * @param StoreSpotRequest $request
      * @return JsonResponse
      * @throws Throwable
@@ -33,7 +35,7 @@ class SpotController extends Controller
     public function store(StoreSpotRequest $request): JsonResponse
     {
         try {
-            $spot = SpotService::createSpot($request->input('new_spot'));
+            $spot = SpotService::createSpot($request->input('spot_name'));
 
             return response()->json([
                 'id' => $spot->id,
@@ -42,26 +44,66 @@ class SpotController extends Controller
         } catch (Throwable $e) {
             Log::error($e);
             return response()->json([
-                'message' => '場所の登録に失敗しました。',
+                'message' => '釣り場の登録に失敗しました。',
                 'status' => 'alert'
             ], 500);
         }
     }
 
     /**
-     * 指定の釣り場を削除するメソッド。
+     * 釣り場の編集画面を表示するメソッド。
+     * @param int $id
+     * @return View
+     */
+    public function edit(int $id): View
+    {
+        // 選択した釣り場を、一件取得。
+        $spot = Spot::availableSelectSpot($id)->firstOrFail();
+        // ブラウザバック対策（値を持たせる）
+        SessionService::setBrowserBackSession();
+
+        return view('user.masters.edit-spot', compact('spot'));
+    }
+
+    /**
+     * 釣り場名を更新するメソッド。
+     * @param StoreSpotRequest $request
+     * @return RedirectResponse
+     */
+    public function update(StoreSpotRequest $request): RedirectResponse
+    {
+        try {
+            // 釣り場を更新
+            SpotService::updateSpot((int) $request->spotId, (string) $request->input('spot_name'));
+
+            return to_route('user.masters.index', ['tab' => 'spots'])
+                ->with(['message' => '釣り場名を更新しました。', 'status' => 'info']);
+        } catch (Throwable $e) {
+            Log::error($e);
+            return back()->with(['message' => '釣り場名の更新に失敗しました。', 'status' => 'alert']);
+        }
+    }
+
+    /**
+     * 釣り場を削除するメソッド。
      * @param Request $request
      * @return RedirectResponse
      */
     public function destroy(Request $request): RedirectResponse
     {
         try {
+            // 指定の釣り場を取得
+            $spot = Spot::availableSelectSpot($request->spotId)->first();
+            // 関連がある場合は削除不可
+            if ($spot->memos()->exists()) {
+                return redirect()->back()->with(['message' => '関連データのため削除できません。', 'status' => 'alert']);
+            }
             // 選択した釣り場を削除
-            Spot::availableSelectSpot($request->spotId)->delete();
-            return redirect()->back()->with('message', '正常に場所を削除しました')->with('status', 'info');
+            $spot->delete();
+            return redirect()->back()->with(['message' => '正常に釣り場を削除しました。', 'status' => 'info']);
         } catch (Throwable $e) {
             Log::error($e);
-            return redirect()->back()->with('message', '場所の削除に失敗しました。')->with('status', 'alert');
+            return redirect()->back()->with(['message' => '釣り場の削除に失敗しました。', 'status' => 'alert']);
         }
     }
 }

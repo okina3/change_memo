@@ -55,11 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
             method: 'POST',
             headers,
             body: JSON.stringify({
-               new_spot: newSpot
+               spot_name: newSpot
             }),
          });
 
-         // 成功: 場所選択欄に新しい option を追加
+         // 成功: 釣り場選択欄に新しい option を追加
          if (res.status === 201) {
             const data = await res.json();
             const opt = document.createElement('option');
@@ -67,24 +67,24 @@ document.addEventListener('DOMContentLoaded', () => {
             opt.textContent = data.name;
             select.appendChild(opt);
             input.value = '';
-            showMessage('場所の選択肢に追加しました', 'success');
+            showMessage('釣り場の選択肢に追加しました', 'success');
             setTimeout(clearMessage, 6000);
             return;
          }
 
          // 失敗: 422エラーメッセージを表示
-         if (res.status === 422) {
+            if (res.status === 422) {
             const data = await res.json().catch(() => ({}));
-            const serverMsg = data?.errors?.new_spot?.[0] ?? data?.message;
+            const serverMsg = data?.errors?.spot_name?.[0] ?? data?.message;
             // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
             showMessage(serverMsg ?? '入力に誤りがあります', 'error');
             return;
          }
 
          // 失敗: それ以外のエラーメッセージを表示
-         try {
+            try {
             const otherData = await res.json().catch(() => ({}));
-            const otherMsg = otherData?.errors?.new_spot?.[0] ?? otherData?.message;
+            const otherMsg = otherData?.errors?.spot_name?.[0] ?? otherData?.message;
             // 通常のバリデーションではじかれた場合のエラーメッセージ（保険）。
             showMessage(otherMsg ?? '追加に失敗しました。時間をおいて再試行してください。', 'error');
          } catch (err) {
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
       clearMessage();
       const newSpot = input.value.trim();
       if (!newSpot) {
-         showMessage('場所名を入力してください。', 'error');
+         showMessage('釣り場名を入力してください。', 'error');
          return;
       }
       addSpot(newSpot);

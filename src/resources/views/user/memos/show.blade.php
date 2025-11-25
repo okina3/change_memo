@@ -18,7 +18,7 @@
                      <p class="mark">{{ $select_memo->status }}</p>
                   </div>
                @endif
-               {{-- 釣行日・釣行時間・釣り場所 --}}
+               {{-- 釣行日・釣行時間・釣り場 --}}
                <x-user.show.basic-info :selectMemo='$select_memo' />
                {{-- 気象状態 --}}
                <x-user.show.weather-state :selectMemo='$select_memo' />
@@ -27,7 +27,7 @@
                {{-- エサの入力 --}}
                <x-user.show.baits :getMemoBaitsName='$get_memo_baits_name' />
                {{-- 釣果の入力 --}}
-               <x-user.show.fishing_results :getMemoFishResults='$get_memo_fish_results' />
+               <x-user.show.fishing-results :getMemoFishResults='$get_memo_fish_results' />
                {{-- メモの備考表示 --}}
                <x-user.show.content :selectMemo='$select_memo' />
                {{-- タグの表示 --}}

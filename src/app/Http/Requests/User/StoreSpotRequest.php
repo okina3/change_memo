@@ -23,7 +23,7 @@ class StoreSpotRequest extends FormRequest
    public function rules(): array
    {
       return [
-         'new_spot' => [
+         'spot_name' => [
             'required',
             'string',
             'max:25',
@@ -41,10 +41,10 @@ class StoreSpotRequest extends FormRequest
    public function messages(): array
    {
       return [
-         'new_spot.required' => '新規釣り場を入力してください。',
-         'new_spot.string' => '新規釣り場名は文字列で入力してください。',
-         'new_spot.max' => '新規釣り場は、25文字以内で入力してください。',
-         'new_spot.unique' => 'この場所はすでに登録されています。',
+         'spot_name.required' => '釣り場を入力してください。',
+         'spot_name.string' => '釣り場名は文字列で入力してください。',
+         'spot_name.max' => '釣り場は、25文字以内で入力してください。',
+         'spot_name.unique' => 'この釣り場はすでに登録されています。',
       ];
    }
 }

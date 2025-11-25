@@ -3,7 +3,7 @@
    <h2 class="sub_heading mb-1">基本情報</h2>
    <div class="md:flex-row md:flex-wrap md:gap-14 flex flex-col items-start gap-6">
       {{-- 釣行日 --}}
-      <div class="">
+      <div>
          <h2 class="mb-1 block text-sm text-gray-700">釣行日</h2>
          <div class="p-2 sm:w-44 md:w-44 w-full border border-gray-500 rounded">
             {{ optional(optional($selectMemo)->fishing_date)->format('Y-m-d') ?? '-' }}
@@ -22,9 +22,9 @@
             </div>
          </div>
       </div>
-      {{-- 釣り場所 --}}
-      <div class="">
-         <h2 class="mb-1 block text-sm text-gray-700">場所</h2>
+      {{-- 釣り場 --}}
+      <div>
+         <h2 class="mb-1 block text-sm text-gray-700">釣り場</h2>
          <div class="p-2 w-60 border border-gray-500 rounded">
             {{ optional($selectMemo->spot)->name ?? '-' }}
          </div>
